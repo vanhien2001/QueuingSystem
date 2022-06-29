@@ -1,0 +1,43 @@
+.header {
+    background-color: transparent;
+    height: 100%;
+    padding: 24px 64px 24px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title{
+        color: #FF9138;
+        font-size: 20px;
+        line-height: 30px;
+    }
+    .headerRight {
+        display: flex;
+        align-items: center;
+        .iconNotify{
+            width: 32px;
+            height: 32px;
+            border: none;
+            color: #FFAC6A;
+            background-color: #FFF2E7;
+        }
+        .inforContainer{
+            display: flex;
+            align-items: center;
+            .avatar{
+                width: 40px;
+                height: 40px;
+                margin: 0 8px 0 24px;
+            }
+            .text {
+                color: #7e7d88;
+                font-size: 12px;
+                font-weight: 400;
+            }
+            .nameUser {
+                color: #535261;
+                font-size: 16px;
+                font-weight: 700;
+            }
+        }
+    }
+}

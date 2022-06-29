@@ -1,31 +1,36 @@
-.form{
+.form {
     text-align: center;
-    .title{
+    .title {
         font-size: 22px;
-        font-weight: 700;
         margin-bottom: 12px;
     }
+    .warningWrapper {
+        position: relative;
+        .warningContainer {
+            position: absolute;
+            color: #e73f3f;
+            top: 12px;
+            .warningText {
+                color: #e73f3f;
+                font-size: 14px;
+                margin-left: 6px;
+            }
+        }
+    }
 }
-.buttonContainer{
+.buttonContainer {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
     margin-top: 48px;
-    .btn{
+    .btn {
         width: 160px;
         height: 40px;
-        border-radius: 8px;
-        outline: none;
-        border-color: #FF9138;
-        background-color: #FF9138;
-        &:hover{
-            background-color: #FF9138;
-        }
     }
-    .link{
+    .link {
         font-size: 14px;
         margin-top: 8px;
-        color: #E73F3F;
+        color: #e73f3f;
     }
 }

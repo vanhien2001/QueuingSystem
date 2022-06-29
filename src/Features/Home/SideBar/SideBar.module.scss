@@ -1,32 +1,36 @@
-.sideBar{
-    background: #FFFFFF;
+.sideBar {
+    background: #ffffff;
     height: 100%;
     padding: 32px 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    .logo{
+    .logo {
         height: 64px;
         width: 80px;
         margin: 0 auto 54px;
-        img{
-            width:100%;
-            height:100%;
+        img {
+            width: 100%;
+            height: 100%;
         }
     }
-    .buttonContainer{
+    .expandIcon {
+        position: absolute;
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+    }
+    .buttonContainer {
         padding: 0 12px;
-        .btn{
+        .btn {
             width: 100%;
             // padding: 12px;
             text-align: left;
-            background-color: #FFF2E7;
+            background-color: #fff2e7;
             border: none;
-            border-radius: 8px;
-            color: #FF7506;
             font-size: 16px;
-            a{
-                color: #FF7506;
+            a {
+                color: #ff7506;
                 margin-left: 12px;
             }
         }

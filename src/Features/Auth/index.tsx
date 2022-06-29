@@ -21,7 +21,10 @@ const Login = () => {
                     <div className={clsx(styles.formContainer)}>
                         <Routes>
                             <Route path="/login" element={<LoginForm />} />
-                            <Route path="/change-password" element={<ChangePass />} />
+                            <Route
+                                path="/change-password"
+                                element={<ChangePass />}
+                            />
                             <Route
                                 path="/forgot-password"
                                 element={<ForgotPass />}
@@ -30,12 +33,20 @@ const Login = () => {
                     </div>
                 </Col>
                 <Col span={14}>
-                    <Image
-                        imgSrc={loginImage}
-                        subtext="Hệ thống"
-                        text="QUẢN LÝ XẾP HÀNG"
-                    />
-                    {/* <Image imgSrc={loginImage2}/> */}
+                    <Routes>
+                        <Route
+                            path="/login"
+                            element={<Image imgSrc={loginImage} />}
+                        />
+                        <Route
+                            path="/change-password"
+                            element={<Image imgSrc={loginImage2} />}
+                        />
+                        <Route
+                            path="/forgot-password"
+                            element={<Image imgSrc={loginImage2} />}
+                        />
+                    </Routes>
                 </Col>
             </Row>
         </>
