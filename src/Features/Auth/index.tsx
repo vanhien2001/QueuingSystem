@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { Col, Row } from "antd";
+import { Route, Routes } from "react-router-dom";
 import LoginForm from "./LoginForm";
 import ChangePass from "./ChangePass";
 import ForgotPass from "./ForgotPass";
@@ -8,7 +9,6 @@ import loginImage2 from "../../Asset/Img/login2.svg";
 import Logo from "../../Asset/Img/LogoAlta.svg";
 import styles from "./Login.module.scss";
 import Image from "./Image";
-import { Route, Routes } from "react-router-dom";
 
 const Login = () => {
     return (
