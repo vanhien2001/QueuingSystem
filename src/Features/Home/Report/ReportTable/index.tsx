@@ -1,7 +1,7 @@
 import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
 import { DownloadOutlined } from '@ant-design/icons';
-import ActionButton from "../../../components/ActionButton";
-import styles from "./Report.module.scss";
+import ActionButton from "../../../../components/ActionButton";
+import styles from "../Report.module.scss";
 
 const columns = [
     {
@@ -71,7 +71,7 @@ const data = [
     },
 ];
 
-const HistoryUserTable = () => {
+const ReportTable = () => {
     return (
         <div className={styles.section}>
             <Form layout="vertical">
@@ -79,7 +79,7 @@ const HistoryUserTable = () => {
                     <Col>
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Chọn thời gian{" "}
                                 </Typography.Text>
                             }
@@ -112,4 +112,4 @@ const HistoryUserTable = () => {
     );
 };
 
-export default HistoryUserTable;
+export default ReportTable;

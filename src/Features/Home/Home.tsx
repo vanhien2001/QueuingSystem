@@ -1,10 +1,10 @@
 import { Layout } from "antd";
 import clsx from "clsx";
 import styles from "./Home.module.scss";
-import SideBar from "./SideBar/SideBar";
-import HeaderContent from "./Header/Header";
+import SideBar from "../../components/SideBar/SideBar";
+import HeaderContent from "../../components/Header/Header";
 import { Route, Routes } from "react-router-dom";
-import Devices from "./Devices"
+import Devices from "./Devices";
 import Services from "./Services";
 import Provider from "./Provider";
 import Report from "./Report";
@@ -17,12 +17,28 @@ const Home = () => {
     return (
         <div className={clsx(styles.homeContainer)}>
             <Layout style={{ height: "100%" }}>
-                <Sider width={205}>
+                <Sider
+                    style={{
+                        overflow: "auto",
+                        height: "100vh",
+                        width: '205px',
+                        position: "fixed",
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
+                    }}
+                >
                     <SideBar />
                 </Sider>
-                <Layout>
-                    <Header style={{ height: "88px", padding: "0", backgroundColor: "transparent"}}>
-                        <HeaderContent/>
+                <Layout style={{ marginLeft: 205 }}>
+                    <Header
+                        style={{
+                            height: "88px",
+                            padding: "0",
+                            backgroundColor: "transparent",
+                        }}
+                    >
+                        <HeaderContent />
                     </Header>
                     <Content>
                         <Routes>

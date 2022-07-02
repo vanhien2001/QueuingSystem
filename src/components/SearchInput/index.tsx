@@ -1,15 +1,14 @@
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Input } from "antd";
 import Icon from "@ant-design/icons";
-import { SizeType } from "antd/lib/config-provider/SizeContext";
-import { ReactComponent as searchSvg } from "../Asset/Img/search.svg";
+import { ReactComponent as searchSvg } from "../../Asset/Img/search.svg";
 
-interface IProps {
+interface props {
   className?: string;
   placeholder?: string;
 }
 
-const SearchInput: React.FC<IProps> = ({ className, placeholder }) => {
+const SearchInput: React.FC<props> = ({ className, placeholder }) => {
 
   return (
     <Input

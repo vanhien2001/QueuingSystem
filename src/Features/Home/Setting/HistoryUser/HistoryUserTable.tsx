@@ -62,7 +62,7 @@ const HistoryUserTable = () => {
                     <Col>
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Chọn thời gian{" "}
                                 </Typography.Text>
                             }
@@ -78,7 +78,7 @@ const HistoryUserTable = () => {
                     <Col flex="300px">
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Từ khóa
                                 </Typography.Text>
                             }

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Avatar, Button, List, Space, Typography } from "antd";
 import { BellFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-import avatarImage from "../../../Asset/Img/avatar.png";
+import avatarImage from "../../Asset/Img/avatar.png";
 import styles from "./Header.module.scss";
 
 const { Title, Text } = Typography;

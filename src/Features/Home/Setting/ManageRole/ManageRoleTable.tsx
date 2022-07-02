@@ -3,6 +3,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageRole.module.scss";
+import { useNavigate } from "react-router-dom";
 
 
 const columns= [
@@ -66,6 +67,8 @@ const data = [
     },
 ];
 const ManageRoleTable = () => {
+    const navigate = useNavigate();
+
     return (
         <div className={styles.section}>
             <Form layout="vertical">
@@ -79,7 +82,7 @@ const ManageRoleTable = () => {
                     <Col flex="300px">
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Từ khóa
                                 </Typography.Text>
                             }
@@ -99,7 +102,7 @@ const ManageRoleTable = () => {
                         />
                     </Col>
                     <Col flex="100px">
-                        <ActionButton text="Thêm vai trò" icon={<PlusOutlined />}/>
+                        <ActionButton text="Thêm vai trò" icon={<PlusOutlined />} onClick={() => navigate("./add")}/>
                     </Col>
                 </Row>
             </Form>

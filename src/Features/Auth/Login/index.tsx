@@ -1,45 +1,49 @@
-// import { useState } from "react";
 import { Button, Col, Form, Input, Row, Typography } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import clsx from "clsx";
-import { useAppDispatch, useAppSelector } from '../../store/index'
-import { userSelector, findByEmail } from "../../store/reducers/userSlice";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./Form.module.scss";
+import { useAppSelector, useAppDispatch } from '../../../store/index'
+import { userSelector, login } from "../../../store/reducers/userSlice";
+import styles from "../Form.module.scss";
 
 interface formValue {
-    email: string;
+    username: string;
+    password: string;
 }
 
-const ForgotPass = () => {
+const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { authLoading, user, message } = useAppSelector(userSelector);
 
     const onFinish = (value: formValue) => {
-        dispatch(findByEmail(value.email))
-            .then((data) => {
-                data.payload && navigate("/auth/change-password");
-            });
+        dispatch(login(value))
+        .then((data) => {
+            if(data.payload){
+                navigate("/dashboard");
+            }
+        })
     };
+
     return (
-        <Form name="login" layout="vertical" className={clsx(styles.form)} onFinish={onFinish}>
-            <Typography.Title className={clsx(styles.title)}>
-                Đặt lại mật khẩu
-            </Typography.Title>
+        <Form
+            name="login"
+            layout="vertical"
+            className={clsx(styles.form)}
+            onFinish={onFinish}
+        >
+            <Form.Item label="Tên đăng nhập" name="username">
+                <Input
+                    style={{ borderRadius: "8px" }}
+                    status={message.fail ? "error" : undefined}
+                    size="large"
+                    disabled={authLoading}
+                />
+            </Form.Item>
             <Form.Item
-                label="Vui lòng nhập email để đặt lại mật khẩu của bạn"
-                name="email"
-                rules={[
-                    {
-                        required: true,
-                        message: "Vui lòng nhập email",
-                    },
-                    {
-                        type: "email",
-                        message: "Email không hợp lệ",
-                    },
-                ]}
+                label="Password"
+                name="password"
+                // rules={[{ required: true, message: "Không được bỏ trống" }]}
                 help={
                     message.fail ? (
                         <div className={styles.warningWrapper}>
@@ -65,33 +69,33 @@ const ForgotPass = () => {
                     ) : undefined
                 }
             >
-                <Input size="large" style={{ borderRadius: "8px" }} />
+                <Input.Password
+                    style={{ borderRadius: "8px" }}
+                    status={message.fail ? "error" : undefined}
+                    size="large"
+                    disabled={authLoading}
+                />
             </Form.Item>
             <Form.Item>
-                <div
-                    className={clsx(styles.buttonContainer)}
-                    style={{ flexDirection: "row" }}
-                >
-                    <Button
-                        className={clsx(styles.btn)}
-                        type="primary"
-                        htmlType="submit"
-                        ghost
-                    >
-                        <Link to="/auth/login">Huỷ</Link>
-                    </Button>
+                <div className={clsx(styles.buttonContainer)}>
                     <Button
                         className={clsx(styles.btn)}
                         type="primary"
                         htmlType="submit"
                         loading={authLoading}
                     >
-                        {authLoading ? "": "Tiếp tục"}
+                        {authLoading ? "": "Đăng nhập"}
                     </Button>
+                    <Link
+                        className={clsx(styles.link)}
+                        to="/auth/forgot-password"
+                    >
+                        Quên mật khẩu ?
+                    </Link>
                 </div>
             </Form.Item>
         </Form>
     );
 };
 
-export default ForgotPass;
+export default LoginForm;

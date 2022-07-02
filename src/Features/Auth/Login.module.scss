@@ -11,24 +11,5 @@
     width: 70%;
     height: calc(100% * 0.7);
     margin: 100px auto auto;
-    // position: relative;
-    // &.widthText{
-    //     margin-left: calc((100% - 600px) / 3);
-    //     margin-right: calc((100% - 600px) / 3 * 2);
-    // }
-    img {
-        width: 100%;
-        height: 100%;
-    }
-    // .text{
-    //     color: #FF7506;
-    //     font-size: 34px;
-    //     position: absolute;
-    //     right: -25%;
-    //     top: 45%;
-    //     .text1{
-    //         font-size: 36px;
-    //         font-weight: 900;
-    //     }
-    // }
+    display: block;
 }

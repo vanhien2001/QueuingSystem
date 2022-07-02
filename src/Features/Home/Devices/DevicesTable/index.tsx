@@ -1,9 +1,10 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
-import ActionButton from "../../../components/ActionButton";
-import SearchInput from "../../../components/SearchInput";
-import styles from "./Devices.module.scss";
+import { PlusOutlined } from "@ant-design/icons";
+import ActionButton from "../../../../components/ActionButton";
+import SearchInput from "../../../../components/SearchInput";
+import styles from "../Devices.module.scss";
+import { Link, useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -43,8 +44,16 @@ const columns = [
         key: "service",
         dataIndex: "service",
     },
-    {},
-    {},
+    {
+        title: "",
+        key: "detail",
+        dataIndex: "detail",
+    },
+    {
+        title: "",
+        key: "update",
+        dataIndex: "update",
+    },
 ];
 
 const data = [
@@ -53,17 +62,27 @@ const data = [
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: 'Ngưng hoạt động',
-        connect: 'Mất kết nối',
+        active: "Ngưng hoạt động",
+        connect: "Mất kết nối",
         service: ["test", "test", "test"],
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "2",
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: 'Hoạt động',
-        connect: 'Kết nối',
+        active: "Hoạt động",
+        connect: "Kết nối",
         service: ["test", "test", "test"],
     },
     {
@@ -71,8 +90,8 @@ const data = [
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: 'Ngưng hoạt động',
-        connect: 'Mất kết nối',
+        active: "Ngưng hoạt động",
+        connect: "Mất kết nối",
         service: ["test", "test", "test"],
     },
     {
@@ -80,30 +99,27 @@ const data = [
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: 'Hoạt động',
-        connect: 'Kết nối',
+        active: "Hoạt động",
+        connect: "Kết nối",
         service: ["test", "test", "test"],
     },
 ];
 
 const DevicesTable = () => {
+    const navigate = useNavigate();
     return (
         <div className={styles.section}>
-            <Row>
-                <Col>
-                    <Typography.Title className={styles.title} level={2}>
-                        Danh sách thiết bị
-                    </Typography.Title>
-                </Col>
-            </Row>
+            <Typography.Title className={styles.title}>
+                Danh sách thiết bị
+            </Typography.Title>
             <Form layout="vertical">
                 <Row justify="space-between" className={styles.inputContainer}>
                     <Col>
                         <Space size={24}>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
-                                        Trạng thái kết nối
+                                    <Typography.Text className={styles.label}>
+                                        Trạng thái hoạt động
                                     </Typography.Text>
                                 }
                                 className={styles.selectContianer}
@@ -130,8 +146,8 @@ const DevicesTable = () => {
 
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
-                                        Trạng thái hoạt động
+                                    <Typography.Text className={styles.label}>
+                                        Trạng thái kết nối
                                     </Typography.Text>
                                 }
                                 className={styles.selectContianer}
@@ -158,7 +174,7 @@ const DevicesTable = () => {
                     <Col flex="300px">
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Từ khóa
                                 </Typography.Text>
                             }
@@ -179,7 +195,11 @@ const DevicesTable = () => {
                     />
                 </Col>
                 <Col flex="100px">
-                    <ActionButton text="Thêm thiết bị" icon={<PlusOutlined />}/>
+                    <ActionButton
+                        text="Thêm thiết bị"
+                        icon={<PlusOutlined />}
+                        onClick={() => navigate("./add")}
+                    />
                 </Col>
             </Row>
         </div>

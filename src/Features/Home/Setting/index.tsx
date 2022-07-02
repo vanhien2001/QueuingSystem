@@ -7,8 +7,8 @@ import HistoryUser from "./HistoryUser";
 const index = () => {
     return (
         <Routes>
-            <Route path="/manage-roles" element={<ManageRole />} />
-            <Route path="/manage-accounts" element={<ManageAccount />} />
+            <Route path="/manage-roles/*" element={<ManageRole />} />
+            <Route path="/manage-accounts/*" element={<ManageAccount />} />
             <Route path="/user-history" element={<HistoryUser />} />
         </Routes>
     );

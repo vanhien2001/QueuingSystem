@@ -9,10 +9,11 @@ import {
     Table,
     Typography,
 } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
-import ActionButton from "../../../components/ActionButton";
-import SearchInput from "../../../components/SearchInput";
-import styles from "./Services.module.scss";
+import { PlusOutlined } from "@ant-design/icons";
+import ActionButton from "../../../../components/ActionButton";
+import SearchInput from "../../../../components/SearchInput";
+import styles from "../Services.module.scss";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -69,22 +70,19 @@ const data = [
 ];
 
 const ServicesTable = () => {
+    const navigate = useNavigate();
     return (
         <div className={styles.section}>
-            <Row>
-                <Col>
-                    <Typography.Title className={styles.title} level={2}>
-                        Quản lý dịch vụ
-                    </Typography.Title>
-                </Col>
-            </Row>
+            <Typography.Title className={styles.title}>
+                Quản lý dịch vụ
+            </Typography.Title>
             <Form layout="vertical">
                 <Row justify="space-between" className={styles.inputContainer}>
                     <Col>
                         <Space size={24}>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Trạng thái hoạt động
                                     </Typography.Text>
                                 }
@@ -111,7 +109,7 @@ const ServicesTable = () => {
                             </Form.Item>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Chọn thời gian{" "}
                                     </Typography.Text>
                                 }
@@ -128,7 +126,7 @@ const ServicesTable = () => {
                     <Col flex="300px">
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Từ khóa
                                 </Typography.Text>
                             }
@@ -149,7 +147,11 @@ const ServicesTable = () => {
                     />
                 </Col>
                 <Col flex="100px">
-                    <ActionButton text="Thêm dịch vụ" icon={<PlusOutlined />}/>
+                    <ActionButton
+                        text="Thêm dịch vụ"
+                        icon={<PlusOutlined />}
+                        onClick={() => navigate("./add")}
+                    />
                 </Col>
             </Row>
         </div>

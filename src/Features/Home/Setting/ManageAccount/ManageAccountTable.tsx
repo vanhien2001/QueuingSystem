@@ -1,44 +1,45 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Col, Form, Row, Select, Table, Typography } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from "@ant-design/icons";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageAccount.module.scss";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const columns = [
     {
-      title: "Tên đăng nhập",
-      key: "username",
-      dataIndex: "username",
+        title: "Tên đăng nhập",
+        key: "username",
+        dataIndex: "username",
     },
-  
+
     {
-      title: "Họ tên",
-      key: "name",
-      dataIndex: "name",
+        title: "Họ tên",
+        key: "name",
+        dataIndex: "name",
     },
-  
+
     {
-      title: "Số điện thoại",
-      key: "phoneNumber",
-      dataIndex: "phoneNumber",
+        title: "Số điện thoại",
+        key: "phoneNumber",
+        dataIndex: "phoneNumber",
     },
-  
+
     {
-      title: "Email",
-      key: "email",
-      dataIndex: "email",
+        title: "Email",
+        key: "email",
+        dataIndex: "email",
     },
     {
-      title: "Vai trò",
-      key: "role",
-      dataIndex: "role",
+        title: "Vai trò",
+        key: "role",
+        dataIndex: "role",
     },
     {},
-    {}
-]
+    {},
+];
 
 const data = [
     {
@@ -47,7 +48,7 @@ const data = [
         name: "Nguyễn Văn Hiền",
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
-        role: "Lập trình viên"
+        role: "Lập trình viên",
     },
     {
         key: "2",
@@ -55,39 +56,45 @@ const data = [
         name: "Nguyễn Văn Hiền",
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
-        role: "Lập trình viên"
-    },{
+        role: "Lập trình viên",
+    },
+    {
         key: "3",
         username: "vanhien2001",
         name: "Nguyễn Văn Hiền",
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
-        role: "Lập trình viên"
-    },{
+        role: "Lập trình viên",
+    },
+    {
         key: "4",
         username: "vanhien2001",
         name: "Nguyễn Văn Hiền",
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
-        role: "Lập trình viên"
-    },{
+        role: "Lập trình viên",
+    },
+    {
         key: "5",
         username: "vanhien2001",
         name: "Nguyễn Văn Hiền",
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
-        role: "Lập trình viên"
-    },{
+        role: "Lập trình viên",
+    },
+    {
         key: "6",
         username: "vanhien2001",
         name: "Nguyễn Văn Hiền",
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
-        role: "Lập trình viên"
+        role: "Lập trình viên",
     },
 ];
 
 const ManageAccountTable = () => {
+    const navigate = useNavigate();
+
     return (
         <div className={styles.section}>
             <Typography.Title level={2} className={styles.title}>
@@ -98,7 +105,7 @@ const ManageAccountTable = () => {
                     <Col flex="300px">
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Tên vai trò
                                 </Typography.Text>
                             }
@@ -124,7 +131,7 @@ const ManageAccountTable = () => {
                     <Col flex="300px">
                         <Form.Item
                             label={
-                                <Typography.Text strong>
+                                <Typography.Text className={styles.label}>
                                     Từ khóa
                                 </Typography.Text>
                             }
@@ -145,7 +152,11 @@ const ManageAccountTable = () => {
                     />
                 </Col>
                 <Col flex="100px">
-                    <ActionButton text="Thêm tài khoản" icon={<PlusOutlined />}/>
+                    <ActionButton
+                        text="Thêm tài khoản"
+                        icon={<PlusOutlined />}
+                        onClick={() => navigate("./add")}
+                    />
                 </Col>
             </Row>
         </div>

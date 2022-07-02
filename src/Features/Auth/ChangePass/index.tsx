@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Input, Row, Typography } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import clsx from "clsx";
-import { useAppDispatch, useAppSelector } from '../../store/index'
-import { userSelector, updateUser } from "../../store/reducers/userSlice";
+import { useAppDispatch, useAppSelector } from '../../../store/index'
+import { userSelector, updateUser } from "../../../store/reducers/userSlice";
 import { Link, useNavigate } from "react-router-dom";
-import styles from "./Form.module.scss";
+import styles from "../Form.module.scss";
 
 interface formValue {
     password: string;

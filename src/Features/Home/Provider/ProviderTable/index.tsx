@@ -10,9 +10,9 @@ import {
     Typography,
 } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import ActionButton from "../../../components/ActionButton";
-import SearchInput from "../../../components/SearchInput";
-import styles from "./Provider.module.scss";
+import ActionButton from "../../../../components/ActionButton";
+import SearchInput from "../../../../components/SearchInput";
+import styles from "../Provider.module.scss";
 
 const { Option } = Select;
 
@@ -101,20 +101,16 @@ const data = [
 const ProviderTable = () => {
     return (
         <div className={styles.section}>
-            <Row>
-                <Col>
                     <Typography.Title className={styles.title} level={2}>
                         Quản lý cấp số
                     </Typography.Title>
-                </Col>
-            </Row>
             <Form layout="vertical">
                 <Row justify="space-between" className={styles.inputContainer}>  
                     <Col span={24}>
                         <Space style={{display: 'flex', justifyContent: 'space-between'}}>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Tên dịch vụ
                                     </Typography.Text>
                                 }
@@ -146,7 +142,7 @@ const ProviderTable = () => {
                             </Form.Item>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Tình trạng
                                     </Typography.Text>
                                 }
@@ -172,7 +168,7 @@ const ProviderTable = () => {
                             </Form.Item>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Nguồn cấp
                                     </Typography.Text>
                                 }
@@ -197,7 +193,7 @@ const ProviderTable = () => {
                             </Form.Item>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Chọn thời gian{" "}
                                     </Typography.Text>
                                 }
@@ -211,7 +207,7 @@ const ProviderTable = () => {
                             </Form.Item>
                             <Form.Item
                                 label={
-                                    <Typography.Text strong>
+                                    <Typography.Text className={styles.label}>
                                         Từ khóa
                                     </Typography.Text>
                                 }

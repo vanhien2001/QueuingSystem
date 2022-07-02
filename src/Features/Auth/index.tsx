@@ -1,14 +1,13 @@
 import clsx from "clsx";
 import { Col, Row } from "antd";
 import { Route, Routes } from "react-router-dom";
-import LoginForm from "./LoginForm";
+import LoginForm from "./Login";
 import ChangePass from "./ChangePass";
 import ForgotPass from "./ForgotPass";
 import loginImage from "../../Asset/Img/login.svg";
 import loginImage2 from "../../Asset/Img/login2.svg";
 import Logo from "../../Asset/Img/LogoAlta.svg";
 import styles from "./Login.module.scss";
-import Image from "./Image";
 
 const Login = () => {
     return (
@@ -36,15 +35,15 @@ const Login = () => {
                     <Routes>
                         <Route
                             path="/login"
-                            element={<Image imgSrc={loginImage} />}
+                            element={<img className={styles.image} src={loginImage} alt="Alta" />}
                         />
                         <Route
                             path="/change-password"
-                            element={<Image imgSrc={loginImage2} />}
+                            element={<img className={styles.image} src={loginImage2} alt="Alta" />}
                         />
                         <Route
                             path="/forgot-password"
-                            element={<Image imgSrc={loginImage2} />}
+                            element={<img className={styles.image} src={loginImage2} alt="Alta" />}
                         />
                     </Routes>
                 </Col>

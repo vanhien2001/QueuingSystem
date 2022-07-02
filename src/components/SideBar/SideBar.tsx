@@ -12,7 +12,7 @@ import { Button, MenuProps } from "antd";
 import { Menu } from "antd";
 import clsx from "clsx";
 import { Link, useLocation } from "react-router-dom";
-import Logo from "../../../Asset/Img/LogoAlta.svg";
+import Logo from "../../Asset/Img/LogoAlta.svg";
 import styles from "./SideBar.module.scss";
 
 type MenuItem = Required<MenuProps>["items"][number];
