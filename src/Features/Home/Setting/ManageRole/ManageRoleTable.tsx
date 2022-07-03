@@ -1,69 +1,81 @@
 import { Col, Form, Row, Table, Typography } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from "@ant-design/icons";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageRole.module.scss";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+const columns = [
+    {
+        title: "Tên vai trò",
+        key: "name",
+        dataIndex: "name",
+    },
 
-const columns= [
     {
-      title: "Tên vai trò",
-      key: "name",
-      dataIndex: "name",
+        title: "Số người dùng",
+        key: "amountOfUser",
+        dataIndex: "amountOfUser",
     },
-  
-    {
-      title: "Số người dùng",
-      key: "amountOfUser",
-      dataIndex: "amountOfUser",
-    },
-  
-    {
-      title: "Mô tả",
-      key: "description",
-      dataIndex: "description",
-    },
-    {
 
-    }
+    {
+        title: "Mô tả",
+        key: "description",
+        dataIndex: "description",
+    },
+    {
+        title: "",
+        key: "update",
+        dataIndex: "update",
+    },
 ];
 const data = [
     {
         key: "1",
         name: "Kế toán",
         amountOfUser: 6,
-        description: 'Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu'
+        description:
+            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
     },
     {
         key: "2",
         name: "Bác sĩ",
         amountOfUser: 6,
-        description: 'Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu'
+        description:
+            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
     },
     {
         key: "3",
         name: "Lễ tân",
         amountOfUser: 6,
-        description: 'Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu'
+        description:
+            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
     },
     {
         key: "4",
         name: "Quản lý",
         amountOfUser: 6,
-        description: 'Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu'
+        description:
+            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
     },
     {
         key: "5",
         name: "Admin",
         amountOfUser: 6,
-        description: 'Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu'
+        description:
+            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
     },
     {
         key: "6",
         name: "Superadmin",
         amountOfUser: 6,
-        description: 'Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu'
+        description:
+            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
     },
 ];
 const ManageRoleTable = () => {
@@ -102,7 +114,15 @@ const ManageRoleTable = () => {
                         />
                     </Col>
                     <Col flex="100px">
-                        <ActionButton text="Thêm vai trò" icon={<PlusOutlined />} onClick={() => navigate("./add")}/>
+                        <ActionButton
+                            data={[
+                                {
+                                    text: "Thêm vai trò",
+                                    icon: <PlusOutlined />,
+                                    onClick: () => navigate("../add"),
+                                },
+                            ]}
+                        />
                     </Col>
                 </Row>
             </Form>

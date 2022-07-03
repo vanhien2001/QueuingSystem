@@ -6,9 +6,17 @@
     .title {
         color: #ff7506 !important;
         font-size: 24px !important;
+        margin-bottom: 20px;
         &.title2{
+            font-size: 32px !important;
+            text-align: center;
+        }
+        &.title3{
             font-size: 20px !important;
         }
+    }
+    .card{
+        height: 550px;
     }
     .inputContainer {
         margin-right: 100px;
@@ -23,6 +31,14 @@
         text-decoration: underline;
         cursor: pointer;
     }
+    .label1 {
+        width: 100%;
+        display: block;
+        font-weight: 700;
+        font-size: 20px;
+        text-align: center;
+        margin-bottom: 12px;
+    }
     .label {
         font-weight: 600;
         font-size: 16px;
@@ -34,7 +50,7 @@
         }
     }
     .buttonContainer {
-        margin-top: 24px;
+        margin: 80px 0 200px;
         .button {
             height: 48px;
             width: 147px;

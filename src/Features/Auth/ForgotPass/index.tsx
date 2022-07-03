@@ -27,8 +27,9 @@ const ForgotPass = () => {
                 Đặt lại mật khẩu
             </Typography.Title>
             <Form.Item
-                label="Vui lòng nhập email để đặt lại mật khẩu của bạn"
+                label="Vui lòng nhập email để đặt lại mật khẩu của bạn *"
                 name="email"
+                required={false}
                 rules={[
                     {
                         required: true,

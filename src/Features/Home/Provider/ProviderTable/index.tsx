@@ -9,7 +9,9 @@ import {
     Table,
     Typography,
 } from "antd";
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "../Provider.module.scss";
@@ -52,7 +54,11 @@ const columns = [
         key: "src",
         dataIndex: "src",
     },
-    {},
+    {
+        title: "",
+        key: "detail",
+        dataIndex: "detail",
+    },
 ];
 
 const data = [
@@ -63,8 +69,13 @@ const data = [
         nameService: "Khám tổng quát",
         time: new Date().toUTCString(),
         timeExp: new Date().toUTCString(),
-        status: "Đang chờ",
+        status: <Status type="waiting" text="Đang chờ"/>,
         src: "Kiosk",
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "2",
@@ -73,8 +84,13 @@ const data = [
         nameService: "Khám tai mũi họng",
         time: new Date().toUTCString(),
         timeExp: new Date().toUTCString(),
-        status: "Đang chờ",
+        status: <Status type="waiting" text="Đang chờ"/>,
         src: "Hệ thống",
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "3",
@@ -83,8 +99,13 @@ const data = [
         nameService: "Khám tổng quát",
         time: new Date().toUTCString(),
         timeExp: new Date().toUTCString(),
-        status: "Đang chờ",
+        status: <Status type="used" text="Đã sử dụng"/>,
         src: "Kiosk",
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "4",
@@ -93,21 +114,32 @@ const data = [
         nameService: "Khám tổng quát",
         time: new Date().toUTCString(),
         timeExp: new Date().toUTCString(),
-        status: "Đang chờ",
+        status: <Status type="error" text="Bỏ qua"/>,
         src: "Kiosk",
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
 ];
 
 const ProviderTable = () => {
+    const navigate = useNavigate();
     return (
         <div className={styles.section}>
-                    <Typography.Title className={styles.title} level={2}>
-                        Quản lý cấp số
-                    </Typography.Title>
+            <Typography.Title className={styles.title} level={2}>
+                Quản lý cấp số
+            </Typography.Title>
             <Form layout="vertical">
-                <Row justify="space-between" className={styles.inputContainer}>  
+                <Row justify="space-between" className={styles.inputContainer}>
                     <Col span={24}>
-                        <Space style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <Space
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                            }}
+                        >
                             <Form.Item
                                 label={
                                     <Typography.Text className={styles.label}>
@@ -229,7 +261,15 @@ const ProviderTable = () => {
                     />
                 </Col>
                 <Col flex="100px">
-                    <ActionButton text="Cấp số mới" icon={<PlusOutlined />}/>
+                    <ActionButton
+                        data={[
+                            {
+                                text: "Cấp số mới",
+                                icon: <PlusOutlined />,
+                                onClick: () => navigate("../new"),
+                            },
+                        ]}
+                    />
                 </Col>
             </Row>
         </div>

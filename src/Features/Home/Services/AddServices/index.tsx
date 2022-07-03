@@ -9,6 +9,7 @@ import {
     Row,
     Typography,
 } from "antd";
+import clsx from "clsx";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "../Services.module.scss";
@@ -21,7 +22,7 @@ const AddService = () => {
     const [increase, setIncrease] = useState(false);
 
     return (
-        <div className={styles.section2}>
+        <div className={clsx(styles.section, styles.section2)}>
             <Form name="service-add" layout="vertical">
                 <Title level={2} className={styles.title}>
                     Quản lý dịch vụ
@@ -29,7 +30,7 @@ const AddService = () => {
                 <Card bordered>
                     <Row gutter={24}>
                         <Col span={24}>
-                            <Title level={4} className={styles.title}>
+                            <Title level={4} className={clsx(styles.title, styles.title2)}>
                                 Thông tin dịch vụ
                             </Title>
                         </Col>
@@ -76,7 +77,7 @@ const AddService = () => {
                         </Col>
 
                         <Col span={24}>
-                            <Title level={4} className={styles.title}>
+                            <Title level={4} className={clsx(styles.title, styles.title2)}>
                                 Quy tắc cấp số
                             </Title>
                         </Col>

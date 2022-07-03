@@ -1,10 +1,11 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "../Devices.module.scss";
-import { Link, useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -62,8 +63,8 @@ const data = [
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: "Ngưng hoạt động",
-        connect: "Mất kết nối",
+        active: <Status type="error" text="Ngưng hoạt động"/>,
+        connect: <Status type="error" text="Mất kết nối"/>,
         service: ["test", "test", "test"],
         detail: (
             <Link to="./detail" className={styles.link}>
@@ -81,27 +82,57 @@ const data = [
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: "Hoạt động",
-        connect: "Kết nối",
+        active: <Status type="success" text="Hoạt động"/>,
+        connect: <Status type="success" text="Kết nối"/>,
         service: ["test", "test", "test"],
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "3",
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: "Ngưng hoạt động",
-        connect: "Mất kết nối",
+        active: <Status type="error" text="Ngưng hoạt động"/>,
+        connect: <Status type="error" text="Mất kết nối"/>,
         service: ["test", "test", "test"],
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "4",
         id: "KIO_01",
         name: "Kisok",
         IPAddess: "111.111.111",
-        active: "Hoạt động",
-        connect: "Kết nối",
+        active: <Status type="success" text="Hoạt động"/>,
+        connect: <Status type="success" text="Kết nối"/>,
         service: ["test", "test", "test"],
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
 ];
 
@@ -196,9 +227,13 @@ const DevicesTable = () => {
                 </Col>
                 <Col flex="100px">
                     <ActionButton
-                        text="Thêm thiết bị"
-                        icon={<PlusOutlined />}
-                        onClick={() => navigate("./add")}
+                        data={[
+                            {
+                                text: "Thêm thiết bị",
+                                icon: <PlusOutlined />,
+                                onClick: () => navigate("../add"),
+                            },
+                        ]}
                     />
                 </Col>
             </Row>

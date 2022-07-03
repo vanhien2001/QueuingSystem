@@ -1,10 +1,11 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Col, Form, Row, Select, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageAccount.module.scss";
-import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -37,8 +38,16 @@ const columns = [
         key: "role",
         dataIndex: "role",
     },
-    {},
-    {},
+    {
+        title: "Trạng thái hoạt động",
+        key: "status",
+        dataIndex: "status",
+    },
+    {
+        title: "",
+        key: "update",
+        dataIndex: "update",
+    },
 ];
 
 const data = [
@@ -49,6 +58,12 @@ const data = [
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
         role: "Lập trình viên",
+        status: <Status type="success" text="Hoạt động" />,
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "2",
@@ -57,6 +72,12 @@ const data = [
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
         role: "Lập trình viên",
+        status: <Status type="error" text="Ngưng hoạt động" />,
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "3",
@@ -65,6 +86,12 @@ const data = [
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
         role: "Lập trình viên",
+        status: <Status type="success" text="Hoạt động" />,
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "4",
@@ -73,6 +100,12 @@ const data = [
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
         role: "Lập trình viên",
+        status: <Status type="error" text="Ngưng hoạt động" />,
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "5",
@@ -81,6 +114,12 @@ const data = [
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
         role: "Lập trình viên",
+        status: <Status type="success" text="Hoạt động" />,
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "6",
@@ -89,6 +128,12 @@ const data = [
         phoneNumber: "0969696969",
         email: "vanhien2001@gmail.com",
         role: "Lập trình viên",
+        status: <Status type="error" text="Ngưng hoạt động" />,
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
 ];
 
@@ -153,9 +198,13 @@ const ManageAccountTable = () => {
                 </Col>
                 <Col flex="100px">
                     <ActionButton
-                        text="Thêm tài khoản"
-                        icon={<PlusOutlined />}
-                        onClick={() => navigate("./add")}
+                        data={[
+                            {
+                                text: "Thêm tài khoản",
+                                icon: <PlusOutlined />,
+                                onClick: () => navigate("../add"),
+                            },
+                        ]}
                     />
                 </Col>
             </Row>

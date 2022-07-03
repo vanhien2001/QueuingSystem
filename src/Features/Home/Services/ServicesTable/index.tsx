@@ -10,10 +10,11 @@ import {
     Typography,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "../Services.module.scss";
-import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -41,8 +42,16 @@ const columns = [
         key: "active",
         dataIndex: "active",
     },
-    {},
-    {},
+    {
+        title: "",
+        key: "detail",
+        dataIndex: "detail",
+    },
+    {
+        title: "",
+        key: "update",
+        dataIndex: "update",
+    },
 ];
 
 const data = [
@@ -51,21 +60,51 @@ const data = [
         id: "KIO_01",
         name: "Kisok",
         description: "Mô tả dịch vụ 1",
-        active: "Hoạt động",
+        active: <Status type="success" text="Hoạt động"/>,
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "2",
         id: "KIO_01",
         name: "Kisok",
         description: "Mô tả dịch vụ 2",
-        active: "Ngừng hoạt động",
+        active: <Status type="error" text="Ngưng hoạt động"/>,
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
     {
         key: "3",
         id: "KIO_01",
         name: "Kisok",
         description: "Mô tả dịch vụ 3",
-        active: "Hoạt động",
+        active: <Status type="success" text="Hoạt động"/>,
+        detail: (
+            <Link to="./detail" className={styles.link}>
+                Chi tiết
+            </Link>
+        ),
+        update: (
+            <Link to="./edit" className={styles.link}>
+                Cập nhật
+            </Link>
+        ),
     },
 ];
 
@@ -148,9 +187,13 @@ const ServicesTable = () => {
                 </Col>
                 <Col flex="100px">
                     <ActionButton
-                        text="Thêm dịch vụ"
-                        icon={<PlusOutlined />}
-                        onClick={() => navigate("./add")}
+                        data={[
+                            {
+                                text: "Thêm dịch vụ",
+                                icon: <PlusOutlined />,
+                                onClick: () => navigate("../add"),
+                            },
+                        ]}
                     />
                 </Col>
             </Row>
