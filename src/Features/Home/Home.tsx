@@ -3,7 +3,8 @@ import clsx from "clsx";
 import styles from "./Home.module.scss";
 import SideBar from "../../components/SideBar/SideBar";
 import HeaderContent from "../../components/Header/Header";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
+import Dashboard from "./Dashboard";
 import Devices from "./Devices";
 import Services from "./Services";
 import Provider from "./Provider";
@@ -14,14 +15,13 @@ import Infor from "./Infor";
 const { Sider, Content, Header } = Layout;
 
 const Home = () => {
+    const location = useLocation();
     return (
         <div className={clsx(styles.homeContainer)}>
             <Layout style={{ height: "100%" }}>
                 <Sider
+                    width={205}
                     style={{
-                        overflow: "auto",
-                        height: "100vh",
-                        width: '205px',
                         position: "fixed",
                         left: 0,
                         top: 0,
@@ -32,7 +32,16 @@ const Home = () => {
                 </Sider>
                 <Layout style={{ marginLeft: 205 }}>
                     <Header
-                        style={{
+                        style={location.pathname == '/dashboard' ? {
+                            height: "88px",
+                            padding: "0",
+                            backgroundColor: "transparent",
+                            position: "fixed",
+                            right: 0,
+                            top: 0,
+                            left: '205px',
+                            zIndex: 100,
+                        } : {
                             height: "88px",
                             padding: "0",
                             backgroundColor: "transparent",
@@ -42,6 +51,7 @@ const Home = () => {
                     </Header>
                     <Content>
                         <Routes>
+                            <Route path="/dashboard" element={<Dashboard />} />
                             <Route path="/devices/*" element={<Devices />} />
                             <Route path="/Services/*" element={<Services />} />
                             <Route path="/Provider/*" element={<Provider />} />

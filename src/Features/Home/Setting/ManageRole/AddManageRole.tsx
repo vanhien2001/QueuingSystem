@@ -17,7 +17,7 @@ const { Text, Title } = Typography;
 const AddManageRole = () => {
     return (
         <Form layout="vertical" name="role-add" className={clsx(styles.section, styles.section2)}>
-            <Title level={2} className={styles.title}>
+            <Title className={styles.title}>
                 Quản lý tài khoản
             </Title>
 

@@ -30,14 +30,20 @@ const AddService = () => {
                 <Card bordered>
                     <Row gutter={24}>
                         <Col span={24}>
-                            <Title level={4} className={clsx(styles.title, styles.title2)}>
+                            <Title
+                                className={clsx(styles.title, styles.title2)}
+                            >
                                 Thông tin dịch vụ
                             </Title>
                         </Col>
                         <Col span={12}>
                             <Form.Item
                                 name="id"
-                                label={<Text className={styles.label}>Mã dịch vụ:</Text>}
+                                label={
+                                    <Text className={styles.label}>
+                                        Mã dịch vụ:
+                                    </Text>
+                                }
                                 required={false}
                                 rules={[
                                     {
@@ -51,7 +57,11 @@ const AddService = () => {
 
                             <Form.Item
                                 name="name"
-                                label={<Text className={styles.label}>Tên dịch vụ:</Text>}
+                                label={
+                                    <Text className={styles.label}>
+                                        Tên dịch vụ:
+                                    </Text>
+                                }
                                 required={false}
                                 rules={[
                                     {
@@ -66,7 +76,9 @@ const AddService = () => {
                         <Col span={12}>
                             <Form.Item
                                 name="description"
-                                label={<Text className={styles.label}>Mô tả:</Text>}
+                                label={
+                                    <Text className={styles.label}>Mô tả:</Text>
+                                }
                             >
                                 <Input.TextArea
                                     size="large"
@@ -77,105 +89,120 @@ const AddService = () => {
                         </Col>
 
                         <Col span={24}>
-                            <Title level={4} className={clsx(styles.title, styles.title2)}>
+                            <Title
+                                className={clsx(styles.title, styles.title2)}
+                            >
                                 Quy tắc cấp số
                             </Title>
                         </Col>
 
                         <Col span={12}>
-                            <div className={styles.providerContainer}>
-                                <Checkbox
-                                    checked={increase}
-                                    onChange={(e) => setIncrease(!increase)}
-                                >
-                                    <Text className={styles.label}>
-                                        Tăng tự động từ:
-                                    </Text>
-                                </Checkbox>
-                                <Form.Item
-                                    noStyle
-                                    name={increase ? "increaseFrom" : undefined}
-                                >
-                                    <InputNumber
-                                        min={0}
-                                        disabled={!increase}
-                                        size="large"
-                                        className={styles.providerInput}
-                                        controls={false}
-                                    />
-                                </Form.Item>
-                                <Text className={styles.label}>đến</Text>
-                                <Form.Item
-                                    noStyle
-                                    name={increase ? "increaseTo" : undefined}
-                                >
-                                    <InputNumber
-                                        min={0}
-                                        disabled={!increase}
-                                        size="large"
-                                        className={styles.providerInput}
-                                        controls={false}
-                                    />
-                                </Form.Item>
+                            <div className={styles.itemWrapper}>
+                                <Row className={styles.itemContainer}>
+                                    <Col span={7}>
+                                        <Checkbox
+                                            checked={increase}
+                                            onChange={(e) =>
+                                                setIncrease(!increase)
+                                            }
+                                        >
+                                            <Text className={styles.label}>
+                                                Tăng tự động từ:
+                                            </Text>
+                                        </Checkbox>
+                                    </Col>
+                                    <Col span={17}>
+                                        <Form.Item noStyle name={""}>
+                                            <InputNumber
+                                                min={0}
+                                                max={9999}
+                                                size="large"
+                                                className={styles.providerInput}
+                                                controls={false}
+                                            />
+                                        </Form.Item>
+                                        <Typography.Text
+                                            className={styles.text}
+                                            style={{ margin: "0 8px" }}
+                                        >
+                                            đến
+                                        </Typography.Text>
+                                        <Form.Item noStyle name={""}>
+                                            <InputNumber
+                                                min={0}
+                                                max={9999}
+                                                size="large"
+                                                className={styles.providerInput}
+                                                controls={false}
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <Row className={styles.itemContainer}>
+                                    <Col span={7}>
+                                        <Checkbox
+                                            checked={increase}
+                                            onChange={(e) =>
+                                                setIncrease(!increase)
+                                            }
+                                        >
+                                            <Text className={styles.label}>
+                                                Prefix:
+                                            </Text>
+                                        </Checkbox>
+                                    </Col>
+                                    <Col span={17}>
+                                        <Form.Item noStyle name={""}>
+                                            <InputNumber
+                                                min={0}
+                                                max={9999}
+                                                size="large"
+                                                className={styles.providerInput}
+                                                controls={false}
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <Row className={styles.itemContainer}>
+                                    <Col span={7}>
+                                        <Checkbox
+                                            checked={increase}
+                                            onChange={(e) =>
+                                                setIncrease(!increase)
+                                            }
+                                        >
+                                            <Text className={styles.label}>
+                                                Surfix:
+                                            </Text>
+                                        </Checkbox>
+                                    </Col>
+                                    <Col span={17}>
+                                        <Form.Item noStyle name={""}>
+                                            <InputNumber
+                                                min={0}
+                                                max={9999}
+                                                size="large"
+                                                className={styles.providerInput}
+                                                controls={false}
+                                            />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <Row className={styles.itemContainer}>
+                                    <Col span={24}>
+                                        <Checkbox
+                                            checked={increase}
+                                            onChange={(e) =>
+                                                setIncrease(!increase)
+                                            }
+                                        >
+                                            <Text className={styles.label}>
+                                                Reset mỗi ngày
+                                            </Text>
+                                        </Checkbox>
+                                    </Col>
+                                </Row>
                             </div>
-
-                            <div className={styles.providerContainer}>
-                                <Checkbox
-                                    checked={prefix}
-                                    onChange={(e) => setPrefix(!prefix)}
-                                >
-                                    <Text className={styles.label}>
-                                        Prefix:
-                                    </Text>
-                                </Checkbox>
-                                <Form.Item
-                                    noStyle
-                                    name={prefix ? "prefix" : undefined}
-                                >
-                                    <InputNumber
-                                        min={0}
-                                        disabled={!prefix}
-                                        size="large"
-                                        className={styles.providerInput}
-                                        controls={false}
-                                    />
-                                </Form.Item>
-                            </div>
-
-                            <div className={styles.providerContainer}>
-                                <Checkbox
-                                    checked={surfix}
-                                    onChange={(e) => setSurfix(!surfix)}
-                                >
-                                    <Text className={styles.label}>
-                                        Surfix:
-                                    </Text>
-                                </Checkbox>
-                                <Form.Item
-                                    noStyle
-                                    name={surfix ? "surfix" : undefined}
-                                >
-                                    <InputNumber
-                                        min={0}
-                                        disabled={!surfix}
-                                        size="large"
-                                        className={styles.providerInput}
-                                        controls={false}
-                                    />
-                                </Form.Item>
-                            </div>
-
-                            <Form.Item
-                                name="isReset"
-                                valuePropName="checked"
-                                initialValue={false}
-                            >
-                                <Checkbox>
-                                    <Text className={styles.label}>
-                                        Reset mỗi ngày
-                                    </Text>
-                                </Checkbox>
-                            </Form.Item>
                         </Col>
                     </Row>
                 </Card>
@@ -207,7 +234,6 @@ const AddService = () => {
                     </Col>
                 </Row>
             </Form>
-
         </div>
     );
 };
