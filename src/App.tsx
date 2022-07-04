@@ -11,11 +11,11 @@ const App: React.FC = () => {
         <Provider store={store}>
             <Routes>
                 <Route path="/auth/*" element={<Auth />} />
-                <Route path="/*" element={<Home />} />
-                {/* <Route
+                <Route
                     path="/"
-                    element={<Navigate to="/auth/login" replace />}
-                /> */}
+                    element={<Navigate to="/dashboard" replace />}
+                />
+                <Route path="/*" element={<Home />} />
             </Routes>
         </Provider>
     );

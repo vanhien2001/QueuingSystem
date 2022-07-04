@@ -73,7 +73,7 @@ const data = [
         src: "Kiosk",
         detail: (
             <Link to="./detail" className={styles.link}>
-                Cập nhật
+                Chi tiết
             </Link>
         ),
     },
@@ -88,7 +88,7 @@ const data = [
         src: "Hệ thống",
         detail: (
             <Link to="./detail" className={styles.link}>
-                Cập nhật
+                Chi tiết
             </Link>
         ),
     },
@@ -103,7 +103,7 @@ const data = [
         src: "Kiosk",
         detail: (
             <Link to="./detail" className={styles.link}>
-                Cập nhật
+                Chi tiết
             </Link>
         ),
     },
@@ -118,7 +118,7 @@ const data = [
         src: "Kiosk",
         detail: (
             <Link to="./detail" className={styles.link}>
-                Cập nhật
+                Chi tiết
             </Link>
         ),
     },

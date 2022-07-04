@@ -7,26 +7,94 @@ import {
     Input,
     Row,
     Typography,
+    message as notice,
 } from "antd";
 import clsx from "clsx";
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import {
+    roleSelector,
+    addRole,
+    get,
+    update,
+} from "../../../../store/reducers/roleSlice";
 import styles from "./ManageRole.module.scss";
 
 const { Text, Title } = Typography;
 
+interface formValue {
+    name: string;
+    description: string;
+    authorityA: string[] | undefined;
+    authorityB: string[] | undefined;
+    authorityC: string[] | undefined;
+}
+
 const AddManageRole = () => {
+    const [form] = Form.useForm();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { loading, message, role } = useAppSelector(roleSelector);
+
+    const onFinish = (value: formValue) => {
+        if(id){
+            dispatch(update({id, ...value}))
+            .then(
+                (data) => {
+                    console.log(data.meta.requestStatus == 'fulfilled');
+                    if (data.meta.requestStatus == 'fulfilled') {
+                        notice.success('Cập nhật thành công', 3);
+                        dispatch(get(id));
+                    } else {
+                        notice.error('Đã xảy ra lỗi', 3);
+                    }
+                }
+            );
+        }else{
+            dispatch(addRole(value))
+            .then(
+                (data) => {
+                    console.log(data.meta.requestStatus == 'fulfilled');
+                    if (data.meta.requestStatus == 'fulfilled') {
+                        notice.success('Thêm thành công', 3);
+                        navigate("../");
+                    } else {
+                        notice.error('Đã xảy ra lỗi', 3);
+                    }
+                }
+            );
+        }
+    };
+
+    form.setFieldsValue(role);
+    useEffect(() => {
+        if (id) {
+            dispatch(get(id));
+        }
+    }, []);
     return (
-        <Form layout="vertical" name="role-add" className={clsx(styles.section, styles.section2)}>
-            <Title className={styles.title}>
-                Quản lý tài khoản
-            </Title>
+        <Form
+            layout="vertical"
+            name="role-add"
+            form={id ? form : undefined}
+            className={clsx(styles.section, styles.section2)}
+            onFinish={onFinish}
+        >
+            <Title className={styles.title}>Quản lý tài khoản</Title>
 
             <Row>
                 <Col flex="auto">
                     <Card bordered={false}>
                         <Row gutter={24}>
                             <Col span={24} style={{ marginBottom: "20px" }}>
-                                <Title className={clsx(styles.title, styles.title2)}>
+                                <Title
+                                    className={clsx(
+                                        styles.title,
+                                        styles.title2
+                                    )}
+                                >
                                     Thông tin vai trò
                                 </Title>
                             </Col>
@@ -77,6 +145,7 @@ const AddManageRole = () => {
 
                             <Col span={12}>
                                 <Form.Item
+                                    name="permission"
                                     label={
                                         <Text className={styles.label}>
                                             Phân quyền chức năng
@@ -88,8 +157,13 @@ const AddManageRole = () => {
                                         bordered={false}
                                     >
                                         <div>
-                                            <Title className={clsx(styles.title, styles.title2)}>
-                                                Nhóm chức nắng A
+                                            <Title
+                                                className={clsx(
+                                                    styles.title,
+                                                    styles.title2
+                                                )}
+                                            >
+                                                Nhóm chức năng A
                                             </Title>
                                             <Checkbox
                                                 className={styles.checkbox}
@@ -131,7 +205,12 @@ const AddManageRole = () => {
                                                         </Text>
                                                     </Checkbox>
                                                     <br />
-                                                    <Checkbox value="az">
+                                                    <Checkbox
+                                                        value="az"
+                                                        className={
+                                                            styles.checkbox
+                                                        }
+                                                    >
                                                         <Text
                                                             className={
                                                                 styles.label
@@ -145,17 +224,18 @@ const AddManageRole = () => {
                                         </div>
 
                                         <div>
-                                            <Title className={clsx(styles.title, styles.title2)}>
-                                                Nhóm chức nắng B
+                                            <Title
+                                                className={clsx(
+                                                    styles.title,
+                                                    styles.title2
+                                                )}
+                                            >
+                                                Nhóm chức năng B
                                             </Title>
                                             <Checkbox
                                                 className={styles.checkbox}
                                             >
-                                                <Text
-                                                    className={
-                                                        styles.label
-                                                    }
-                                                >
+                                                <Text className={styles.label}>
                                                     Tất cả
                                                 </Text>
                                             </Checkbox>
@@ -211,8 +291,13 @@ const AddManageRole = () => {
                                         </div>
 
                                         <div>
-                                            <Title className={clsx(styles.title, styles.title2)}>
-                                                Nhóm chức nắng C
+                                            <Title
+                                                className={clsx(
+                                                    styles.title,
+                                                    styles.title2
+                                                )}
+                                            >
+                                                Nhóm chức năng C
                                             </Title>
                                             <Checkbox
                                                 className={styles.checkbox}
@@ -295,8 +380,9 @@ const AddManageRole = () => {
                         type="primary"
                         className={styles.button}
                         htmlType="submit"
+                        loading={loading}
                     >
-                        Thêm
+                        {loading ? "" : id ? "Cập nhật" : "Thêm"}
                     </Button>
                 </Col>
             </Row>

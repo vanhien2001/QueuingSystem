@@ -1,9 +1,12 @@
 import { Col, Form, Row, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import { roleSelector, getAll } from "../../../../store/reducers/roleSlice";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageRole.module.scss";
 import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const columns = [
     {
@@ -29,57 +32,14 @@ const columns = [
         dataIndex: "update",
     },
 ];
-const data = [
-    {
-        key: "1",
-        name: "Kế toán",
-        amountOfUser: 6,
-        description:
-            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-    },
-    {
-        key: "2",
-        name: "Bác sĩ",
-        amountOfUser: 6,
-        description:
-            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-        key: "3",
-        name: "Lễ tân",
-        amountOfUser: 6,
-        description:
-            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-        key: "4",
-        name: "Quản lý",
-        amountOfUser: 6,
-        description:
-            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-        key: "5",
-        name: "Admin",
-        amountOfUser: 6,
-        description:
-            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-    {
-        key: "6",
-        name: "Superadmin",
-        amountOfUser: 6,
-        description:
-            "Thực hiện nhiệm vụ về thống kê số liệu và tổng hợp số liệu",
-    },
-];
 const ManageRoleTable = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { loading, roles, message } = useAppSelector(roleSelector);
+
+    useEffect(() => {
+        dispatch(getAll())
+    }, [])
 
     return (
         <div className={styles.section}>
@@ -107,7 +67,8 @@ const ManageRoleTable = () => {
                     <Col flex="auto">
                         <Table
                             columns={columns}
-                            dataSource={data}
+                            loading={loading}
+                            dataSource={roles.map(role => ({key: role.id, ...role, update: <Link to={`./edit/${role.id}`} className={styles.link}>Cập nhật</Link>}))}
                             bordered
                             size="middle"
                             pagination={{ position: ["bottomRight"] }}
