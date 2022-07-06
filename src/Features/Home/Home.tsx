@@ -3,7 +3,9 @@ import clsx from "clsx";
 import styles from "./Home.module.scss";
 import SideBar from "../../components/SideBar/SideBar";
 import HeaderContent from "../../components/Header/Header";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from '../../store/index'
+import { userSelector, load } from "../../store/reducers/userSlice";
 import Dashboard from "./Dashboard";
 import Devices from "./Devices";
 import Services from "./Services";
@@ -11,11 +13,23 @@ import Provider from "./Provider";
 import Report from "./Report";
 import Setting from "./Setting";
 import Infor from "./Infor";
+import { useEffect } from "react";
 
 const { Sider, Content, Header } = Layout;
 
 const Home = () => {
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
     const location = useLocation();
+
+    useEffect(() => {
+        dispatch(load()).then(data => {
+            if (!data.payload) {
+                navigate("/provider/new");
+            }
+        })
+    }, []);
+
     return (
         <div className={clsx(styles.homeContainer)}>
             <Layout style={{ height: "100%" }}>

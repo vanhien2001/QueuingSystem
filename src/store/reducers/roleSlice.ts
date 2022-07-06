@@ -12,13 +12,14 @@ import {
 import { db } from "../../config/firebase";
 import { RootState } from "../index";
 
-type roleType = {
+export type roleType = {
     id?: string;
-    name?: string;
-    description?: string;
-    authorityA?: string[] | undefined;
-    authorityB?: string[] | undefined;
-    authorityC?: string[] | undefined;
+    name: string;
+    description: string;
+    amountOfUser?: number;
+    authorityA: string[] | undefined;
+    authorityB: string[] | undefined;
+    authorityC: string[] | undefined;
 };
 
 export const addRole = createAsyncThunk(
@@ -39,22 +40,29 @@ export const getAll = createAsyncThunk("role/getAll", async () => {
     queryRoles.forEach((value) => {
         roles.push({
             id: value.id,
-            ...value.data(),
+            ...value.data() as roleType,
         });
     });
-
+    for (const role of roles) {
+        const roleSnap = await getDocs(query(collection(db, "user"), where("role", "==", role.id)));
+        let amountOfUser = 0
+        roleSnap.forEach((value) => {
+            amountOfUser += 1
+        })
+        role.amountOfUser = amountOfUser
+    }
     roles.reverse();
     return roles;
 });
 
 export const get = createAsyncThunk("role/get", async (id: string) => {
-    let role: roleType = {};
+    let role: roleType;
 
     const roleRef = doc(db, "roles", id);
     const roleSnap = await getDoc(roleRef);
     role = {
-        id: roleRef.id,
-        ...roleSnap.data(),
+        id,
+        ...roleSnap.data() as roleType,
     };
 
     return role;
@@ -63,7 +71,7 @@ export const get = createAsyncThunk("role/get", async (id: string) => {
 export const update = createAsyncThunk(
     "role/update",
     async (value: roleType) => {
-        const roleRef = doc(db, "roles", value.id ? value.id : "");
+        const roleRef = doc(db, "roles", value.id as string);
         await updateDoc(roleRef, value);
     }
 );
@@ -106,6 +114,12 @@ const roleSlice = createSlice({
             }
             state.loading = false;
         });
+        builder.addCase(addRole.rejected, (state, action) => {
+            state.message.fail = true;
+            state.message.text = "Đã xảy ra lỗi !";
+            state.loading = false;
+        });
+
         builder.addCase(getAll.pending, (state, action) => {
             state.loading = true;
         });
@@ -120,6 +134,12 @@ const roleSlice = createSlice({
             }
             state.loading = false;
         });
+        builder.addCase(getAll.rejected, (state, action) => {
+            state.message.fail = true;
+            state.message.text = "Đã xảy ra lỗi !";
+            state.loading = false;
+        });
+
         builder.addCase(get.pending, (state, action) => {
             state.loading = true;
         });
@@ -134,6 +154,12 @@ const roleSlice = createSlice({
             }
             state.loading = false;
         });
+        builder.addCase(get.rejected, (state, action) => {
+            state.message.fail = true;
+            state.message.text = "Đã xảy ra lỗi !";
+            state.loading = false;
+        });
+
         builder.addCase(update.pending, (state, action) => {
             state.loading = true;
         });

@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import { Button, Col, Form, Input, Row, Typography } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from '../../../store/index'
-import { userSelector, login } from "../../../store/reducers/userSlice";
+import { userSelector, login, load } from "../../../store/reducers/userSlice";
 import styles from "../Form.module.scss";
 
 interface formValue {
@@ -14,16 +15,22 @@ interface formValue {
 const LoginForm = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { authLoading, user, message } = useAppSelector(userSelector);
+    const { authLoading, message, userLogin } = useAppSelector(userSelector);
 
     const onFinish = (value: formValue) => {
         dispatch(login(value))
-        .then((data) => {
-            if(data.payload){
-                navigate("/dashboard");
-            }
-        })
+        .then(() => dispatch(load()))
     };
+
+    useEffect(() => {
+        dispatch(load())
+    }, []);
+
+    useEffect(() => {
+        if (userLogin) {
+            navigate("/dashboard");
+        }
+    }, [userLogin]);
 
     return (
         <Form

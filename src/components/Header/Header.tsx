@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { Avatar, Button, List, Space, Typography } from "antd";
 import { BellFilled } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { useAppSelector } from '../../store/index'
+import { userSelector } from "../../store/reducers/userSlice";
 import avatarImage from "../../Asset/Img/avatar.png";
 import styles from "./Header.module.scss";
+import clsx from "clsx";
 
 const { Title, Text } = Typography;
 
@@ -43,11 +46,13 @@ const data = [
 ];
 
 const Header = () => {
+    const { userLogin } = useAppSelector(userSelector);
     const [showNotify, setShowNotify] = useState<boolean>(false);
+
     return (
         <div className={styles.header}>
             <Title className={styles.title}>Thông tin cá nhân</Title>
-            <div className={styles.headerRight}>
+            <div className={clsx(styles.headerRight, {[styles.withoutLogin]: !userLogin})}>
                 <div className={styles.notifyContainer}>
                     <Button
                         type="primary"
@@ -103,7 +108,7 @@ const Header = () => {
                         style={{ lineHeight: "18px" }}
                     >
                         <Text className={styles.text}>Xin chào</Text>
-                        <Text className={styles.nameUser}>Nguyễn Văn Hiền</Text>
+                        <Text className={styles.nameUser}>{userLogin?.name}</Text>
                     </Space>
                 </Link>
             </div>

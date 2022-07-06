@@ -13,7 +13,7 @@ interface formValue {
 const ForgotPass = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { authLoading, user, message } = useAppSelector(userSelector);
+    const { authLoading, message } = useAppSelector(userSelector);
 
     const onFinish = (value: formValue) => {
         dispatch(findByEmail(value.email))

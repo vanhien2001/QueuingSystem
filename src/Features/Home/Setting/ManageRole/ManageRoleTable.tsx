@@ -35,7 +35,7 @@ const columns = [
 const ManageRoleTable = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { loading, roles, message } = useAppSelector(roleSelector);
+    const { loading, roles } = useAppSelector(roleSelector);
 
     useEffect(() => {
         dispatch(getAll())

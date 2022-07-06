@@ -26,9 +26,9 @@ const { Text, Title } = Typography;
 interface formValue {
     name: string;
     description: string;
-    authorityA: string[] | undefined;
-    authorityB: string[] | undefined;
-    authorityC: string[] | undefined;
+    authorityA: string[];
+    authorityB: string[];
+    authorityC: string[];
 }
 
 const AddManageRole = () => {
@@ -40,10 +40,15 @@ const AddManageRole = () => {
 
     const onFinish = (value: formValue) => {
         if(id){
-            dispatch(update({id, ...value}))
+            dispatch(update({
+                id, 
+                ...value,
+                authorityA: value.authorityA ? value.authorityA : [],
+                authorityB: value.authorityB ? value.authorityB : [],
+                authorityC: value.authorityC ? value.authorityC : [],
+            }))
             .then(
                 (data) => {
-                    console.log(data.meta.requestStatus == 'fulfilled');
                     if (data.meta.requestStatus == 'fulfilled') {
                         notice.success('Cập nhật thành công', 3);
                         dispatch(get(id));
@@ -53,10 +58,14 @@ const AddManageRole = () => {
                 }
             );
         }else{
-            dispatch(addRole(value))
+            dispatch(addRole({
+                ...value,
+                authorityA: value.authorityA ? value.authorityA : [],
+                authorityB: value.authorityB ? value.authorityB : [],
+                authorityC: value.authorityC ? value.authorityC : [],
+            }))
             .then(
                 (data) => {
-                    console.log(data.meta.requestStatus == 'fulfilled');
                     if (data.meta.requestStatus == 'fulfilled') {
                         notice.success('Thêm thành công', 3);
                         navigate("../");
@@ -145,7 +154,6 @@ const AddManageRole = () => {
 
                             <Col span={12}>
                                 <Form.Item
-                                    name="permission"
                                     label={
                                         <Text className={styles.label}>
                                             Phân quyền chức năng

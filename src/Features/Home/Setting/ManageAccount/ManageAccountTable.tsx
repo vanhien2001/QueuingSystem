@@ -2,10 +2,13 @@ import { CaretDownOutlined } from "@ant-design/icons";
 import { Col, Form, Row, Select, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import { userSelector, getAll } from "../../../../store/reducers/userSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageAccount.module.scss";
+import { useEffect } from "react";
 
 const { Option } = Select;
 
@@ -50,95 +53,14 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: "1",
-        username: "vanhien2001",
-        name: "Nguyễn Văn Hiền",
-        phoneNumber: "0969696969",
-        email: "vanhien2001@gmail.com",
-        role: "Lập trình viên",
-        status: <Status type="success" text="Hoạt động" />,
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "2",
-        username: "vanhien2001",
-        name: "Nguyễn Văn Hiền",
-        phoneNumber: "0969696969",
-        email: "vanhien2001@gmail.com",
-        role: "Lập trình viên",
-        status: <Status type="error" text="Ngưng hoạt động" />,
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "3",
-        username: "vanhien2001",
-        name: "Nguyễn Văn Hiền",
-        phoneNumber: "0969696969",
-        email: "vanhien2001@gmail.com",
-        role: "Lập trình viên",
-        status: <Status type="success" text="Hoạt động" />,
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "4",
-        username: "vanhien2001",
-        name: "Nguyễn Văn Hiền",
-        phoneNumber: "0969696969",
-        email: "vanhien2001@gmail.com",
-        role: "Lập trình viên",
-        status: <Status type="error" text="Ngưng hoạt động" />,
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "5",
-        username: "vanhien2001",
-        name: "Nguyễn Văn Hiền",
-        phoneNumber: "0969696969",
-        email: "vanhien2001@gmail.com",
-        role: "Lập trình viên",
-        status: <Status type="success" text="Hoạt động" />,
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "6",
-        username: "vanhien2001",
-        name: "Nguyễn Văn Hiền",
-        phoneNumber: "0969696969",
-        email: "vanhien2001@gmail.com",
-        role: "Lập trình viên",
-        status: <Status type="error" text="Ngưng hoạt động" />,
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-];
-
 const ManageAccountTable = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { authLoading, users } = useAppSelector(userSelector);
+
+    useEffect(() => {
+        dispatch(getAll())
+    }, [])
 
     return (
         <div className={styles.section}>
@@ -190,7 +112,8 @@ const ManageAccountTable = () => {
                 <Col flex="auto">
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        loading={authLoading}
+                        dataSource={users.map(user => ({key: user.id, ...user, status: <Status type={user.isActive ? 'success' : 'error'} text={user.isActive ? 'Hoạt động' : 'Ngưng hoạt động'} />, update: <Link to={`./edit/${user.id}`} className={styles.link}>Cập nhật</Link>}))}
                         bordered
                         size="middle"
                         pagination={{ position: ["bottomRight"] }}

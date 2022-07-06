@@ -13,6 +13,9 @@
     .headerRight {
         display: flex;
         align-items: center;
+        &.withoutLogin{
+            visibility: hidden;
+        }
         .notifyContainer {
             position: relative;
             .iconNotify {

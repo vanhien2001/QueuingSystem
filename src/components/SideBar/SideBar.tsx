@@ -11,7 +11,9 @@ import {
 import { Button, MenuProps } from "antd";
 import { Menu } from "antd";
 import clsx from "clsx";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from '../../store/index'
+import { userSelector, logout } from "../../store/reducers/userSlice";
 import Logo from "../../Asset/Img/LogoAlta.svg";
 import styles from "./SideBar.module.scss";
 
@@ -33,21 +35,25 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
-    getItem("/dashboard", <Link to="/dashboard" >DashBoard</Link> , <AppstoreOutlined />),
-    getItem("/devices", <Link to="/devices" >Thiết bị</Link> , <DesktopOutlined />),
-    getItem("/services", <Link to="/services" >Dịch vụ</Link>, <WechatOutlined />),
-    getItem("/provider", <Link to="/provider" >Cấp số</Link>, <CodepenOutlined />),
-    getItem("/report", <Link to="/report" >Báo cáo</Link>, <FileTextOutlined />),
-    getItem("setting", "Cài đặt hệ thống", <SettingOutlined />, <MoreOutlined className={styles.expandIcon}/>, [
-        getItem("/setting/manage-roles", <Link to="/setting/manage-roles" >Quản lý vai trò</Link>),
-        getItem("/setting/manage-accounts", <Link to="/setting/manage-accounts" >Quản lý tài khoản</Link>),
-        getItem("/setting/user-history", <Link to="/setting/user-history" >Nhật ký người dùng</Link>),
-    ]),
-];
 
 const SideBar = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { userLogin } = useAppSelector(userSelector);
+    const items: MenuItem[] = userLogin ? [
+        getItem("/dashboard", <Link to="/dashboard" >DashBoard</Link> , <AppstoreOutlined />),
+        getItem("/devices", <Link to="/devices" >Thiết bị</Link> , <DesktopOutlined />),
+        getItem("/services", <Link to="/services" >Dịch vụ</Link>, <WechatOutlined />),
+        getItem("/provider", <Link to="/provider" >Cấp số</Link>, <CodepenOutlined />),
+        getItem("/report", <Link to="/report" >Báo cáo</Link>, <FileTextOutlined />),
+        getItem("setting", "Cài đặt hệ thống", <SettingOutlined />, <MoreOutlined className={styles.expandIcon}/>, [
+            getItem("/setting/manage-roles", <Link to="/setting/manage-roles" >Quản lý vai trò</Link>),
+            getItem("/setting/manage-accounts", <Link to="/setting/manage-accounts" >Quản lý tài khoản</Link>),
+            getItem("/setting/user-history", <Link to="/setting/user-history" >Nhật ký người dùng</Link>),
+        ]),
+    ] : [ getItem("/provider/new", <Link to="/provider/new" >Cấp số</Link>, <CodepenOutlined />)];
+
     return (
         <div className={clsx(styles.sideBar)}>
             <div>
@@ -65,8 +71,12 @@ const SideBar = () => {
                     ghost
                     htmlType="submit"
                     icon={<ExportOutlined />}
+                    onClick={() =>  {
+                        dispatch(logout())
+                        navigate("/auth/login")
+                    }}
                 >
-                    <Link to="/auth/login">Đăng xuất</Link>
+                    Đăng xuất
                 </Button>
             </div>
         </div>

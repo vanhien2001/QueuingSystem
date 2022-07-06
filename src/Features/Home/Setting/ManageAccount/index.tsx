@@ -7,7 +7,7 @@ const index = () => {
     return (
         <Routes>
             <Route path="/add" element={<AddManageAccount/>} />
-            <Route path="/edit" element={<AddManageAccount/>} />
+            <Route path="/edit/:id" element={<AddManageAccount/>} />
             <Route path="/" element={<ManageAccountTable />} />
         </Routes>
     );

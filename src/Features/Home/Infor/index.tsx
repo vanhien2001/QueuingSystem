@@ -1,9 +1,23 @@
+import { useEffect } from "react";
 import { Card, Form, Input, Row, Col, Avatar, Typography } from "antd";
 import { CameraOutlined } from "@ant-design/icons";
+import { useAppDispatch, useAppSelector } from '../../../store/index'
+import { userSelector } from "../../../store/reducers/userSlice";
+import { roleSelector, get } from "../../../store/reducers/roleSlice";
 import avatarImage from "../../../Asset/Img/avatar.png";
 import styles from "./Infor.module.scss";
 
-const index = () => {
+const Infor = () => {
+    const dispatch = useAppDispatch();
+    const { userLogin } = useAppSelector(userSelector);
+    const { role } = useAppSelector(roleSelector);
+
+    useEffect(() => {
+        if (userLogin) {
+            dispatch(get(userLogin.role));
+        }
+    }, [userLogin]);
+
     return (
         <div style={{ padding: "80px 104px 0 24px" }}>
             <Card bordered={false}>
@@ -15,39 +29,39 @@ const index = () => {
                                     <Avatar src={avatarImage} className={styles.avatar}/>
                                     <CameraOutlined className={styles.icon}/>
                                 </div>
-                                <Typography.Title className={styles.name}>Nguyễn Văn Hiền</Typography.Title>
+                                <Typography.Title className={styles.name}>{userLogin?.name}</Typography.Title>
                             </div>
                         </Col>
                         <Col span={18}>
                             <Row gutter={24}>
                                 <Col span={12}>
                                     <Form.Item label="Tên người dùng">
-                                        <Input className={styles.input} disabled value={'Nguyễn Văn Hiền'}/>
+                                        <Input className={styles.input} disabled value={userLogin?.name}/>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item label="Tên đăng nhập">
-                                        <Input className={styles.input} disabled value={'vanhien2001'}/>
+                                        <Input className={styles.input} disabled value={userLogin?.username}/>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item label="Số điện thoại">
-                                        <Input className={styles.input} disabled value={'0969696969'}/>
+                                        <Input className={styles.input} disabled value={userLogin?.phoneNumber}/>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item label="Mật khẩu">
-                                        <Input className={styles.input} disabled value={'123'}/>
+                                        <Input className={styles.input} disabled value={userLogin?.password}/>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item label="Email">
-                                        <Input className={styles.input} disabled value={'vanhienit2001@gmail.com'}/>
+                                        <Input className={styles.input} disabled value={userLogin?.email}/>
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
                                     <Form.Item label="Vai trò">
-                                        <Input className={styles.input} disabled value={'Lập trình viên'}/>
+                                        <Input className={styles.input} disabled value={role?.name}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -59,4 +73,4 @@ const index = () => {
     );
 };
 
-export default index;
+export default Infor;
