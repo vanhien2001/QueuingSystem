@@ -59,8 +59,8 @@ const ManageAccountTable = () => {
     const { authLoading, users } = useAppSelector(userSelector);
 
     useEffect(() => {
-        dispatch(getAll())
-    }, [])
+        dispatch(getAll());
+    }, []);
 
     return (
         <div className={styles.section}>
@@ -113,7 +113,28 @@ const ManageAccountTable = () => {
                     <Table
                         columns={columns}
                         loading={authLoading}
-                        dataSource={users.map(user => ({key: user.id, ...user, status: <Status type={user.isActive ? 'success' : 'error'} text={user.isActive ? 'Hoạt động' : 'Ngưng hoạt động'} />, update: <Link to={`./edit/${user.id}`} className={styles.link}>Cập nhật</Link>}))}
+                        dataSource={users.map((user) => ({
+                            key: user.id,
+                            ...user,
+                            status: (
+                                <Status
+                                    type={user.isActive ? "success" : "error"}
+                                    text={
+                                        user.isActive
+                                            ? "Hoạt động"
+                                            : "Ngưng hoạt động"
+                                    }
+                                />
+                            ),
+                            update: (
+                                <Link
+                                    to={`./edit/${user.id}`}
+                                    className={styles.link}
+                                >
+                                    Cập nhật
+                                </Link>
+                            ),
+                        }))}
                         bordered
                         size="middle"
                         pagination={{ position: ["bottomRight"] }}

@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import {
     Button,
     Card,
@@ -8,22 +9,122 @@ import {
     InputNumber,
     Row,
     Typography,
+    message as notice,
 } from "antd";
+import { Timestamp } from "firebase/firestore";
 import clsx from "clsx";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import {
+    serviceSelector,
+    addService,
+    get,
+    update,
+} from "../../../../store/reducers/serviceSlice";
+import { userSelector } from "../../../../store/reducers/userSlice";
+import { add as addDiary } from "../../../../store/reducers/diarySlice";
 import styles from "../Services.module.scss";
 
 const { Text, Title } = Typography;
 
+interface formValue {
+    code: string;
+    name: string;
+    description: string;
+    increaseStart?: number;
+    increaseEnd?: number;
+    prefix: string | undefined;
+    surfix: string | undefined;
+    reset: boolean;
+}
+
 const AddService = () => {
+    const [form] = Form.useForm();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { loading, service } = useAppSelector(serviceSelector);
+    const { userLogin } = useAppSelector(userSelector);
+
     const [prefix, setPrefix] = useState(false);
     const [surfix, setSurfix] = useState(false);
     const [increase, setIncrease] = useState(false);
 
+    const onFinish = (value: formValue) => {
+        console.log(value);
+        if (id) {
+            dispatch(
+                update({
+                    id,
+                    ...value,
+                    prefix: value.prefix ? value.prefix : "",
+                    surfix: value.surfix ? value.surfix : "",
+                })
+            ).then((data) => {
+                if (data.meta.requestStatus == "fulfilled") {
+                    dispatch(get(id));
+                    notice.success("Cập nhật thành công", 3);
+                    dispatch(
+                        addDiary({
+                            username: userLogin ? userLogin.username : "",
+                            ip: "127.0.0.1",
+                            action: "Cập nhật thông tin dịch vụ",
+                            time: Timestamp.fromDate(new Date()),
+                        })
+                    );
+                } else {
+                    notice.error("Đã xảy ra lỗi", 3);
+                }
+            });
+        } else {
+            dispatch(
+                addService({
+                    ...value,
+                    prefix: value.prefix ? value.prefix : "",
+                    surfix: value.surfix ? value.surfix : "",
+                    isActive: true
+                })
+            ).then((data) => {
+                if (data.meta.requestStatus == "fulfilled") {
+                    notice.success("Thêm thành công", 3);
+                    navigate("../");
+                    dispatch(
+                        addDiary({
+                            username: userLogin ? userLogin.username : "",
+                            ip: "127.0.0.1",
+                            action: "Thêm dịch vụ",
+                            time: Timestamp.fromDate(new Date()),
+                        })
+                    );
+                } else {
+                    notice.error("Đã xảy ra lỗi", 3);
+                }
+            });
+        }
+    };
+
+    useEffect(() => {
+        if(id){
+            form.setFieldsValue(service);
+            if (service?.prefix) setPrefix(true);
+            if (service?.surfix) setSurfix(true);
+            if (service?.increaseStart) setIncrease(true);
+        }
+    }, [service]);
+    useEffect(() => {
+        if (id) {
+            dispatch(get(id));
+        }
+    }, []);
+
     return (
         <div className={clsx(styles.section, styles.section2)}>
-            <Form name="service-add" layout="vertical">
+            <Form
+                name="service-add"
+                layout="vertical"
+                form={id ? form : undefined}
+                onFinish={onFinish}
+            >
                 <Title level={2} className={styles.title}>
                     Quản lý dịch vụ
                 </Title>
@@ -38,7 +139,7 @@ const AddService = () => {
                         </Col>
                         <Col span={12}>
                             <Form.Item
-                                name="id"
+                                name="code"
                                 label={
                                     <Text className={styles.label}>
                                         Mã dịch vụ:
@@ -112,13 +213,17 @@ const AddService = () => {
                                         </Checkbox>
                                     </Col>
                                     <Col span={17}>
-                                        <Form.Item noStyle name={""}>
+                                        <Form.Item
+                                            noStyle
+                                            name={"increaseStart"}
+                                        >
                                             <InputNumber
                                                 min={0}
                                                 max={9999}
                                                 size="large"
                                                 className={styles.providerInput}
                                                 controls={false}
+                                                disabled={!increase}
                                             />
                                         </Form.Item>
                                         <Typography.Text
@@ -127,13 +232,14 @@ const AddService = () => {
                                         >
                                             đến
                                         </Typography.Text>
-                                        <Form.Item noStyle name={""}>
+                                        <Form.Item noStyle name={"increaseEnd"}>
                                             <InputNumber
                                                 min={0}
                                                 max={9999}
                                                 size="large"
                                                 className={styles.providerInput}
                                                 controls={false}
+                                                disabled={!increase}
                                             />
                                         </Form.Item>
                                     </Col>
@@ -141,10 +247,8 @@ const AddService = () => {
                                 <Row className={styles.itemContainer}>
                                     <Col span={7}>
                                         <Checkbox
-                                            checked={increase}
-                                            onChange={(e) =>
-                                                setIncrease(!increase)
-                                            }
+                                            checked={prefix}
+                                            onChange={(e) => setPrefix(!prefix)}
                                         >
                                             <Text className={styles.label}>
                                                 Prefix:
@@ -152,13 +256,11 @@ const AddService = () => {
                                         </Checkbox>
                                     </Col>
                                     <Col span={17}>
-                                        <Form.Item noStyle name={""}>
-                                            <InputNumber
-                                                min={0}
-                                                max={9999}
+                                        <Form.Item noStyle name={"prefix"}>
+                                            <Input
                                                 size="large"
                                                 className={styles.providerInput}
-                                                controls={false}
+                                                disabled={!prefix}
                                             />
                                         </Form.Item>
                                     </Col>
@@ -166,10 +268,8 @@ const AddService = () => {
                                 <Row className={styles.itemContainer}>
                                     <Col span={7}>
                                         <Checkbox
-                                            checked={increase}
-                                            onChange={(e) =>
-                                                setIncrease(!increase)
-                                            }
+                                            checked={surfix}
+                                            onChange={(e) => setSurfix(!surfix)}
                                         >
                                             <Text className={styles.label}>
                                                 Surfix:
@@ -177,29 +277,28 @@ const AddService = () => {
                                         </Checkbox>
                                     </Col>
                                     <Col span={17}>
-                                        <Form.Item noStyle name={""}>
-                                            <InputNumber
-                                                min={0}
-                                                max={9999}
+                                        <Form.Item noStyle name={"surfix"}>
+                                            <Input
                                                 size="large"
                                                 className={styles.providerInput}
-                                                controls={false}
+                                                disabled={!surfix}
                                             />
                                         </Form.Item>
                                     </Col>
                                 </Row>
                                 <Row className={styles.itemContainer}>
                                     <Col span={24}>
-                                        <Checkbox
-                                            checked={increase}
-                                            onChange={(e) =>
-                                                setIncrease(!increase)
-                                            }
+                                        <Form.Item
+                                            noStyle
+                                            name={"reset"}
+                                            valuePropName="checked"
                                         >
-                                            <Text className={styles.label}>
-                                                Reset mỗi ngày
-                                            </Text>
-                                        </Checkbox>
+                                            <Checkbox>
+                                                <Text className={styles.label}>
+                                                    Reset mỗi ngày
+                                                </Text>
+                                            </Checkbox>
+                                        </Form.Item>
                                     </Col>
                                 </Row>
                             </div>
@@ -228,8 +327,9 @@ const AddService = () => {
                             type="primary"
                             className={styles.button}
                             htmlType="submit"
+                            loading={loading}
                         >
-                            Thêm dịch vụ
+                            {loading ? "" : id ? "Cập nhật" : "Thêm dịch vụ"}
                         </Button>
                     </Col>
                 </Row>

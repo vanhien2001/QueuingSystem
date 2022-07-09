@@ -7,8 +7,8 @@ const index = () => {
     return (
         <Routes>
             <Route path="/add" element={<AddServices />} />
-            <Route path="/edit" element={<AddServices />} />
-            <Route path="/detail" element={<DetailServices />} />
+            <Route path="/edit/:id" element={<AddServices />} />
+            <Route path="/detail/:id" element={<DetailServices />} />
             <Route path="/" element={<ServicesTable />} />
         </Routes>
     );

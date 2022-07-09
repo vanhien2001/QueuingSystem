@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { Avatar, Button, List, Space, Typography } from "antd";
+import { Avatar, Breadcrumb, Button, List, Space, Typography } from "antd";
 import { BellFilled } from "@ant-design/icons";
-import { Link } from "react-router-dom";
-import { useAppSelector } from '../../store/index'
+import { Link, useLocation } from "react-router-dom";
+import { useAppSelector } from "../../store/index";
 import { userSelector } from "../../store/reducers/userSlice";
 import avatarImage from "../../Asset/Img/avatar.png";
 import styles from "./Header.module.scss";
 import clsx from "clsx";
 
 const { Title, Text } = Typography;
+
+interface Route {
+    path: string;
+    breadcrumbName: string;
+    children?: Array<{
+        path: string;
+        breadcrumbName: string;
+    }>;
+}
 
 const data = [
     {
@@ -45,14 +54,45 @@ const data = [
     },
 ];
 
+const getName = (name: string): string => {
+    switch (name) {
+        case 'devices': return 'thiết bị';
+        case 'services': return 'dịch vụ';
+        case 'provider': return 'cấp số';
+        case 'report': return 'báo cáo';
+        default: return name;
+    }
+}
+
+function itemRender(route: Route, params: any, routes: Route[], paths: any) {
+    const last = routes.indexOf(route) === routes.length - 1;
+    return last ? (
+        <span>{route.breadcrumbName}</span>
+    ) : (
+        <Link to={paths.join("/")}>{route.breadcrumbName}</Link>
+    );
+}
+
 const Header = () => {
+    const location = useLocation();
+    let keys = location.pathname.split('/').slice(1)
+    const routes: Route[] = keys.map(key => {
+        return {
+            path: "/" + key,
+            breadcrumbName: key,
+        }
+    })
     const { userLogin } = useAppSelector(userSelector);
     const [showNotify, setShowNotify] = useState<boolean>(false);
 
     return (
         <div className={styles.header}>
-            <Title className={styles.title}>Thông tin cá nhân</Title>
-            <div className={clsx(styles.headerRight, {[styles.withoutLogin]: !userLogin})}>
+            <Breadcrumb itemRender={itemRender} routes={routes} />;
+            <div
+                className={clsx(styles.headerRight, {
+                    [styles.withoutLogin]: !userLogin,
+                })}
+            >
                 <div className={styles.notifyContainer}>
                     <Button
                         type="primary"
@@ -63,7 +103,7 @@ const Header = () => {
                     />
                     <List
                         className={styles.notifyPopup}
-                        style={{ display: showNotify?'block' : 'none'}}
+                        style={{ display: showNotify ? "block" : "none" }}
                         header={
                             <Typography.Title className={styles.title}>
                                 Thông báo
@@ -108,7 +148,9 @@ const Header = () => {
                         style={{ lineHeight: "18px" }}
                     >
                         <Text className={styles.text}>Xin chào</Text>
-                        <Text className={styles.nameUser}>{userLogin?.name}</Text>
+                        <Text className={styles.nameUser}>
+                            {userLogin?.name}
+                        </Text>
                     </Space>
                 </Link>
             </div>

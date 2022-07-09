@@ -1,4 +1,9 @@
+import { useEffect } from "react";
 import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
+import moment from "moment";
+import { Timestamp } from "firebase/firestore";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import { diarySelector, getAll, add } from "../../../../store/reducers/diarySlice";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./HistoryUser.module.scss";
 
@@ -28,33 +33,14 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: "1",
-        username: "vanhien2001",
-        time: (new Date()).toString(),
-        ip: "111.111.111.111",
-        actionImplemented: "Cập nhật thông tin dịch vụ",
-    },
-
-    {
-        key: "2",
-        username: "vanhien2001",
-        time: (new Date()).toString(),
-        ip: "111.111.111.111",
-        actionImplemented: "Cập nhật thông tin dịch vụ",
-    },
-
-    {
-        key: "3",
-        username: "vanhien2001",
-        time: (new Date()).toString(),
-        ip: "111.111.111.111",
-        actionImplemented: "Cập nhật thông tin dịch vụ",
-    },
-];
-
 const HistoryUserTable = () => {
+    const dispatch = useAppDispatch();
+    const { loading, diaries } = useAppSelector(diarySelector);
+
+    useEffect(() => {
+        dispatch(getAll());
+    }, []);
+
     return (
         <div className={styles.section}>
             <Form layout="vertical">
@@ -91,7 +77,15 @@ const HistoryUserTable = () => {
                     <Col flex="auto">
                         <Table
                             columns={columns}
-                            dataSource={data}
+                            loading={loading}
+                            dataSource={diaries.map((diary) => (
+                            {
+                                key: diary.id,
+                                username: diary.username,
+                                time: moment(diary.time.toDate()).format("HH:mm - DD/MM/YYYY"),
+                                ip: diary.ip,
+                                actionImplemented: diary.action,
+                            }))}
                             bordered
                             size="middle"
                             pagination={{ position: ["bottomRight"] }}

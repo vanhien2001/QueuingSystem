@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     EditOutlined,
     RollbackOutlined,
@@ -8,6 +9,7 @@ import {
     Col,
     DatePicker,
     Form,
+    Input,
     InputNumber,
     Row,
     Select,
@@ -16,7 +18,9 @@ import {
     Typography,
 } from "antd";
 import clsx from "clsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import { serviceSelector, get } from "../../../../store/reducers/serviceSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
@@ -73,6 +77,16 @@ const data = [
 
 const DetailService = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const dispatch = useAppDispatch();
+    const { loading, service } = useAppSelector(serviceSelector);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(get(id));
+        }
+    }, [id]);
+
     return (
         <div className={styles.section}>
             <Typography.Title className={styles.title}>
@@ -96,7 +110,7 @@ const DetailService = () => {
                                 </Col>
                                 <Col span={17}>
                                     <Typography.Text className={styles.text}>
-                                        201
+                                        {service?.code}
                                     </Typography.Text>
                                 </Col>
                             </Row>
@@ -108,7 +122,7 @@ const DetailService = () => {
                                 </Col>
                                 <Col span={17}>
                                     <Typography.Text className={styles.text}>
-                                        Khám tim mạch
+                                        {service?.name}
                                     </Typography.Text>
                                 </Col>
                             </Row>
@@ -120,7 +134,7 @@ const DetailService = () => {
                                 </Col>
                                 <Col span={17}>
                                     <Typography.Text className={styles.text}>
-                                        Chuyên các bệnh lý về tim
+                                        {service?.description}
                                     </Typography.Text>
                                 </Col>
                             </Row>
@@ -136,30 +150,24 @@ const DetailService = () => {
                                     </Typography.Text>
                                 </Col>
                                 <Col span={17}>
-                                    <Form.Item noStyle name={""}>
-                                        <InputNumber
-                                            min={0}
-                                            max={9999}
-                                            size="large"
-                                            className={styles.providerInput}
-                                            controls={false}
-                                        />
-                                    </Form.Item>
+                                    <Input
+                                        className={styles.inputValue}
+                                        readOnly
+                                        value={service?.increaseStart}
+                                        size="large"
+                                    />
                                     <Typography.Text
                                         className={styles.text}
                                         style={{ margin: "0 8px" }}
                                     >
                                         đến
                                     </Typography.Text>
-                                    <Form.Item noStyle name={""}>
-                                        <InputNumber
-                                            min={0}
-                                            max={9999}
-                                            size="large"
-                                            className={styles.providerInput}
-                                            controls={false}
-                                        />
-                                    </Form.Item>
+                                    <Input
+                                        className={styles.inputValue}
+                                        readOnly
+                                        value={service?.increaseEnd}
+                                        size="large"
+                                    />
                                 </Col>
                             </Row>
                             <Row className={styles.itemContainer}>
@@ -169,15 +177,12 @@ const DetailService = () => {
                                     </Typography.Text>
                                 </Col>
                                 <Col span={17}>
-                                    <Form.Item noStyle name={""}>
-                                        <InputNumber
-                                            min={0}
-                                            max={9999}
-                                            size="large"
-                                            className={styles.providerInput}
-                                            controls={false}
-                                        />
-                                    </Form.Item>
+                                    <Input
+                                        className={styles.inputValue}
+                                        readOnly
+                                        value={service?.prefix}
+                                        size="large"
+                                    />
                                 </Col>
                             </Row>
                             <Row className={styles.itemContainer}>
@@ -297,7 +302,7 @@ const DetailService = () => {
                             {
                                 text: "Cập nhật danh sách",
                                 icon: <EditOutlined />,
-                                onClick: () => navigate("../edit"),
+                                onClick: () => navigate(`../edit/${service?.id}`),
                             },
                             {
                                 text: "Quay lại",

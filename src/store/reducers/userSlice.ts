@@ -144,7 +144,7 @@ interface defaultState {
     users: userType[];
     message: {
         fail: boolean;
-        text: string;
+        text: string | undefined;
     };
 }
 
@@ -230,7 +230,7 @@ const userSlice = createSlice({
         });
         builder.addCase(getAll.rejected, (state, action) => {
             state.message.fail = true;
-            state.message.text = "Đã xảy ra lỗi !";
+            state.message.text = action.error.message;
             state.authLoading = false;
         });
 
@@ -250,7 +250,7 @@ const userSlice = createSlice({
         });
         builder.addCase(get.rejected, (state, action) => {
             state.message.fail = true;
-            state.message.text = "Đã xảy ra lỗi !";
+            state.message.text = action.error.message;
             state.authLoading = false;
         });
 
@@ -261,8 +261,9 @@ const userSlice = createSlice({
             state.authLoading = false;
         });
         builder.addCase(update.rejected, (state, action) => {
+            state.message.fail = true;
+            state.message.text = action.error.message;
             state.authLoading = false;
-            console.log("Failed to update user");
         });
     },
 });

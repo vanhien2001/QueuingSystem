@@ -41,6 +41,14 @@ const SideBar = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { userLogin } = useAppSelector(userSelector);
+
+    let keys = location.pathname.split('/')
+    let key
+    if(keys[1] == 'setting'){
+        key = keys.slice(0,3).join('/')
+    }else{
+        key = keys.slice(0,2).join('/')
+    }
     const items: MenuItem[] = userLogin ? [
         getItem("/dashboard", <Link to="/dashboard" >DashBoard</Link> , <AppstoreOutlined />),
         getItem("/devices", <Link to="/devices" >Thiết bị</Link> , <DesktopOutlined />),
@@ -48,9 +56,9 @@ const SideBar = () => {
         getItem("/provider", <Link to="/provider" >Cấp số</Link>, <CodepenOutlined />),
         getItem("/report", <Link to="/report" >Báo cáo</Link>, <FileTextOutlined />),
         getItem("setting", "Cài đặt hệ thống", <SettingOutlined />, <MoreOutlined className={styles.expandIcon}/>, [
-            getItem("/setting/manage-roles", <Link to="/setting/manage-roles" >Quản lý vai trò</Link>),
-            getItem("/setting/manage-accounts", <Link to="/setting/manage-accounts" >Quản lý tài khoản</Link>),
-            getItem("/setting/user-history", <Link to="/setting/user-history" >Nhật ký người dùng</Link>),
+            getItem("/setting/roles", <Link to="/setting/roles" >Quản lý vai trò</Link>),
+            getItem("/setting/accounts", <Link to="/setting/accounts" >Quản lý tài khoản</Link>),
+            getItem("/setting/history", <Link to="/setting/history" >Nhật ký người dùng</Link>),
         ]),
     ] : [ getItem("/provider/new", <Link to="/provider/new" >Cấp số</Link>, <CodepenOutlined />)];
 
@@ -61,7 +69,7 @@ const SideBar = () => {
                     <img src={Logo} alt="Alta" />
                 </div>
                 <div className="menu">
-                    <Menu selectedKeys={[location.pathname]} items={items} />
+                    <Menu selectedKeys={[key]} items={items} />
                 </div>
             </div>
             <div className={clsx(styles.buttonContainer)}>

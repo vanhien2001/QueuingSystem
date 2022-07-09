@@ -26,6 +26,9 @@
         margin-bottom: 12px;
         display: flex;
         align-items: center;
+        .inputValue{
+            width: 60px;
+        }
         .text {
             font-size: 16px;
         }

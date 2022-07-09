@@ -79,7 +79,6 @@ const index = () => {
                             >
                                 <Space
                                     size={12}
-                                    style={{ marginRight: "50px" }}
                                 >
                                     <CalendarOutlined
                                         className={styles.icon}
@@ -123,7 +122,6 @@ const index = () => {
                             >
                                 <Space
                                     size={12}
-                                    style={{ marginRight: "50px" }}
                                 >
                                     <CalendarOutlined
                                         className={styles.icon}
@@ -167,7 +165,6 @@ const index = () => {
                             >
                                 <Space
                                     size={12}
-                                    style={{ marginRight: "50px" }}
                                 >
                                     <CalendarOutlined
                                         className={styles.icon}
@@ -211,7 +208,6 @@ const index = () => {
                             >
                                 <Space
                                     size={12}
-                                    style={{ marginRight: "50px" }}
                                 >
                                     <CalendarOutlined
                                         className={styles.icon}

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import {
     Button,
@@ -11,7 +12,7 @@ import {
     message as notice,
 } from "antd";
 import clsx from "clsx";
-import { useEffect } from "react";
+import { Timestamp } from "firebase/firestore";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import {
@@ -21,6 +22,7 @@ import {
     update,
 } from "../../../../store/reducers/userSlice";
 import { roleSelector, getAll } from "../../../../store/reducers/roleSlice";
+import { add as addDiary } from "../../../../store/reducers/diarySlice";
 import styles from "./ManageAccount.module.scss";
 
 const { Option } = Select;
@@ -40,7 +42,7 @@ const AddManageAccount = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { authLoading, message, user } = useAppSelector(userSelector);
+    const { authLoading, message, user, userLogin } = useAppSelector(userSelector);
     const { roles } = useAppSelector(roleSelector);
 
     const onFinish = (value: formValue) => {
@@ -52,8 +54,16 @@ const AddManageAccount = () => {
                 })
             ).then((data) => {
                 if (data.meta.requestStatus == "fulfilled") {
-                    notice.success("Cập nhật thành công", 3);
                     dispatch(get(id));
+                    notice.success("Cập nhật thành công", 3);
+                    dispatch(
+                        addDiary({
+                            username: userLogin ? userLogin.username : '',
+                            ip: "127.0.0.1",
+                            action: "Cập nhật thông tin tài khoản",
+                            time: Timestamp.fromDate(new Date()),
+                        })
+                    );
                 } else {
                     notice.error("Đã xảy ra lỗi", 3);
                 }
@@ -63,6 +73,14 @@ const AddManageAccount = () => {
                 if (data.meta.requestStatus == "fulfilled") {
                     notice.success("Thêm thành công", 3);
                     navigate("../");
+                    dispatch(
+                        addDiary({
+                            username: userLogin ? userLogin.username : '',
+                            ip: "127.0.0.1",
+                            action: "Thêm tài khoản",
+                            time: Timestamp.fromDate(new Date()),
+                        })
+                    );
                 } else {
                     notice.error("Đã xảy ra lỗi", 3);
                 }
@@ -70,10 +88,12 @@ const AddManageAccount = () => {
         }
     };
 
-    form.setFieldsValue({
-        ...user,
-        passwordConfirm: user?.password,
-    });
+    useEffect(() => {
+        form.setFieldsValue({
+            ...user,
+            passwordConfirm: user?.password,
+        });
+    }, [user])
     useEffect(() => {
         dispatch(getAll());
         if (id) {
