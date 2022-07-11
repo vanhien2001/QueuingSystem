@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Breadcrumb, Button, List, Space, Typography } from "antd";
 import { BellFilled } from "@ant-design/icons";
-import { Link, useLocation } from "react-router-dom";
-import { useAppSelector } from "../../store/index";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../store";
+import {
+    providerNumberSelector,
+    getAll,
+} from "../../store/reducers/providerNumberSlice";
 import { userSelector } from "../../store/reducers/userSlice";
 import avatarImage from "../../Asset/Img/avatar.png";
 import styles from "./Header.module.scss";
 import clsx from "clsx";
+import moment from "moment";
 
 const { Title, Text } = Typography;
 
@@ -18,41 +23,6 @@ interface Route {
         breadcrumbName: string;
     }>;
 }
-
-const data = [
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-    {
-        name: "Nguyễn Thị Thuỳ Dung",
-        time: "12h20 ngày 30/11/2021",
-    },
-];
 
 const getName = (name: string): string => {
     switch (name) {
@@ -75,6 +45,10 @@ function itemRender(route: Route, params: any, routes: Route[], paths: any) {
 
 const Header = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { loading, providerNumbers } = useAppSelector(providerNumberSelector);
+
     let keys = location.pathname.split('/').slice(1)
     const routes: Route[] = keys.map(key => {
         return {
@@ -85,9 +59,13 @@ const Header = () => {
     const { userLogin } = useAppSelector(userSelector);
     const [showNotify, setShowNotify] = useState<boolean>(false);
 
+    useEffect(() => {
+        dispatch(getAll());
+    }, []);
+
     return (
         <div className={styles.header}>
-            <Breadcrumb itemRender={itemRender} routes={routes} />;
+            <Breadcrumb itemRender={itemRender} routes={routes} />
             <div
                 className={clsx(styles.headerRight, {
                     [styles.withoutLogin]: !userLogin,
@@ -110,9 +88,9 @@ const Header = () => {
                             </Typography.Title>
                         }
                         bordered
-                        dataSource={data}
+                        dataSource={providerNumbers}
                         renderItem={(item) => (
-                            <List.Item className={styles.item}>
+                            <List.Item className={styles.item} onClick={() => {navigate(`../provider/detail/${item.id}`); setShowNotify(false);}}>
                                 <List.Item.Meta
                                     title={
                                         <Typography.Text
@@ -121,7 +99,7 @@ const Header = () => {
                                                 color: "#BF5805",
                                             }}
                                         >
-                                            Người dùng: {item.name}
+                                            Người dùng: {item.user}
                                         </Typography.Text>
                                     }
                                     description={
@@ -132,7 +110,7 @@ const Header = () => {
                                                 fontWeight: 400,
                                             }}
                                         >
-                                            Thời gian nhận số: {item.time}
+                                            Thời gian nhận số: {moment(item.timeGet.toDate()).format("HH:mm") + " ngày " + moment(item.timeGet.toDate()).format("DD/MM/YYYY")}
                                         </Typography.Text>
                                     }
                                 />

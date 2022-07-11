@@ -10,7 +10,6 @@ import {
     DatePicker,
     Form,
     Input,
-    InputNumber,
     Row,
     Select,
     Space,
@@ -21,6 +20,10 @@ import clsx from "clsx";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import { serviceSelector, get } from "../../../../store/reducers/serviceSlice";
+import {
+    providerNumberSelector,
+    getByIdService,
+} from "../../../../store/reducers/providerNumberSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
@@ -31,7 +34,7 @@ const { Option } = Select;
 
 const columns = [
     {
-        title: "STT",
+        title: "Số thứ tự",
         key: "stt",
         dataIndex: "stt",
     },
@@ -79,11 +82,13 @@ const DetailService = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const dispatch = useAppDispatch();
-    const { loading, service } = useAppSelector(serviceSelector);
+    const { service } = useAppSelector(serviceSelector);
+    const { loading, providerNumbersFilter } = useAppSelector(providerNumberSelector);
 
     useEffect(() => {
         if (id) {
             dispatch(get(id));
+            dispatch(getByIdService(id));
         }
     }, [id]);
 
@@ -284,7 +289,37 @@ const DetailService = () => {
                                 <Col span={24}>
                                     <Table
                                         columns={columns}
-                                        dataSource={data}
+                                        loading={loading}
+                                        dataSource={providerNumbersFilter.map(
+                                            (providerNumber) => {
+                                                return {
+                                                    key: providerNumber.id,
+                                                    stt: service?.prefix
+                                                        ? service?.prefix +
+                                                          providerNumber.stt
+                                                        : providerNumber.stt,
+                                                    status: (
+                                                        <Status
+                                                            type={
+                                                                providerNumber.status ==
+                                                                "skip"
+                                                                    ? "error"
+                                                                    : providerNumber.status
+                                                            }
+                                                            text={
+                                                                providerNumber.status ==
+                                                                "waiting"
+                                                                    ? "Đang chờ"
+                                                                    : providerNumber.status ==
+                                                                      "used"
+                                                                    ? "Đã sử dụng"
+                                                                    : "Bỏ qua"
+                                                            }
+                                                        />
+                                                    ),
+                                                };
+                                            }
+                                        )}
                                         bordered
                                         size="middle"
                                         pagination={{
@@ -302,7 +337,8 @@ const DetailService = () => {
                             {
                                 text: "Cập nhật danh sách",
                                 icon: <EditOutlined />,
-                                onClick: () => navigate(`../edit/${service?.id}`),
+                                onClick: () =>
+                                    navigate(`../edit/${service?.id}`),
                             },
                             {
                                 text: "Quay lại",

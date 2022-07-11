@@ -1,0 +1,42 @@
+.contentModal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 24px auto 20px;
+    .text{
+        color: #535261;
+        font-size: 32px;
+        line-height: 48px;
+        font-weight: 700;
+        margin-bottom: 24px;
+    }
+    .number{
+        color: #FF7506;
+        font-size: 56px;
+        line-height: 60px;
+        font-weight: 800;
+        margin-bottom: 24px;
+    }
+    .subtext{
+        color: #282739;
+        font-size: 18px;
+        line-height: 27px;
+        font-weight: 400;
+    }
+}
+.footerModal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .text{
+        color: #fff;
+        font-size: 22px;
+        line-height: 33px;
+        font-weight: 700;
+        &:first-child{
+            margin-bottom: 12px;
+        }
+    }
+}

@@ -51,7 +51,6 @@ const AddService = () => {
     const [increase, setIncrease] = useState(false);
 
     const onFinish = (value: formValue) => {
-        console.log(value);
         if (id) {
             dispatch(
                 update({

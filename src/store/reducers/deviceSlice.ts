@@ -10,69 +10,68 @@ import {
 import { db } from "../../config/firebase";
 import { RootState } from "../index";
 
-export type serviceType = {
+export type deviceType = {
     id?: string;
     code: string;
     name: string;
-    description: string;
-    increaseStart ?: number;
-    increaseEnd ?: number;
-    prefix : string;
-    surfix : string;
-    reset : boolean;
-    isActive?: boolean;
+    username: string;
+    password: string;
+    type: string;
+    ip: string;
+    isActive: boolean;
+    isConnect: boolean;
+    services: string[];
 };
 
-export const addService = createAsyncThunk(
-    "service/add",
-    async (values: serviceType) => {
-        const newDoc = doc(collection(db, "services"));
+export const addDevice = createAsyncThunk(
+    "device/add",
+    async (values: deviceType) => {
+        const newDoc = doc(collection(db, "devices"));
         await setDoc(newDoc, values);
-        const Ref = doc(db, "service", newDoc.id);
+        const Ref = doc(db, "device", newDoc.id);
         const Snap = await getDoc(Ref);
         return Snap;
     }
 );
 
-export const getAll = createAsyncThunk("service/getAll", async () => {
-    let services: serviceType[] = [];
+export const getAll = createAsyncThunk("device/getAll", async () => {
+    let devices: deviceType[] = [];
 
-    const query = await getDocs(collection(db, "services"));
+    const query = await getDocs(collection(db, "devices"));
     query.forEach((value) => {
-        services.push({
+        devices.push({
             id: value.id,
-            ...value.data() as serviceType,
+            ...value.data() as deviceType,
         });
     });
-    services.reverse();
-    return services;
+    devices.reverse();
+    return devices;
 });
 
-export const get = createAsyncThunk("service/get", async (id: string) => {
-    let service: serviceType;
+export const get = createAsyncThunk("device/get", async (id: string) => {
+    let device: deviceType;
 
-    const serviceRef = doc(db, "services", id);
-    const serviceSnap = await getDoc(serviceRef);
-    service = {
+    const deviceRef = doc(db, "devices", id);
+    const deviceSnap = await getDoc(deviceRef);
+    device = {
         id,
-        ...serviceSnap.data() as serviceType,
+        ...deviceSnap.data() as deviceType,
     };
-
-    return service;
+    return device;
 });
 
 export const update = createAsyncThunk(
-    "service/update",
-    async ({id, ...value}: serviceType) => {
-        const ref = doc(db, "services", id as string);
+    "device/update",
+    async ({id, ...value}: deviceType) => {
+        const ref = doc(db, "devices", id as string);
         await updateDoc(ref, {...value});
     }
 );
 
 interface defaultState {
     loading: boolean;
-    service: serviceType | null;
-    services: serviceType[];
+    device: deviceType | null;
+    devices: deviceType[];
     message: {
         fail: boolean;
         text: string | undefined;
@@ -81,23 +80,23 @@ interface defaultState {
 
 const initialState: defaultState = {
     loading: false,
-    service: null,
-    services: [],
+    device: null,
+    devices: [],
     message: {
         fail: false,
         text: "",
     },
 };
 
-const serviceSlice = createSlice({
-    name: "service",
+const deviceSlice = createSlice({
+    name: "device",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(addService.pending, (state, action) => {
+        builder.addCase(addDevice.pending, (state, action) => {
             state.loading = true;
         });
-        builder.addCase(addService.fulfilled, (state, action) => {
+        builder.addCase(addDevice.fulfilled, (state, action) => {
             if (action.payload.exists()) {
                 state.message.fail = false;
                 state.message.text = "Thêm thành công";
@@ -107,7 +106,7 @@ const serviceSlice = createSlice({
             }
             state.loading = false;
         });
-        builder.addCase(addService.rejected, (state, action) => {
+        builder.addCase(addDevice.rejected, (state, action) => {
             state.message.fail = true;
             state.message.text = action.error.message;
             state.loading = false;
@@ -118,7 +117,7 @@ const serviceSlice = createSlice({
         });
         builder.addCase(getAll.fulfilled, (state, action) => {
             if (action.payload) {
-                state.services = action.payload;
+                state.devices = action.payload;
                 state.message.fail = false;
                 state.message.text = "";
             } else {
@@ -138,7 +137,7 @@ const serviceSlice = createSlice({
         });
         builder.addCase(get.fulfilled, (state, action) => {
             if (action.payload) {
-                state.service = action.payload;
+                state.device = action.payload;
                 state.message.fail = false;
                 state.message.text = "";
             } else {
@@ -169,10 +168,10 @@ const serviceSlice = createSlice({
     },
 });
 
-const serviceReducer = serviceSlice.reducer;
+const deviceReducer = deviceSlice.reducer;
 
-export const serviceSelector = (state: RootState) => state.serviceReducer;
+export const deviceSelector = (state: RootState) => state.deviceReducer;
 
-export const {} = serviceSlice.actions;
+export const {} = deviceSlice.actions;
 
-export default serviceReducer;
+export default deviceReducer;

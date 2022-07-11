@@ -53,6 +53,11 @@ module.exports = {
                             "@checkbox-border-radius": "4px",
                             //List
                             "@list-header-background": '#FF9138',
+                            //Modal
+                            "@modal-footer-bg": '#FF9138',
+                            "@modal-header-border-width": 0,
+                            "@modal-footer-border-width": 0,
+                            "@modal-footer-padding-vertical": "16px",
                         },
                         javascriptEnabled: true,
                     },

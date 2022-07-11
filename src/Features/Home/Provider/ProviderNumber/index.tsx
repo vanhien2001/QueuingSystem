@@ -1,32 +1,79 @@
-import {
-    Button,
-    Card,
-    Checkbox,
-    Col,
-    Form,
-    Input,
-    InputNumber,
-    Row,
-    Select,
-    Typography,
-} from "antd";
+import { useEffect, useState } from "react";
+import { Button, Card, Col, Form, Modal, Row, Select, Typography, message as notice } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
 import clsx from "clsx";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import {
+    providerNumberSelector,
+    get,
+    getAll,
+    addProviderNumber
+} from "../../../../store/reducers/providerNumberSlice";
+import {
+    serviceSelector,
+    getAll as getServices,
+} from "../../../../store/reducers/serviceSlice";
+import { userSelector } from "../../../../store/reducers/userSlice";
+import { add as addDiary } from "../../../../store/reducers/diarySlice";
 import styles from "../Provider.module.scss";
+import styles2 from "./Modal.module.scss";
+import { Timestamp } from "firebase/firestore";
 
 const { Text, Title } = Typography;
 const { Option } = Select;
+interface formValue {
+    service: string;
+}
 
 const ProviderNumber = () => {
-    const [prefix, setPrefix] = useState(false);
-    const [surfix, setSurfix] = useState(false);
-    const [increase, setIncrease] = useState(false);
+    const dispatch = useAppDispatch();
+    const { loading, providerNumber } = useAppSelector(providerNumberSelector);
+    const { services } = useAppSelector(serviceSelector);
+    const { userLogin } = useAppSelector(userSelector);
+    const [visible, setVisible] = useState(false);
+
+    const onFinish = (value: formValue) => {
+            let time = new Date();
+            let timeExp = new Date();
+            timeExp.setHours(time.getHours() + 1)
+            dispatch(
+                addProviderNumber({
+                    service: value.service,
+                    user: userLogin?.id as string,
+                    stt: 0,
+                    src: 'Hệ thống',
+                    status: 'waiting',
+                    timeGet: Timestamp.fromDate(time),
+                    timeExp: Timestamp.fromDate(timeExp),
+                })
+            ).then((data) => {
+                if (data.payload) {
+                    const id = data.payload as string
+                    dispatch(get(id)).then(() => setVisible(true))
+                    notice.success("Lấy số thành công", 3);
+                    dispatch(getAll())
+                    dispatch(
+                        addDiary({
+                            username: userLogin ? userLogin.username : "",
+                            ip: "127.0.0.1",
+                            action: "Lấy số",
+                            time: Timestamp.fromDate(new Date()),
+                        })
+                    );
+                } else {
+                    notice.error("Đã xảy ra lỗi", 3);
+                }
+            });
+    };
+
+    useEffect(() => {
+        dispatch(getServices());
+    }, []);
 
     return (
         <div className={clsx(styles.section, styles.section2)}>
-            <Form name="provider-new" layout="vertical">
+            <Form name="provider-new" layout="vertical" onFinish={onFinish}>
                 <Title className={styles.title}>Quản lý cấp số</Title>
                 <Card bordered>
                     <Row gutter={24}>
@@ -40,11 +87,12 @@ const ProviderNumber = () => {
                                 Dịch vụ khách hàng lựa chọn
                             </Text>
                             <Form.Item
-                                name="id"
+                                name="service"
                                 required={false}
                                 rules={[
                                     {
                                         required: true,
+                                        message: "Vui lòng chọn dịch vụ",
                                     },
                                 ]}
                             >
@@ -60,12 +108,16 @@ const ProviderNumber = () => {
                                         />
                                     }
                                 >
-                                    <Option key={1} value={"kisok"}>
-                                        {"Kisok"}
-                                    </Option>
-                                    <Option key={2} value={"Hệ thống"}>
-                                        {"Hệ thống"}
-                                    </Option>
+                                    {services.map((service) => {
+                                        return (
+                                            <Option
+                                                key={service.id}
+                                                value={service.id}
+                                            >
+                                                {service.name}
+                                            </Option>
+                                        );
+                                    })}
                                 </Select>
                             </Form.Item>
                         </Col>
@@ -89,15 +141,45 @@ const ProviderNumber = () => {
                             <Button
                                 size="large"
                                 type="primary"
+                                loading={loading}
                                 className={styles.button}
                                 htmlType="submit"
                             >
-                                In số
+                                {loading ? "" : "In số"}
                             </Button>
                         </Col>
                     </Row>
                 </Card>
             </Form>
+            <Modal
+                centered
+                visible={visible}
+                bodyStyle={{ borderRadius: "10px"}}
+                onCancel={() => setVisible(false)}
+                width={470}
+                footer={
+                    <div className={styles2.footerModal}>
+                        <Typography.Text className={styles2.text}>
+                            {"Thời gian cấp:" + " 17:30 11/10/2021"}
+                        </Typography.Text>
+                        <Typography.Text className={styles2.text}>
+                            {"Hạn sử dụng:" + " 17:30 11/10/2021"}
+                        </Typography.Text>
+                    </div>
+                }
+            >
+                <div className={styles2.contentModal}>
+                    <Typography.Text className={styles2.text}>
+                        Số thứ tự được cấp
+                    </Typography.Text>
+                    <Typography.Text className={styles2.number}>
+                        {providerNumber?.number}
+                    </Typography.Text>
+                    <Typography.Text className={styles2.subtext}>
+                        Dv: {providerNumber?.service} <b>(tại quầy số 1)</b>
+                    </Typography.Text>
+                </div>
+            </Modal>
         </div>
     );
 };

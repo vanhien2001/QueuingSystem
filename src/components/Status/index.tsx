@@ -3,7 +3,7 @@ import styles from './Status.module.scss';
 
 
 interface props {
-    type: 'success' | 'waiting' | 'error' | 'used';
+    type: 'success' | 'waiting' | 'error' | 'used' ;
     text: string;
 }
 

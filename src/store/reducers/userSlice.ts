@@ -13,7 +13,7 @@ import { db } from "../../config/firebase";
 import { RootState } from "../index";
 import { roleType } from "./roleSlice";
 
-type userType = {
+export type userType = {
     id?: string;
     username: string;
     password: string;

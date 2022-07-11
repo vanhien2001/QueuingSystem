@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import {
     Col,
@@ -10,7 +11,13 @@ import {
     Typography,
 } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import moment from "moment";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import {
+    providerNumberSelector,
+    getAll,
+} from "../../../../store/reducers/providerNumberSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
@@ -61,71 +68,15 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: "1",
-        stt: "201001",
-        name: "Nguyễn Văn Hiền",
-        nameService: "Khám tổng quát",
-        time: new Date().toUTCString(),
-        timeExp: new Date().toUTCString(),
-        status: <Status type="waiting" text="Đang chờ"/>,
-        src: "Kiosk",
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-    },
-    {
-        key: "2",
-        stt: "201002",
-        name: "Nguyễn Văn Hiền",
-        nameService: "Khám tai mũi họng",
-        time: new Date().toUTCString(),
-        timeExp: new Date().toUTCString(),
-        status: <Status type="waiting" text="Đang chờ"/>,
-        src: "Hệ thống",
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-    },
-    {
-        key: "3",
-        stt: "201003",
-        name: "Nguyễn Văn Hiền",
-        nameService: "Khám tổng quát",
-        time: new Date().toUTCString(),
-        timeExp: new Date().toUTCString(),
-        status: <Status type="used" text="Đã sử dụng"/>,
-        src: "Kiosk",
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-    },
-    {
-        key: "4",
-        stt: "201004",
-        name: "Nguyễn Văn Hiền",
-        nameService: "Khám tổng quát",
-        time: new Date().toUTCString(),
-        timeExp: new Date().toUTCString(),
-        status: <Status type="error" text="Bỏ qua"/>,
-        src: "Kiosk",
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-    },
-];
-
 const ProviderTable = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { loading, providerNumbers } = useAppSelector(providerNumberSelector);
+
+    useEffect(() => {
+        dispatch(getAll());
+    }, []);
+
     return (
         <div className={styles.section}>
             <Typography.Title className={styles.title} level={2}>
@@ -254,10 +205,40 @@ const ProviderTable = () => {
                 <Col flex="auto">
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        loading={loading}
+                        dataSource={providerNumbers.map((providerNumber) => {
+                            return {
+                                key: providerNumber.id,
+                                stt: providerNumber.number,
+                                name: providerNumber.user,
+                                nameService: providerNumber.service,
+                                time: moment(providerNumber.timeGet.toDate()).format("HH:mm - DD/MM/YYYY"),
+                                timeExp: moment(providerNumber.timeExp.toDate()).format("HH:mm - DD/MM/YYYY"),
+                                status: (
+                                    <Status
+                                        type={
+                                            providerNumber.status == 'skip'
+                                                ? "error"
+                                                : providerNumber.status
+                                        }
+                                        text={
+                                            providerNumber.status == 'waiting'
+                                                ? "Đang chờ"
+                                                : providerNumber.status == 'used' ? "Đã sử dụng" : "Bỏ qua"
+                                        }
+                                    />
+                                ),
+                                src: providerNumber.src,
+                                detail: (
+                                    <Link to={`./detail/${providerNumber.id}`} className={styles.link}>
+                                        Chi tiết
+                                    </Link>
+                                ),
+                            };
+                        })}
                         bordered
                         size="middle"
-                        pagination={{ position: ["bottomRight"] }}
+                        pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
                     />
                 </Col>
                 <Col flex="100px">

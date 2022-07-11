@@ -71,7 +71,7 @@ const ManageRoleTable = () => {
                             dataSource={roles.map(role => ({key: role.id, ...role, update: <Link to={`./edit/${role.id}`} className={styles.link}>Cập nhật</Link>}))}
                             bordered
                             size="middle"
-                            pagination={{ position: ["bottomRight"] }}
+                            pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
                         />
                     </Col>
                     <Col flex="100px">

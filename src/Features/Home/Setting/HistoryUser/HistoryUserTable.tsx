@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
 import moment from "moment";
-import { Timestamp } from "firebase/firestore";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import { diarySelector, getAll, add } from "../../../../store/reducers/diarySlice";
 import SearchInput from "../../../../components/SearchInput";
@@ -88,7 +87,7 @@ const HistoryUserTable = () => {
                             }))}
                             bordered
                             size="middle"
-                            pagination={{ position: ["bottomRight"] }}
+                            pagination={{defaultPageSize: 8, position: ["bottomRight"] }}
                         />
                     </Col>
                     <Col flex="100px"></Col>

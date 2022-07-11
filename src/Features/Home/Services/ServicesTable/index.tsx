@@ -173,7 +173,7 @@ const ServicesTable = () => {
                         })}
                         bordered
                         size="middle"
-                        pagination={{ position: ["bottomRight"] }}
+                        pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
                     />
                 </Col>
                 <Col flex="100px">

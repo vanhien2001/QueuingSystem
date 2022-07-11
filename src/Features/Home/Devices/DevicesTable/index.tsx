@@ -1,7 +1,17 @@
+import { useEffect } from "react";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../../../store";
+import {
+    deviceSelector,
+    getAll,
+} from "../../../../store/reducers/deviceSlice";
+import {
+    serviceSelector,
+    getAll as getAllService,
+} from "../../../../store/reducers/serviceSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
@@ -42,8 +52,8 @@ const columns = [
 
     {
         title: "Dịch vụ sửa dụng",
-        key: "service",
-        dataIndex: "service",
+        key: "services",
+        dataIndex: "services",
     },
     {
         title: "",
@@ -57,87 +67,17 @@ const columns = [
     },
 ];
 
-const data = [
-    {
-        key: "1",
-        id: "KIO_01",
-        name: "Kisok",
-        IPAddess: "111.111.111",
-        active: <Status type="error" text="Ngưng hoạt động"/>,
-        connect: <Status type="error" text="Mất kết nối"/>,
-        service: ["test", "test", "test"],
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "2",
-        id: "KIO_01",
-        name: "Kisok",
-        IPAddess: "111.111.111",
-        active: <Status type="success" text="Hoạt động"/>,
-        connect: <Status type="success" text="Kết nối"/>,
-        service: ["test", "test", "test"],
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "3",
-        id: "KIO_01",
-        name: "Kisok",
-        IPAddess: "111.111.111",
-        active: <Status type="error" text="Ngưng hoạt động"/>,
-        connect: <Status type="error" text="Mất kết nối"/>,
-        service: ["test", "test", "test"],
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-    {
-        key: "4",
-        id: "KIO_01",
-        name: "Kisok",
-        IPAddess: "111.111.111",
-        active: <Status type="success" text="Hoạt động"/>,
-        connect: <Status type="success" text="Kết nối"/>,
-        service: ["test", "test", "test"],
-        detail: (
-            <Link to="./detail" className={styles.link}>
-                Chi tiết
-            </Link>
-        ),
-        update: (
-            <Link to="./edit" className={styles.link}>
-                Cập nhật
-            </Link>
-        ),
-    },
-];
-
 const DevicesTable = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+    const { loading, devices } = useAppSelector(deviceSelector);
+    const { services } = useAppSelector(serviceSelector);
+
+    useEffect(() => {
+        dispatch(getAll());
+        dispatch(getAllService());
+    }, []);
+
     return (
         <div className={styles.section}>
             <Typography.Title className={styles.title}>
@@ -219,10 +159,59 @@ const DevicesTable = () => {
                 <Col flex="auto">
                     <Table
                         columns={columns}
-                        dataSource={data}
+                        loading={loading}
+                        dataSource={devices.map((device) => {
+                            return {
+                                key: device.id,
+                                id: device.code,
+                                name: device.name,
+                                IPAddess: device.ip,
+                                active: (
+                                    <Status
+                                        type={
+                                            device.isActive
+                                                ? "success"
+                                                : "error"
+                                        }
+                                        text={
+                                            device.isActive
+                                                ? "Hoạt động"
+                                                : "Ngưng hoạt động"
+                                        }
+                                    />
+                                ),
+                                connect: (
+                                    <Status
+                                        type={
+                                            device.isConnect
+                                                ? "success"
+                                                : "error"
+                                        }
+                                        text={
+                                            device.isConnect
+                                                ? "Hoạt động"
+                                                : "Ngưng hoạt động"
+                                        }
+                                    />
+                                ),
+                                services: device.services.map((value) => {
+                                    return services.find( service => service.id == value)?.name
+                                }).join(', '),
+                                detail: (
+                                    <Link to={`./detail/${device.id}`} className={styles.link}>
+                                        Chi tiết
+                                    </Link>
+                                ),
+                                update: (
+                                    <Link to={`./edit/${device.id}`} className={styles.link}>
+                                        Cập nhật
+                                    </Link>
+                                ),
+                            };
+                        })}
                         bordered
                         size="middle"
-                        pagination={{ position: ["bottomRight"] }}
+                        pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
                     />
                 </Col>
                 <Col flex="100px">
