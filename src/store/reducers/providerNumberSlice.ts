@@ -19,14 +19,14 @@ export type providerNumberType = {
     id?: string;
     service: string;
     number?: string;
-    user: string;
+    name: string;
     stt: number;
     status: "waiting" | "used" | "skip";
     src: string;
     timeGet: Timestamp;
     timeExp: Timestamp;
-    phoneNumber?: string;
-    email?: string;
+    phoneNumber: string;
+    email: string;
 };
 
 export const addProviderNumber = createAsyncThunk(
@@ -103,19 +103,12 @@ export const getAll = createAsyncThunk(
             const temp = Snap.data() as serviceType;
             providerNumber.service = temp.name;
             providerNumber.number = temp.prefix + providerNumber.stt;
-            const Snap1 = await getDoc(
-                doc(db, "user", providerNumber.user as string)
-            );
-            const temp2 = Snap1.data() as userType;
-            providerNumber.user = temp2.name;
-            providerNumber.phoneNumber = temp2.phoneNumber;
-            providerNumber.email = temp2.email;
         }
         if (filter) {
             if (filter.keywords != "")
                 providerNumbers = providerNumbers.filter(
                     (providerNumber) =>
-                        providerNumber.user
+                        providerNumber.name
                             .toLowerCase()
                             .includes(filter.keywords.toLowerCase()) ||
                         providerNumber.number
@@ -189,14 +182,6 @@ export const get = createAsyncThunk(
         const temp = Snap.data() as serviceType;
         providerNumber.service = temp.name;
         providerNumber.number = temp.prefix + providerNumber.stt;
-        const Snap1 = await getDoc(
-            doc(db, "user", providerNumber.user as string)
-        );
-        const temp2 = Snap1.data() as userType;
-        providerNumber.user = temp2.name;
-        providerNumber.phoneNumber = temp2.phoneNumber;
-        providerNumber.email = temp2.email;
-
         return providerNumber;
     }
 );

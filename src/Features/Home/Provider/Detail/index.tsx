@@ -53,7 +53,7 @@ const DetailDevice = () => {
                                         <Typography.Text
                                             className={styles.text}
                                         >
-                                            {providerNumber?.user}
+                                            {providerNumber?.name}
                                         </Typography.Text>
                                     </Col>
                                 </Row>

@@ -236,7 +236,7 @@ const ProviderTable = () => {
                             return {
                                 key: providerNumber.id,
                                 stt: providerNumber.number,
-                                name: providerNumber.user,
+                                name: providerNumber.name,
                                 nameService: providerNumber.service,
                                 time: moment(
                                     providerNumber.timeGet.toDate()

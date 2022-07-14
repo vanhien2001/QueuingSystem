@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Modal, Row, Select, Typography, message as notice } from "antd";
 import { CaretDownOutlined } from "@ant-design/icons";
 import clsx from "clsx";
+import { Timestamp } from "firebase/firestore";
+import moment from "moment";
 import { Link } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import {
@@ -16,10 +18,9 @@ import {
 } from "../../../../store/reducers/serviceSlice";
 import { userSelector } from "../../../../store/reducers/userSlice";
 import { add as addDiary } from "../../../../store/reducers/diarySlice";
+import randomCustomer from '../../../../Utils/RandomCustomer';
 import styles from "../Provider.module.scss";
 import styles2 from "./Modal.module.scss";
-import { Timestamp } from "firebase/firestore";
-import moment from "moment";
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -41,12 +42,12 @@ const ProviderNumber = () => {
             dispatch(
                 addProviderNumber({
                     service: value.service,
-                    user: userLogin?.id as string,
                     stt: 0,
                     src: 'Hệ thống',
                     status: 'waiting',
                     timeGet: Timestamp.fromDate(time),
                     timeExp: Timestamp.fromDate(timeExp),
+                    ...randomCustomer()
                 })
             ).then((data) => {
                 if (data.payload) {

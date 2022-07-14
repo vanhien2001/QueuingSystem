@@ -31,7 +31,8 @@ import {
     serviceSelector,
     getAll as getAllService,
 } from "../../../store/reducers/serviceSlice";
-import Status from "../../../components/Status";
+import CardContent from "./CardContainer/CardContent";
+import CardSideBar from "./CardContainer/CardSideBar";
 import styles from "./Dasboard.module.scss";
 
 const { Sider, Content } = Layout;
@@ -71,10 +72,19 @@ const data = [
         value: 4221,
     },
 ];
+const iconCardStyle = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "48px",
+    width: "48px",
+    fontSize: "24px",
+    borderRadius: "50%",
+};
 
 const Dashboard = () => {
     const dispatch = useAppDispatch();
-    const { loading, providerNumbers } = useAppSelector(providerNumberSelector);
+    const { providerNumbers } = useAppSelector(providerNumberSelector);
     const { devices } = useAppSelector(deviceSelector);
     const { services } = useAppSelector(serviceSelector);
 
@@ -100,183 +110,96 @@ const Dashboard = () => {
                     </Typography.Title>
                     <Row gutter={12}>
                         <Col span={6}>
-                            <Card
-                                className={styles.cardContainer}
-                                bodyStyle={{ padding: "12px" }}
-                            >
-                                <Space size={12}>
+                            <CardContent
+                                icon={
                                     <CalendarOutlined
-                                        className={styles.icon}
                                         style={{
+                                            ...iconCardStyle,
                                             backgroundColor:
                                                 "rgba(100, 147, 249, 0.2)",
                                             color: "#6493F9",
                                         }}
                                     />
-                                    <Typography.Text className={styles.text}>
-                                        Số thứ tự đã cấp
-                                    </Typography.Text>
-                                </Space>
-                                <Space
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        marginTop: "12px",
-                                    }}
-                                >
-                                    <Typography.Text className={styles.number}>
-                                        {providerNumbers.length}
-                                    </Typography.Text>
-                                    <Tag
-                                        className={styles.tag}
-                                        style={{
-                                            backgroundColor:
-                                                "rgba(255, 149, 1, 0.15)",
-                                            color: "#FF9138",
-                                        }}
-                                    >
-                                        32,41%
-                                    </Tag>
-                                </Space>
-                            </Card>
+                                }
+                                title={"Số thứ tự đã cấp"}
+                                number={providerNumbers.length}
+                                tag={{
+                                    color: "#FF9138",
+                                    number: 32.41,
+                                }}
+                            />
                         </Col>
                         <Col span={6}>
-                            <Card
-                                className={styles.cardContainer}
-                                bodyStyle={{ padding: "12px" }}
-                            >
-                                <Space size={12}>
+                            <CardContent
+                                icon={
                                     <CalendarOutlined
-                                        className={styles.icon}
                                         style={{
+                                            ...iconCardStyle,
                                             backgroundColor:
                                                 "rgb(53, 199, 90, 0.2)",
                                             color: "#35C75A",
                                         }}
                                     />
-                                    <Typography.Text className={styles.text}>
-                                        Số thứ tự đã sử dụng
-                                    </Typography.Text>
-                                </Space>
-                                <Space
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        marginTop: "12px",
-                                    }}
-                                >
-                                    <Typography.Text className={styles.number}>
-                                        {
-                                            providerNumbers.filter(
-                                                (value) =>
-                                                    value.status == "used"
-                                            ).length
-                                        }
-                                    </Typography.Text>
-                                    <Tag
-                                        className={styles.tag}
-                                        style={{
-                                            backgroundColor:
-                                                "rgba(231, 63, 63, 0.15)",
-                                            color: "#E73F3F",
-                                        }}
-                                    >
-                                        32,41%
-                                    </Tag>
-                                </Space>
-                            </Card>
+                                }
+                                title={"Số thứ tự đã sử dụng"}
+                                number={
+                                    providerNumbers.filter(
+                                        (value) => value.status === "used"
+                                    ).length
+                                }
+                                tag={{
+                                    color: "#E73F3F",
+                                    number: 32.41,
+                                }}
+                            />
                         </Col>
                         <Col span={6}>
-                            <Card
-                                className={styles.cardContainer}
-                                bodyStyle={{ padding: "12px" }}
-                            >
-                                <Space size={12}>
+                            <CardContent
+                                icon={
                                     <CalendarOutlined
-                                        className={styles.icon}
                                         style={{
+                                            ...iconCardStyle,
                                             backgroundColor:
                                                 "rgba(255, 172, 106, 0.2)",
                                             color: "#FFAC6A",
                                         }}
                                     />
-                                    <Typography.Text className={styles.text}>
-                                        Số thứ tự đang chờ
-                                    </Typography.Text>
-                                </Space>
-                                <Space
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        marginTop: "12px",
-                                    }}
-                                >
-                                    <Typography.Text className={styles.number}>
-                                        {
-                                            providerNumbers.filter(
-                                                (value) =>
-                                                    value.status == "waiting"
-                                            ).length
-                                        }
-                                    </Typography.Text>
-                                    <Tag
-                                        className={styles.tag}
-                                        style={{
-                                            backgroundColor:
-                                                "rgba(255, 149, 1, 0.15)",
-                                            color: "#FF9138",
-                                        }}
-                                    >
-                                        32,41%
-                                    </Tag>
-                                </Space>
-                            </Card>
+                                }
+                                title={"Số thứ tự đang chờ"}
+                                number={
+                                    providerNumbers.filter(
+                                        (value) => value.status === "waiting"
+                                    ).length
+                                }
+                                tag={{
+                                    color: "#FF9138",
+                                    number: 32.41,
+                                }}
+                            />
                         </Col>
                         <Col span={6}>
-                            <Card
-                                className={styles.cardContainer}
-                                bodyStyle={{ padding: "12px" }}
-                            >
-                                <Space size={12}>
+                            <CardContent
+                                icon={
                                     <CalendarOutlined
-                                        className={styles.icon}
                                         style={{
+                                            ...iconCardStyle,
                                             backgroundColor:
                                                 "rgba(248, 109, 109, 0.2)",
                                             color: "#F86D6D",
                                         }}
                                     />
-                                    <Typography.Text className={styles.text}>
-                                        Số thứ tự đã bỏ qua
-                                    </Typography.Text>
-                                </Space>
-                                <Space
-                                    style={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                        marginTop: "12px",
-                                    }}
-                                >
-                                    <Typography.Text className={styles.number}>
-                                        {
-                                            providerNumbers.filter(
-                                                (value) =>
-                                                    value.status == "skip"
-                                            ).length
-                                        }
-                                    </Typography.Text>
-                                    <Tag
-                                        className={styles.tag}
-                                        style={{
-                                            backgroundColor:
-                                                "rgba(231, 63, 63, 0.15)",
-                                            color: "#E73F3F",
-                                        }}
-                                    >
-                                        32,41%
-                                    </Tag>
-                                </Space>
-                            </Card>
+                                }
+                                title={"Số thứ tự đã bỏ qua"}
+                                number={
+                                    providerNumbers.filter(
+                                        (value) => value.status === "skip"
+                                    ).length
+                                }
+                                tag={{
+                                    color: "#E73F3F",
+                                    number: 32.41,
+                                }}
+                            />
                         </Col>
                     </Row>
                     <Card className={styles.chartContainer}>
@@ -342,334 +265,85 @@ const Dashboard = () => {
                     <Typography.Title className={styles.title}>
                         Tổng quan
                     </Typography.Title>
-                    <Card
-                        bodyStyle={{ padding: "0" }}
-                        style={{
-                            marginBottom: "12px",
-                            boxShadow: "2px 2px 15px 0 rgba(70, 64, 67, 0.1)",
-                        }}
-                    >
-                        <Row gutter={0}>
-                            <Col span={12}>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        padding: "12px 0 12px 16px",
-                                    }}
-                                >
-                                    <Progress
-                                        type="circle"
-                                        percent={90}
-                                        className={styles.chartCircle}
-                                        strokeColor={"#FF7506"}
-                                    />
-                                    <Space direction="vertical" size={0}>
-                                        <Typography.Title
-                                            className={styles.number}
-                                        >
-                                            {devices.length}
-                                        </Typography.Title>
-                                        <Space size={4}>
-                                            <DesktopOutlined
-                                                style={{ color: "#FF7506" }}
-                                            />
-                                            <span
-                                                style={{
-                                                    color: "#FF7506",
-                                                    fontSize: "14px",
-                                                    fontWeight: "600",
-                                                }}
-                                            >
-                                                Thiết bị
-                                            </span>
-                                        </Space>
-                                    </Space>
-                                </div>
-                            </Col>
-                            <Col span={12}>
-                                <div
-                                    style={{
-                                        padding: "12px 0",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
-                                        height: "100%",
-                                    }}
-                                >
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="success"
-                                                text="Đang hoạt động"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#FF7506",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {devices.filter(device => device.isActive == true).length}
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="used"
-                                                text="Ngưng hoạt động"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#FF7506",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {devices.filter(device => device.isActive == false).length}
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Card>
-                    <Card
-                        bodyStyle={{ padding: "0" }}
-                        style={{
-                            marginBottom: "12px",
-                            boxShadow: "2px 2px 15px 0 rgba(70, 64, 67, 0.1)",
-                        }}
-                    >
-                        <Row gutter={0}>
-                            <Col span={12}>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        padding: "12px 0 12px 16px",
-                                    }}
-                                >
-                                    <Progress
-                                        type="circle"
-                                        percent={76}
-                                        className={styles.chartCircle}
-                                        strokeColor={"#4277FF"}
-                                    />
-                                    <Space direction="vertical" size={0}>
-                                        <Typography.Title
-                                            className={styles.number}
-                                        >
-                                            {services.length}
-                                        </Typography.Title>
-                                        <Space size={4}>
-                                            <DesktopOutlined
-                                                style={{ color: "#4277FF" }}
-                                            />
-                                            <span
-                                                style={{
-                                                    color: "#4277FF",
-                                                    fontSize: "14px",
-                                                    fontWeight: "600",
-                                                }}
-                                            >
-                                                Dịch vụ
-                                            </span>
-                                        </Space>
-                                    </Space>
-                                </div>
-                            </Col>
-                            <Col span={12}>
-                                <div
-                                    style={{
-                                        padding: "12px 0",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
-                                        height: "100%",
-                                    }}
-                                >
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="success"
-                                                text="Đang hoạt động"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#4277FF",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {services.filter(service => service.isActive == true).length}
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="used"
-                                                text="Ngưng hoạt động"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#4277FF",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {services.filter(service => service.isActive == false).length}
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Card>
-                    <Card
-                        bodyStyle={{ padding: "0" }}
-                        style={{
-                            marginBottom: "12px",
-                            boxShadow: "2px 2px 15px 0 rgba(70, 64, 67, 0.1)",
-                        }}
-                    >
-                        <Row gutter={0}>
-                            <Col span={12}>
-                                <div
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        padding: "12px 0 12px 16px",
-                                    }}
-                                >
-                                    <Progress
-                                        type="circle"
-                                        percent={86}
-                                        className={styles.chartCircle}
-                                        strokeColor={"#35C75A"}
-                                    />
-                                    <Space direction="vertical" size={0}>
-                                        <Typography.Title
-                                            className={styles.number}
-                                        >
-                                            {providerNumbers.length}
-                                        </Typography.Title>
-                                        <Space size={4}>
-                                            <DesktopOutlined
-                                                style={{ color: "#35C75A" }}
-                                            />
-                                            <span
-                                                style={{
-                                                    color: "#35C75A",
-                                                    fontSize: "14px",
-                                                    fontWeight: "600",
-                                                }}
-                                            >
-                                                Cấp số
-                                            </span>
-                                        </Space>
-                                    </Space>
-                                </div>
-                            </Col>
-                            <Col span={12}>
-                                <div
-                                    style={{
-                                        padding: "12px 0",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "center",
-                                        height: "100%",
-                                    }}
-                                >
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="success"
-                                                text="Đã sử dụng"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#35C75A",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {
-                                                    providerNumbers.filter(
-                                                        (value) =>
-                                                            value.status ==
-                                                            "used"
-                                                    ).length
-                                                }
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="used"
-                                                text="Đang chờ"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#35C75A",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {
-                                                    providerNumbers.filter(
-                                                        (value) =>
-                                                            value.status ==
-                                                            "waiting"
-                                                    ).length
-                                                }
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col span={18}>
-                                            <Status
-                                                type="error"
-                                                text="Bỏ qua"
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <span
-                                                style={{
-                                                    color: "#35C75A",
-                                                    fontSize: "14px",
-                                                    fontWeight: "700",
-                                                }}
-                                            >
-                                                {
-                                                    providerNumbers.filter(
-                                                        (value) =>
-                                                            value.status ==
-                                                            "skip"
-                                                    ).length
-                                                }
-                                            </span>
-                                        </Col>
-                                    </Row>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Card>
+                    <CardSideBar
+                        icon={<DesktopOutlined style={{ color: "#FF7506" }} />}
+                        percent={90}
+                        color={"#FF7506"}
+                        title={"Thiết bị"}
+                        quantity={devices.length}
+                        data={[
+                            {
+                                type: "success",
+                                text: "Đang hoạt động",
+                                number: devices.filter(
+                                    (device) => device.isActive === true
+                                ).length,
+                            },
+                            {
+                                type: "used",
+                                text: "Ngưng hoạt động",
+                                number: devices.filter(
+                                    (device) => device.isActive === false
+                                ).length,
+                            },
+                        ]}
+                    />
+                    <CardSideBar
+                        icon={<DesktopOutlined style={{ color: "#4277FF" }} />}
+                        percent={76}
+                        color={"#4277FF"}
+                        title={"Dịch vụ"}
+                        quantity={services.length}
+                        data={[
+                            {
+                                type: "success",
+                                text: "Đang hoạt động",
+                                number: services.filter(
+                                    (service) => service.isActive === true
+                                ).length,
+                            },
+                            {
+                                type: "used",
+                                text: "Ngưng hoạt động",
+                                number: services.filter(
+                                    (service) => service.isActive === false
+                                ).length,
+                            },
+                        ]}
+                    />
+                    <CardSideBar
+                        icon={<DesktopOutlined style={{ color: "#35C75A" }} />}
+                        percent={86}
+                        color={"#35C75A"}
+                        title={"Cấp số"}
+                        quantity={providerNumbers.length}
+                        data={[
+                            {
+                                type: "success",
+                                text: "Đã sử dụng",
+                                number: providerNumbers.filter(
+                                    (providerNumber) =>
+                                        providerNumber.status === "used"
+                                ).length,
+                            },
+                            {
+                                type: "used",
+                                text: "Đang chờ",
+                                number: providerNumbers.filter(
+                                    (providerNumber) =>
+                                        providerNumber.status === "waiting"
+                                ).length,
+                            },
+                            {
+                                type: "error",
+                                text: "Bỏ qua",
+                                number: providerNumbers.filter(
+                                    (providerNumber) =>
+                                        providerNumber.status === "skip"
+                                ).length,
+                            },
+                        ]}
+                    />
                     <div className={styles.calendar}>
                         <Calendar
                             style={{ width: "80%" }}

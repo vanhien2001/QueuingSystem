@@ -180,7 +180,7 @@ const Header = () => {
                                                 color: "#BF5805",
                                             }}
                                         >
-                                            Người dùng: {item.user}
+                                            Người dùng: {item.name}
                                         </Typography.Text>
                                     }
                                     description={

@@ -63,7 +63,9 @@ const ReportTable = () => {
                             <Form.Item noStyle>
                                 <DatePicker size="large" />
                             </Form.Item>
-                            <CaretRightOutlined style={{margin: "0 4px", fontSize: "10px"}}/>
+                            <CaretRightOutlined
+                                style={{ margin: "0 4px", fontSize: "10px" }}
+                            />
                             <Form.Item noStyle>
                                 <DatePicker size="large" />
                             </Form.Item>
@@ -125,7 +127,24 @@ const ReportTable = () => {
                                         const excel = new Excel();
                                         excel
                                             .addSheet("Report")
-                                            .addColumns(columns)
+                                            .addColumns([
+                                                ...columns,
+                                                {
+                                                    title: "Họ tên",
+                                                    key: "customer",
+                                                    dataIndex: "customer",
+                                                },
+                                                {
+                                                    title: "Số điện thoại",
+                                                    key: "phoneNumber",
+                                                    dataIndex: "phoneNumber",
+                                                },
+                                                {
+                                                    title: "Email",
+                                                    key: "email",
+                                                    dataIndex: "email",
+                                                },
+                                            ])
                                             .addDataSource(
                                                 providerNumbers.map(
                                                     (providerNumber) => {
@@ -147,6 +166,11 @@ const ReportTable = () => {
                                                                     ? "Đã sử dụng"
                                                                     : "Bỏ qua",
                                                             src: providerNumber.src,
+                                                            customer:
+                                                                providerNumber.name,
+                                                            phoneNumber:
+                                                                providerNumber.phoneNumber,
+                                                            email: providerNumber.email,
                                                         };
                                                     }
                                                 ),
