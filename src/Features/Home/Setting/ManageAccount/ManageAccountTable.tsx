@@ -8,7 +8,7 @@ import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./ManageAccount.module.scss";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const { Option } = Select;
 
@@ -57,10 +57,12 @@ const ManageAccountTable = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { authLoading, users } = useAppSelector(userSelector);
+    const [active, setActive] = useState<boolean | null>(null);
+    const [keywords, setKeywords] = useState<string>("");
 
     useEffect(() => {
-        dispatch(getAll());
-    }, []);
+        dispatch(getAll({ active, keywords }));
+    }, [active, keywords]);
 
     return (
         <div className={styles.section}>
@@ -80,6 +82,8 @@ const ManageAccountTable = () => {
                             <Select
                                 size="large"
                                 defaultValue={null}
+                                value={active}
+                                onChange={(value) => setActive(value)}
                                 suffixIcon={
                                     <CaretDownOutlined
                                         style={{
@@ -103,7 +107,10 @@ const ManageAccountTable = () => {
                                 </Typography.Text>
                             }
                         >
-                            <SearchInput placeholder="Nhập từ khóa" />
+                            <SearchInput
+                                placeholder="Nhập từ khóa"
+                                onSearch={setKeywords}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -137,7 +144,10 @@ const ManageAccountTable = () => {
                         }))}
                         bordered
                         size="middle"
-                        pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
+                        pagination={{
+                            defaultPageSize: 8,
+                            position: ["bottomRight"],
+                        }}
                     />
                 </Col>
                 <Col flex="100px">

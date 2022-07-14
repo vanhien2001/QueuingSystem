@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
+import { CaretRightOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { useAppSelector, useAppDispatch } from "../../../../store";
-import { diarySelector, getAll, add } from "../../../../store/reducers/diarySlice";
+import { diarySelector, getAll } from "../../../../store/reducers/diarySlice";
 import SearchInput from "../../../../components/SearchInput";
 import styles from "./HistoryUser.module.scss";
 
@@ -35,10 +36,11 @@ const columns = [
 const HistoryUserTable = () => {
     const dispatch = useAppDispatch();
     const { loading, diaries } = useAppSelector(diarySelector);
+    const [keywords, setKeywords] = useState<string>("");
 
     useEffect(() => {
-        dispatch(getAll());
-    }, []);
+        dispatch(getAll({ keywords }));
+    }, [keywords]);
 
     return (
         <div className={styles.section}>
@@ -55,6 +57,9 @@ const HistoryUserTable = () => {
                             <Form.Item noStyle>
                                 <DatePicker size="large" />
                             </Form.Item>
+                            <CaretRightOutlined
+                                style={{ margin: "0 4px", fontSize: "10px" }}
+                            />
                             <Form.Item noStyle>
                                 <DatePicker size="large" />
                             </Form.Item>
@@ -68,7 +73,10 @@ const HistoryUserTable = () => {
                                 </Typography.Text>
                             }
                         >
-                            <SearchInput placeholder="Nhập từ khóa" />
+                            <SearchInput
+                                placeholder="Nhập từ khóa"
+                                onSearch={setKeywords}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -77,17 +85,21 @@ const HistoryUserTable = () => {
                         <Table
                             columns={columns}
                             loading={loading}
-                            dataSource={diaries.map((diary) => (
-                            {
+                            dataSource={diaries.map((diary) => ({
                                 key: diary.id,
                                 username: diary.username,
-                                time: moment(diary.time.toDate()).format("HH:mm - DD/MM/YYYY"),
+                                time: moment(diary.time.toDate()).format(
+                                    "HH:mm - DD/MM/YYYY"
+                                ),
                                 ip: diary.ip,
                                 actionImplemented: diary.action,
                             }))}
                             bordered
                             size="middle"
-                            pagination={{defaultPageSize: 8, position: ["bottomRight"] }}
+                            pagination={{
+                                defaultPageSize: 8,
+                                position: ["bottomRight"],
+                            }}
                         />
                     </Col>
                     <Col flex="100px"></Col>

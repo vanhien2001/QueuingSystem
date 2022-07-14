@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
     Calendar,
     Card,
@@ -11,8 +12,25 @@ import {
     Tag,
     Typography,
 } from "antd";
-import { DesktopOutlined, CalendarOutlined, CaretDownOutlined } from "@ant-design/icons";
+import {
+    DesktopOutlined,
+    CalendarOutlined,
+    CaretDownOutlined,
+} from "@ant-design/icons";
 import { Line } from "@ant-design/plots";
+import { useAppSelector, useAppDispatch } from "../../../store";
+import {
+    providerNumberSelector,
+    getAll,
+} from "../../../store/reducers/providerNumberSlice";
+import {
+    deviceSelector,
+    getAll as getAllDevice,
+} from "../../../store/reducers/deviceSlice";
+import {
+    serviceSelector,
+    getAll as getAllService,
+} from "../../../store/reducers/serviceSlice";
 import Status from "../../../components/Status";
 import styles from "./Dasboard.module.scss";
 
@@ -54,16 +72,25 @@ const data = [
     },
 ];
 
-const index = () => {
+const Dashboard = () => {
+    const dispatch = useAppDispatch();
+    const { loading, providerNumbers } = useAppSelector(providerNumberSelector);
+    const { devices } = useAppSelector(deviceSelector);
+    const { services } = useAppSelector(serviceSelector);
+
     const config = {
         data,
         xField: "date",
         yField: "value",
-        // xAxis: {
-        //     tickCount: 5,
-        // },
         smooth: true,
     };
+
+    useEffect(() => {
+        dispatch(getAll());
+        dispatch(getAllService());
+        dispatch(getAllDevice());
+    }, []);
+
     return (
         <Layout>
             <Content style={{ marginRight: 410 }}>
@@ -77,9 +104,7 @@ const index = () => {
                                 className={styles.cardContainer}
                                 bodyStyle={{ padding: "12px" }}
                             >
-                                <Space
-                                    size={12}
-                                >
+                                <Space size={12}>
                                     <CalendarOutlined
                                         className={styles.icon}
                                         style={{
@@ -100,7 +125,7 @@ const index = () => {
                                     }}
                                 >
                                     <Typography.Text className={styles.number}>
-                                        4.422
+                                        {providerNumbers.length}
                                     </Typography.Text>
                                     <Tag
                                         className={styles.tag}
@@ -120,9 +145,7 @@ const index = () => {
                                 className={styles.cardContainer}
                                 bodyStyle={{ padding: "12px" }}
                             >
-                                <Space
-                                    size={12}
-                                >
+                                <Space size={12}>
                                     <CalendarOutlined
                                         className={styles.icon}
                                         style={{
@@ -143,7 +166,12 @@ const index = () => {
                                     }}
                                 >
                                     <Typography.Text className={styles.number}>
-                                        4.422
+                                        {
+                                            providerNumbers.filter(
+                                                (value) =>
+                                                    value.status == "used"
+                                            ).length
+                                        }
                                     </Typography.Text>
                                     <Tag
                                         className={styles.tag}
@@ -163,9 +191,7 @@ const index = () => {
                                 className={styles.cardContainer}
                                 bodyStyle={{ padding: "12px" }}
                             >
-                                <Space
-                                    size={12}
-                                >
+                                <Space size={12}>
                                     <CalendarOutlined
                                         className={styles.icon}
                                         style={{
@@ -186,7 +212,12 @@ const index = () => {
                                     }}
                                 >
                                     <Typography.Text className={styles.number}>
-                                        4.422
+                                        {
+                                            providerNumbers.filter(
+                                                (value) =>
+                                                    value.status == "waiting"
+                                            ).length
+                                        }
                                     </Typography.Text>
                                     <Tag
                                         className={styles.tag}
@@ -206,9 +237,7 @@ const index = () => {
                                 className={styles.cardContainer}
                                 bodyStyle={{ padding: "12px" }}
                             >
-                                <Space
-                                    size={12}
-                                >
+                                <Space size={12}>
                                     <CalendarOutlined
                                         className={styles.icon}
                                         style={{
@@ -229,7 +258,12 @@ const index = () => {
                                     }}
                                 >
                                     <Typography.Text className={styles.number}>
-                                        4.422
+                                        {
+                                            providerNumbers.filter(
+                                                (value) =>
+                                                    value.status == "skip"
+                                            ).length
+                                        }
                                     </Typography.Text>
                                     <Tag
                                         className={styles.tag}
@@ -246,37 +280,49 @@ const index = () => {
                         </Col>
                     </Row>
                     <Card className={styles.chartContainer}>
-                        <Space style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px'}}>
+                        <Space
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                marginBottom: "20px",
+                            }}
+                        >
                             <Space direction="vertical">
                                 <Typography.Title className={styles.title}>
                                     Bảng thống kê theo ngày
                                 </Typography.Title>
-                                <Typography.Text className={styles.text}>Tháng 7/2022</Typography.Text>
+                                <Typography.Text className={styles.text}>
+                                    Tháng 7/2022
+                                </Typography.Text>
                             </Space>
-                            <Space style={{display: 'flex', alignItems: 'center'}}>
+                            <Space
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
                                 <Typography.Text className={styles.label}>
                                     Xem theo
                                 </Typography.Text>
-                                <Form.Item
-                                className={styles.selectContianer}
-                            >
-                                <Select
-                                    size="large"
-                                    defaultValue={"date"}
-                                    suffixIcon={
-                                        <CaretDownOutlined
-                                            style={{
-                                                fontSize: "20px",
-                                                color: "#FF7506",
-                                            }}
-                                        />
-                                    }
-                                >
-                                    <Option value="date">Ngày</Option>
-                                    <Option value="week">Tuần</Option>
-                                    <Option value="month">Tháng</Option>
-                                </Select>
-                            </Form.Item>
+                                <Form.Item className={styles.selectContianer}>
+                                    <Select
+                                        size="large"
+                                        defaultValue={"date"}
+                                        suffixIcon={
+                                            <CaretDownOutlined
+                                                style={{
+                                                    fontSize: "20px",
+                                                    color: "#FF7506",
+                                                }}
+                                            />
+                                        }
+                                    >
+                                        <Option value="date">Ngày</Option>
+                                        <Option value="week">Tuần</Option>
+                                        <Option value="month">Tháng</Option>
+                                    </Select>
+                                </Form.Item>
                             </Space>
                         </Space>
                         <Line {...config} style={{ height: "300px" }} />
@@ -322,7 +368,7 @@ const index = () => {
                                         <Typography.Title
                                             className={styles.number}
                                         >
-                                            4.221
+                                            {devices.length}
                                         </Typography.Title>
                                         <Space size={4}>
                                             <DesktopOutlined
@@ -366,7 +412,7 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                3.799
+                                                {devices.filter(device => device.isActive == true).length}
                                             </span>
                                         </Col>
                                     </Row>
@@ -385,7 +431,7 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                422
+                                                {devices.filter(device => device.isActive == false).length}
                                             </span>
                                         </Col>
                                     </Row>
@@ -419,7 +465,7 @@ const index = () => {
                                         <Typography.Title
                                             className={styles.number}
                                         >
-                                            4.221
+                                            {services.length}
                                         </Typography.Title>
                                         <Space size={4}>
                                             <DesktopOutlined
@@ -463,7 +509,7 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                210
+                                                {services.filter(service => service.isActive == true).length}
                                             </span>
                                         </Col>
                                     </Row>
@@ -482,7 +528,7 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                66
+                                                {services.filter(service => service.isActive == false).length}
                                             </span>
                                         </Col>
                                     </Row>
@@ -516,7 +562,7 @@ const index = () => {
                                         <Typography.Title
                                             className={styles.number}
                                         >
-                                            4.221
+                                            {providerNumbers.length}
                                         </Typography.Title>
                                         <Space size={4}>
                                             <DesktopOutlined
@@ -560,7 +606,13 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                3.799
+                                                {
+                                                    providerNumbers.filter(
+                                                        (value) =>
+                                                            value.status ==
+                                                            "used"
+                                                    ).length
+                                                }
                                             </span>
                                         </Col>
                                     </Row>
@@ -579,7 +631,13 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                486
+                                                {
+                                                    providerNumbers.filter(
+                                                        (value) =>
+                                                            value.status ==
+                                                            "waiting"
+                                                    ).length
+                                                }
                                             </span>
                                         </Col>
                                     </Row>
@@ -598,7 +656,13 @@ const index = () => {
                                                     fontWeight: "700",
                                                 }}
                                             >
-                                                32
+                                                {
+                                                    providerNumbers.filter(
+                                                        (value) =>
+                                                            value.status ==
+                                                            "skip"
+                                                    ).length
+                                                }
                                             </span>
                                         </Col>
                                     </Row>
@@ -619,4 +683,4 @@ const index = () => {
     );
 };
 
-export default index;
+export default Dashboard;

@@ -15,11 +15,11 @@ export type serviceType = {
     code: string;
     name: string;
     description: string;
-    increaseStart ?: number;
-    increaseEnd ?: number;
-    prefix : string;
-    surfix : string;
-    reset : boolean;
+    increaseStart?: number;
+    increaseEnd?: number;
+    prefix: string;
+    surfix: string;
+    reset: boolean;
     isActive?: boolean;
 };
 
@@ -34,19 +34,46 @@ export const addService = createAsyncThunk(
     }
 );
 
-export const getAll = createAsyncThunk("service/getAll", async () => {
-    let services: serviceType[] = [];
+interface Ifilter {
+    active: boolean | null;
+    keywords: string;
+}
 
-    const query = await getDocs(collection(db, "services"));
-    query.forEach((value) => {
-        services.push({
-            id: value.id,
-            ...value.data() as serviceType,
+export const getAll = createAsyncThunk(
+    "service/getAll",
+    async (filter?: Ifilter) => {
+        let services: serviceType[] = [];
+
+        const query = await getDocs(collection(db, "services"));
+        query.forEach((value) => {
+            services.push({
+                id: value.id,
+                ...(value.data() as serviceType),
+            });
         });
-    });
-    services.reverse();
-    return services;
-});
+        if (filter) {
+            if (filter.active != null)
+                services = services.filter(
+                    (service) => service.isActive == filter.active
+                );
+            if (filter.keywords != "")
+                services = services.filter(
+                    (service) =>
+                        service.code
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        service.name
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        service.description
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase())
+                );
+        }
+        services.reverse();
+        return services;
+    }
+);
 
 export const get = createAsyncThunk("service/get", async (id: string) => {
     let service: serviceType;
@@ -55,7 +82,7 @@ export const get = createAsyncThunk("service/get", async (id: string) => {
     const serviceSnap = await getDoc(serviceRef);
     service = {
         id,
-        ...serviceSnap.data() as serviceType,
+        ...(serviceSnap.data() as serviceType),
     };
 
     return service;
@@ -63,9 +90,9 @@ export const get = createAsyncThunk("service/get", async (id: string) => {
 
 export const update = createAsyncThunk(
     "service/update",
-    async ({id, ...value}: serviceType) => {
+    async ({ id, ...value }: serviceType) => {
         const ref = doc(db, "services", id as string);
-        await updateDoc(ref, {...value});
+        await updateDoc(ref, { ...value });
     }
 );
 

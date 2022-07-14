@@ -58,6 +58,13 @@ module.exports = {
                             "@modal-header-border-width": 0,
                             "@modal-footer-border-width": 0,
                             "@modal-footer-padding-vertical": "16px",
+                            // Breadcrumb
+                            "@breadcrumb-base-color": "#7E7D88",
+                            "@breadcrumb-font-size": "20px",
+                            "@breadcrumb-last-item-color": "#FF7506",
+                            "@breadcrumb-separator-margin": "0 8px",
+                            //Pagination
+                            "@pagination-item-bg-active": "#FF7506",
                         },
                         javascriptEnabled: true,
                     },

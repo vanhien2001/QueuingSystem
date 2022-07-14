@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
 import {
     Col,
     DatePicker,
@@ -18,6 +18,10 @@ import {
     providerNumberSelector,
     getAll,
 } from "../../../../store/reducers/providerNumberSlice";
+import {
+    serviceSelector,
+    getAll as getAllService,
+} from "../../../../store/reducers/serviceSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
@@ -72,9 +76,18 @@ const ProviderTable = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { loading, providerNumbers } = useAppSelector(providerNumberSelector);
+    const { services } = useAppSelector(serviceSelector);
+    const [status, setStatus] = useState<string | null>(null);
+    const [src, setSrc] = useState<string>("");
+    const [service, setService] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>("");
 
     useEffect(() => {
-        dispatch(getAll());
+        dispatch(getAll({ status, src, service, keywords }));
+    }, [status, src, service, keywords]);
+
+    useEffect(() => {
+        dispatch(getAllService());
     }, []);
 
     return (
@@ -101,7 +114,9 @@ const ProviderTable = () => {
                             >
                                 <Select
                                     size="large"
-                                    defaultValue={null}
+                                    defaultValue={''}
+                                    value={service}
+                                    onChange={(value) => setService(value)}
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
@@ -111,16 +126,14 @@ const ProviderTable = () => {
                                         />
                                     }
                                 >
-                                    <Option value={null}>Tất cả</Option>
-                                    <Option value="spk">
-                                        Khám sản - Phụ khoa
-                                    </Option>
-                                    <Option value="rhm">
-                                        Khám răng hàm mặt
-                                    </Option>
-                                    <Option value="tmh">
-                                        Khám tai mũi họng
-                                    </Option>
+                                    <Option value={''}>Tất cả</Option>
+                                    {services.map((service) => {
+                                        return (
+                                            <Option value={service.id}>
+                                                {service.name}
+                                            </Option>
+                                        );
+                                    })}
                                 </Select>
                             </Form.Item>
                             <Form.Item
@@ -134,6 +147,8 @@ const ProviderTable = () => {
                                 <Select
                                     size="large"
                                     defaultValue={null}
+                                    value={status}
+                                    onChange={(value) => setStatus(value)}
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
@@ -159,7 +174,9 @@ const ProviderTable = () => {
                             >
                                 <Select
                                     size="large"
-                                    defaultValue={null}
+                                    defaultValue={""}
+                                    value={src}
+                                    onChange={(value) => setSrc(value)}
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
@@ -169,9 +186,9 @@ const ProviderTable = () => {
                                         />
                                     }
                                 >
-                                    <Option value={null}>Tất cả</Option>
-                                    <Option value="kisok">Kisok</Option>
-                                    <Option value="system">Hệ thống</Option>
+                                    <Option value={""}>Tất cả</Option>
+                                    <Option value="Kisok">Kisok</Option>
+                                    <Option value="Hệ thống">Hệ thống</Option>
                                 </Select>
                             </Form.Item>
                             <Form.Item
@@ -184,6 +201,12 @@ const ProviderTable = () => {
                                 <Form.Item noStyle>
                                     <DatePicker size="large" />
                                 </Form.Item>
+                                <CaretRightOutlined
+                                    style={{
+                                        margin: "0 4px",
+                                        fontSize: "10px",
+                                    }}
+                                />
                                 <Form.Item noStyle>
                                     <DatePicker size="large" />
                                 </Form.Item>
@@ -195,7 +218,10 @@ const ProviderTable = () => {
                                     </Typography.Text>
                                 }
                             >
-                                <SearchInput placeholder="Nhập từ khóa" />
+                                <SearchInput
+                                    placeholder="Nhập từ khóa"
+                                    onSearch={setKeywords}
+                                />
                             </Form.Item>
                         </Space>
                     </Col>
@@ -212,25 +238,35 @@ const ProviderTable = () => {
                                 stt: providerNumber.number,
                                 name: providerNumber.user,
                                 nameService: providerNumber.service,
-                                time: moment(providerNumber.timeGet.toDate()).format("HH:mm - DD/MM/YYYY"),
-                                timeExp: moment(providerNumber.timeExp.toDate()).format("HH:mm - DD/MM/YYYY"),
+                                time: moment(
+                                    providerNumber.timeGet.toDate()
+                                ).format("HH:mm - DD/MM/YYYY"),
+                                timeExp: moment(
+                                    providerNumber.timeExp.toDate()
+                                ).format("HH:mm - DD/MM/YYYY"),
                                 status: (
                                     <Status
                                         type={
-                                            providerNumber.status == 'skip'
+                                            providerNumber.status == "skip"
                                                 ? "error"
                                                 : providerNumber.status
                                         }
                                         text={
-                                            providerNumber.status == 'waiting'
+                                            providerNumber.status == "waiting"
                                                 ? "Đang chờ"
-                                                : providerNumber.status == 'used' ? "Đã sử dụng" : "Bỏ qua"
+                                                : providerNumber.status ==
+                                                  "used"
+                                                ? "Đã sử dụng"
+                                                : "Bỏ qua"
                                         }
                                     />
                                 ),
                                 src: providerNumber.src,
                                 detail: (
-                                    <Link to={`./detail/${providerNumber.id}`} className={styles.link}>
+                                    <Link
+                                        to={`./detail/${providerNumber.id}`}
+                                        className={styles.link}
+                                    >
                                         Chi tiết
                                     </Link>
                                 ),
@@ -238,7 +274,10 @@ const ProviderTable = () => {
                         })}
                         bordered
                         size="middle"
-                        pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
+                        pagination={{
+                            defaultPageSize: 8,
+                            position: ["bottomRight"],
+                        }}
                     />
                 </Col>
                 <Col flex="100px">

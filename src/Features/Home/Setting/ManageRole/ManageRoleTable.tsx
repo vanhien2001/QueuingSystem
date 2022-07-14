@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Col, Form, Row, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useAppSelector, useAppDispatch } from "../../../../store";
@@ -36,10 +36,11 @@ const ManageRoleTable = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { loading, roles } = useAppSelector(roleSelector);
+    const [keywords, setKeywords] = useState<string>("");
 
     useEffect(() => {
-        dispatch(getAll())
-    }, [])
+        dispatch(getAll({ keywords }));
+    }, [keywords]);
 
     return (
         <div className={styles.section}>
@@ -59,7 +60,10 @@ const ManageRoleTable = () => {
                                 </Typography.Text>
                             }
                         >
-                            <SearchInput placeholder="Nhập từ khóa" />
+                            <SearchInput
+                                placeholder="Nhập từ khóa"
+                                onSearch={setKeywords}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -68,10 +72,24 @@ const ManageRoleTable = () => {
                         <Table
                             columns={columns}
                             loading={loading}
-                            dataSource={roles.map(role => ({key: role.id, ...role, update: <Link to={`./edit/${role.id}`} className={styles.link}>Cập nhật</Link>}))}
+                            dataSource={roles.map((role) => ({
+                                key: role.id,
+                                ...role,
+                                update: (
+                                    <Link
+                                        to={`./edit/${role.id}`}
+                                        className={styles.link}
+                                    >
+                                        Cập nhật
+                                    </Link>
+                                ),
+                            }))}
                             bordered
                             size="middle"
-                            pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
+                            pagination={{
+                                defaultPageSize: 8,
+                                position: ["bottomRight"],
+                            }}
                         />
                     </Col>
                     <Col flex="100px">

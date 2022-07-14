@@ -5,7 +5,7 @@ import {
     getDoc,
     getDocs,
     setDoc,
-    Timestamp
+    Timestamp,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { RootState } from "../index";
@@ -18,32 +18,52 @@ export type diaryType = {
     time: Timestamp;
 };
 
-export const add = createAsyncThunk(
-    "diary/add",
-    async (values: diaryType) => {
-        const newDoc = doc(collection(db, "diaryUser"));
-        await setDoc(newDoc, values);
-        const ref = doc(db, "roles", newDoc.id);
-        const snap = await getDoc(ref);
-        return snap;
-    }
-);
-
-export const getAll = createAsyncThunk("diary/getAll", async () => {
-    let diaries: diaryType[] = [];
-
-    const query = await getDocs(collection(db, "diaryUser"));
-    query.forEach((value) => {
-        diaries.push({
-            id: value.id,
-            ...value.data() as diaryType,
-        });
-        console.log(value.data() as diaryType)
-    });
-    diaries.sort((a, b) => b.time.toDate().getTime() - a.time.toDate().getTime());
-    return diaries;
+export const add = createAsyncThunk("diary/add", async (values: diaryType) => {
+    const newDoc = doc(collection(db, "diaryUser"));
+    await setDoc(newDoc, values);
+    const ref = doc(db, "roles", newDoc.id);
+    const snap = await getDoc(ref);
+    return snap;
 });
 
+interface Ifilter {
+    keywords: string;
+}
+
+export const getAll = createAsyncThunk(
+    "diary/getAll",
+    async (filter?: Ifilter) => {
+        let diaries: diaryType[] = [];
+
+        const query = await getDocs(collection(db, "diaryUser"));
+        query.forEach((value) => {
+            diaries.push({
+                id: value.id,
+                ...(value.data() as diaryType),
+            });
+            console.log(value.data() as diaryType);
+        });
+        if (filter) {
+            if (filter.keywords != "")
+                diaries = diaries.filter(
+                    (diary) =>
+                        diary.username
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        diary.ip
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        diary.action
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase())
+                );
+        }
+        diaries.sort(
+            (a, b) => b.time.toDate().getTime() - a.time.toDate().getTime()
+        );
+        return diaries;
+    }
+);
 
 interface defaultState {
     loading: boolean;

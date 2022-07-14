@@ -19,6 +19,7 @@ import { add as addDiary } from "../../../../store/reducers/diarySlice";
 import styles from "../Provider.module.scss";
 import styles2 from "./Modal.module.scss";
 import { Timestamp } from "firebase/firestore";
+import moment from "moment";
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -160,10 +161,10 @@ const ProviderNumber = () => {
                 footer={
                     <div className={styles2.footerModal}>
                         <Typography.Text className={styles2.text}>
-                            {"Thời gian cấp:" + " 17:30 11/10/2021"}
+                            {"Thời gian cấp:" + moment(providerNumber?.timeGet.toDate()).format("HH:mm - DD/MM/YYYY")}
                         </Typography.Text>
                         <Typography.Text className={styles2.text}>
-                            {"Hạn sử dụng:" + " 17:30 11/10/2021"}
+                            {"Hạn sử dụng:" + moment(providerNumber?.timeExp.toDate()).format("HH:mm - DD/MM/YYYY")}
                         </Typography.Text>
                     </div>
                 }

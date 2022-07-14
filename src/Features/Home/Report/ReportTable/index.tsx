@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import moment from "moment";
 import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { DownloadOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { Excel } from "antd-table-saveas-excel";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import {
     providerNumberSelector,
@@ -37,7 +38,7 @@ const columns = [
         key: "src",
         dataIndex: "src",
     },
-]
+];
 
 const ReportTable = () => {
     const dispatch = useAppDispatch();
@@ -62,6 +63,7 @@ const ReportTable = () => {
                             <Form.Item noStyle>
                                 <DatePicker size="large" />
                             </Form.Item>
+                            <CaretRightOutlined style={{margin: "0 4px", fontSize: "10px"}}/>
                             <Form.Item noStyle>
                                 <DatePicker size="large" />
                             </Form.Item>
@@ -73,32 +75,44 @@ const ReportTable = () => {
                         <Table
                             columns={columns}
                             loading={loading}
-                            dataSource={providerNumbers.map((providerNumber) => {
-                                return {
-                                    key: providerNumber.id,
-                                    stt: providerNumber.number,
-                                    name: providerNumber.service,
-                                    time: moment(providerNumber.timeGet.toDate()).format("HH:mm - DD/MM/YYYY"),
-                                    status: (
-                                        <Status
-                                            type={
-                                                providerNumber.status == 'skip'
-                                                    ? "error"
-                                                    : providerNumber.status
-                                            }
-                                            text={
-                                                providerNumber.status == 'waiting'
-                                                    ? "Đang chờ"
-                                                    : providerNumber.status == 'used' ? "Đã sử dụng" : "Bỏ qua"
-                                            }
-                                        />
-                                    ),
-                                    src: providerNumber.src,
-                                };
-                            })}
+                            dataSource={providerNumbers.map(
+                                (providerNumber) => {
+                                    return {
+                                        key: providerNumber.id,
+                                        stt: providerNumber.number,
+                                        name: providerNumber.service,
+                                        time: moment(
+                                            providerNumber.timeGet.toDate()
+                                        ).format("HH:mm - DD/MM/YYYY"),
+                                        status: (
+                                            <Status
+                                                type={
+                                                    providerNumber.status ==
+                                                    "skip"
+                                                        ? "error"
+                                                        : providerNumber.status
+                                                }
+                                                text={
+                                                    providerNumber.status ==
+                                                    "waiting"
+                                                        ? "Đang chờ"
+                                                        : providerNumber.status ==
+                                                          "used"
+                                                        ? "Đã sử dụng"
+                                                        : "Bỏ qua"
+                                                }
+                                            />
+                                        ),
+                                        src: providerNumber.src,
+                                    };
+                                }
+                            )}
                             bordered
                             size="middle"
-                            pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
+                            pagination={{
+                                defaultPageSize: 8,
+                                position: ["bottomRight"],
+                            }}
                         />
                     </Col>
                     <Col flex="100px">
@@ -107,6 +121,41 @@ const ReportTable = () => {
                                 {
                                     text: "Tải về",
                                     icon: <DownloadOutlined />,
+                                    onClick: () => {
+                                        const excel = new Excel();
+                                        excel
+                                            .addSheet("Report")
+                                            .addColumns(columns)
+                                            .addDataSource(
+                                                providerNumbers.map(
+                                                    (providerNumber) => {
+                                                        return {
+                                                            key: providerNumber.id,
+                                                            stt: providerNumber.number,
+                                                            name: providerNumber.service,
+                                                            time: moment(
+                                                                providerNumber.timeGet.toDate()
+                                                            ).format(
+                                                                "HH:mm - DD/MM/YYYY"
+                                                            ),
+                                                            status:
+                                                                providerNumber.status ==
+                                                                "waiting"
+                                                                    ? "Đang chờ"
+                                                                    : providerNumber.status ==
+                                                                      "used"
+                                                                    ? "Đã sử dụng"
+                                                                    : "Bỏ qua",
+                                                            src: providerNumber.src,
+                                                        };
+                                                    }
+                                                ),
+                                                {
+                                                    str2Percent: true,
+                                                }
+                                            )
+                                            .saveAs("Report.xlsx");
+                                    },
                                 },
                             ]}
                         />

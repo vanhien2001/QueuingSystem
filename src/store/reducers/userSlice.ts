@@ -93,40 +93,72 @@ export const update = createAsyncThunk(
     }
 );
 
-export const add = createAsyncThunk(
-    "user/add",
-    async (values: userType) => {
-        const newUser = doc(collection(db, "user"));
-        await setDoc(newUser, values);
-        const userRef = doc(db, "user", newUser.id);
-        const userSnap = await getDoc(userRef);
-        return userSnap;
+export const add = createAsyncThunk("user/add", async (values: userType) => {
+    const newUser = doc(collection(db, "user"));
+    await setDoc(newUser, values);
+    const userRef = doc(db, "user", newUser.id);
+    const userSnap = await getDoc(userRef);
+    return userSnap;
+});
+
+interface Ifilter {
+    active: boolean | null;
+    keywords: string;
+}
+
+export const getAll = createAsyncThunk(
+    "user/getAll",
+    async (filter?: Ifilter) => {
+        let users: userType[] = [];
+
+        const queryUser = await getDocs(collection(db, "user"));
+        queryUser.forEach((value) => {
+            users.push({
+                id: value.id,
+                ...(value.data() as userType),
+            });
+        });
+        for (const user of users) {
+            const roleSnap = await getDoc(
+                doc(db, "roles", user.role as string)
+            );
+            user.role = (roleSnap.data() as roleType).name;
+        }
+        if (filter) {
+            if (filter.active != null)
+                users = users.filter((user) => user.isActive == filter.active);
+            if (filter.keywords != "")
+                users = users.filter(
+                    (user) =>
+                        user.username
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        user.name
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        user.phoneNumber
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        user.email
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        user.role
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase())
+                );
+        }
+        users.reverse();
+        return users;
     }
 );
-
-export const getAll = createAsyncThunk("user/getAll", async () => {
-    let users: userType[] = [];
-
-    const queryUser = await getDocs(collection(db, "user"));
-    queryUser.forEach((value) => {
-        users.push({
-            id: value.id,
-            ...(value.data() as userType),
-        });
-    });
-    for (const user of users) {
-        const roleSnap = await getDoc(doc(db, "roles", user.role as string));
-        user.role = (roleSnap.data() as roleType).name;
-    }
-    users.reverse();
-    return users;
-});
 
 export const get = createAsyncThunk("user/get", async (id: string) => {
     let user: userType;
 
     const userSnap = await getDoc(doc(db, "user", id));
-    const roleSnap = await getDoc(doc(db, "roles", (userSnap.data() as userType).role));
+    const roleSnap = await getDoc(
+        doc(db, "roles", (userSnap.data() as userType).role)
+    );
     user = {
         id,
         ...(userSnap.data() as userType),

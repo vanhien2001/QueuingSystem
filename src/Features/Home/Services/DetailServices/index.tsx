@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     EditOutlined,
     RollbackOutlined,
     CaretDownOutlined,
+    CaretRightOutlined,
 } from "@ant-design/icons";
 import {
     Card,
@@ -83,12 +84,21 @@ const DetailService = () => {
     const { id } = useParams();
     const dispatch = useAppDispatch();
     const { service } = useAppSelector(serviceSelector);
-    const { loading, providerNumbersFilter } = useAppSelector(providerNumberSelector);
+    const { loading, providerNumbersFilter } = useAppSelector(
+        providerNumberSelector
+    );
+    const [status, setStatus] = useState<string | null>(null);
+    const [keywords, setKeywords] = useState<string>("");
+
+    useEffect(() => {
+        if (id) {
+            dispatch(getByIdService({ id, filter: { status, keywords } }));
+        }
+    }, [id, status, keywords]);
 
     useEffect(() => {
         if (id) {
             dispatch(get(id));
-            dispatch(getByIdService(id));
         }
     }, [id]);
 
@@ -232,6 +242,10 @@ const DetailService = () => {
                                             <Select
                                                 size="large"
                                                 defaultValue={null}
+                                                value={status}
+                                                onChange={(value) =>
+                                                    setStatus(value)
+                                                }
                                                 suffixIcon={
                                                     <CaretDownOutlined
                                                         style={{
@@ -244,13 +258,13 @@ const DetailService = () => {
                                                 <Option value={null}>
                                                     Tất cả
                                                 </Option>
-                                                <Option value="spk">
+                                                <Option value="used">
                                                     Đã hoàn thành
                                                 </Option>
-                                                <Option value="rhm">
-                                                    Đã thực hiện
+                                                <Option value="waiting">
+                                                    Đang thực hiện
                                                 </Option>
-                                                <Option value="tmh">
+                                                <Option value="skip">
                                                     Vắng
                                                 </Option>
                                             </Select>
@@ -265,10 +279,22 @@ const DetailService = () => {
                                             }
                                         >
                                             <Form.Item noStyle>
-                                                <DatePicker size="large" />
+                                                <DatePicker
+                                                    size="large"
+                                                    style={{ width: "150px" }}
+                                                />
                                             </Form.Item>
+                                            <CaretRightOutlined
+                                                style={{
+                                                    margin: "0 4px",
+                                                    fontSize: "10px",
+                                                }}
+                                            />
                                             <Form.Item noStyle>
-                                                <DatePicker size="large" />
+                                                <DatePicker
+                                                    size="large"
+                                                    style={{ width: "150px" }}
+                                                />
                                             </Form.Item>
                                         </Form.Item>
                                         <Form.Item
@@ -280,7 +306,10 @@ const DetailService = () => {
                                                 </Typography.Text>
                                             }
                                         >
-                                            <SearchInput placeholder="Nhập từ khóa" />
+                                            <SearchInput
+                                                placeholder="Nhập từ khóa"
+                                                onSearch={setKeywords}
+                                            />
                                         </Form.Item>
                                     </Space>
                                 </Col>
@@ -294,10 +323,7 @@ const DetailService = () => {
                                             (providerNumber) => {
                                                 return {
                                                     key: providerNumber.id,
-                                                    stt: service?.prefix
-                                                        ? service?.prefix +
-                                                          providerNumber.stt
-                                                        : providerNumber.stt,
+                                                    stt: providerNumber.number,
                                                     status: (
                                                         <Status
                                                             type={
@@ -309,11 +335,11 @@ const DetailService = () => {
                                                             text={
                                                                 providerNumber.status ==
                                                                 "waiting"
-                                                                    ? "Đang chờ"
+                                                                    ? "Đang thực hiện"
                                                                     : providerNumber.status ==
                                                                       "used"
-                                                                    ? "Đã sử dụng"
-                                                                    : "Bỏ qua"
+                                                                    ? "Đã hoàn thành"
+                                                                    : "Vắng"
                                                             }
                                                         />
                                                     ),

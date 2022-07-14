@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
 import {
     Col,
     DatePicker,
@@ -64,10 +64,17 @@ const ServicesTable = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { loading, services } = useAppSelector(serviceSelector);
+    const [active, setActive] = useState<boolean | null>(null);
+    const [keywords, setKeywords] = useState<string>("");
 
     useEffect(() => {
-        dispatch(getAll());
-    }, []);
+        dispatch(
+            getAll({
+                active,
+                keywords,
+            })
+        );
+    }, [active, keywords]);
 
     return (
         <div className={styles.section}>
@@ -89,6 +96,8 @@ const ServicesTable = () => {
                                 <Select
                                     size="large"
                                     defaultValue={null}
+                                    value={active}
+                                    onChange={(value) => setActive(value)}
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
@@ -115,6 +124,12 @@ const ServicesTable = () => {
                                 <Form.Item noStyle>
                                     <DatePicker size="large" />
                                 </Form.Item>
+                                <CaretRightOutlined
+                                    style={{
+                                        margin: "0 4px",
+                                        fontSize: "10px",
+                                    }}
+                                />
                                 <Form.Item noStyle>
                                     <DatePicker size="large" />
                                 </Form.Item>
@@ -129,7 +144,10 @@ const ServicesTable = () => {
                                 </Typography.Text>
                             }
                         >
-                            <SearchInput placeholder="Nhập từ khóa" />
+                            <SearchInput
+                                placeholder="Nhập từ khóa"
+                                onSearch={setKeywords}
+                            />
                         </Form.Item>
                     </Col>
                 </Row>
@@ -160,12 +178,18 @@ const ServicesTable = () => {
                                     />
                                 ),
                                 detail: (
-                                    <Link to={`./detail/${service.id}`} className={styles.link}>
+                                    <Link
+                                        to={`./detail/${service.id}`}
+                                        className={styles.link}
+                                    >
                                         Chi tiết
                                     </Link>
                                 ),
                                 update: (
-                                    <Link to={`./edit/${service.id}`} className={styles.link}>
+                                    <Link
+                                        to={`./edit/${service.id}`}
+                                        className={styles.link}
+                                    >
                                         Cập nhật
                                     </Link>
                                 ),
@@ -173,7 +197,10 @@ const ServicesTable = () => {
                         })}
                         bordered
                         size="middle"
-                        pagination={{ defaultPageSize: 8, position: ["bottomRight"] }}
+                        pagination={{
+                            defaultPageSize: 8,
+                            position: ["bottomRight"],
+                        }}
                     />
                 </Col>
                 <Col flex="100px">

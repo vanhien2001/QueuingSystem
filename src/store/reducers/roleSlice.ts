@@ -33,27 +33,48 @@ export const addRole = createAsyncThunk(
     }
 );
 
-export const getAll = createAsyncThunk("role/getAll", async () => {
-    let roles: roleType[] = [];
+interface Ifilter {
+    keywords: string;
+}
 
-    const queryRoles = await getDocs(collection(db, "roles"));
-    queryRoles.forEach((value) => {
-        roles.push({
-            id: value.id,
-            ...value.data() as roleType,
+export const getAll = createAsyncThunk(
+    "role/getAll",
+    async (filter?: Ifilter) => {
+        let roles: roleType[] = [];
+
+        const queryRoles = await getDocs(collection(db, "roles"));
+        queryRoles.forEach((value) => {
+            roles.push({
+                id: value.id,
+                ...(value.data() as roleType),
+            });
         });
-    });
-    for (const role of roles) {
-        const roleSnap = await getDocs(query(collection(db, "user"), where("role", "==", role.id)));
-        let amountOfUser = 0
-        roleSnap.forEach((value) => {
-            amountOfUser += 1
-        })
-        role.amountOfUser = amountOfUser
+        for (const role of roles) {
+            const roleSnap = await getDocs(
+                query(collection(db, "user"), where("role", "==", role.id))
+            );
+            let amountOfUser = 0;
+            roleSnap.forEach((value) => {
+                amountOfUser += 1;
+            });
+            role.amountOfUser = amountOfUser;
+        }
+        if (filter) {
+            if (filter.keywords != "")
+                roles = roles.filter(
+                    (role) =>
+                        role.name
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase()) ||
+                        role.description
+                            .toLowerCase()
+                            .includes(filter.keywords.toLowerCase())
+                );
+        }
+        roles.reverse();
+        return roles;
     }
-    roles.reverse();
-    return roles;
-});
+);
 
 export const get = createAsyncThunk("role/get", async (id: string) => {
     let role: roleType;
@@ -62,7 +83,7 @@ export const get = createAsyncThunk("role/get", async (id: string) => {
     const roleSnap = await getDoc(roleRef);
     role = {
         id,
-        ...roleSnap.data() as roleType,
+        ...(roleSnap.data() as roleType),
     };
 
     return role;
