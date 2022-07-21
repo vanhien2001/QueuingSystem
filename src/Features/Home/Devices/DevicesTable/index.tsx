@@ -22,31 +22,26 @@ const columns = [
         key: "id",
         dataIndex: "id",
     },
-
     {
         title: "Tên thiết bị",
         key: "name",
         dataIndex: "name",
     },
-
     {
         title: "Địa chỉ IP",
         key: "IPAddess",
         dataIndex: "IPAddess",
     },
-
     {
         title: "Trạng thái hoạt động",
         key: "active",
         dataIndex: "active",
     },
-
     {
         title: "Trạng thái kết nối",
         key: "connect",
         dataIndex: "connect",
     },
-
     {
         title: "Dịch vụ sửa dụng",
         key: "services",
@@ -240,6 +235,8 @@ const DevicesTable = () => {
                         pagination={{
                             defaultPageSize: 8,
                             position: ["bottomRight"],
+                            showLessItems: true,
+                            showSizeChanger: false,
                         }}
                     />
                 </Col>

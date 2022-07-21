@@ -147,6 +147,8 @@ const ManageAccountTable = () => {
                         pagination={{
                             defaultPageSize: 8,
                             position: ["bottomRight"],
+                            showLessItems: true,
+                            showSizeChanger: false,
                         }}
                     />
                 </Col>

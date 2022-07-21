@@ -93,6 +93,8 @@ const HistoryUserTable = () => {
                             pagination={{
                                 defaultPageSize: 8,
                                 position: ["bottomRight"],
+                                showLessItems: true,
+                                showSizeChanger: false,
                             }}
                         />
                     </Col>
