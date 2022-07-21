@@ -1,3 +1,4 @@
+import moment, { Moment } from "moment";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
     collection,
@@ -11,9 +12,9 @@ import {
     where,
 } from "firebase/firestore";
 import { db } from "../../config/firebase";
-import { userType } from "./userSlice";
 import { serviceType } from "./serviceSlice";
 import { RootState } from "../index";
+import { Console } from "console";
 
 export type providerNumberType = {
     id?: string;
@@ -64,17 +65,17 @@ export const addProviderNumber = createAsyncThunk(
 );
 
 interface Ifilter {
-    status: string | null;
+    status?: string | null;
     service?: string;
     src?: string;
     keywords: string;
+    dateRange: [Moment, Moment] | null;
 }
 
 export const getAll = createAsyncThunk(
     "providerNumber/getAll",
     async (filter?: Ifilter) => {
         let providerNumbers: providerNumberType[] = [];
-
         const query = await getDocs(collection(db, "providerNumber"));
         query.forEach((value) => {
             providerNumbers.push({
@@ -83,18 +84,51 @@ export const getAll = createAsyncThunk(
             });
         });
         if (filter) {
-            if (filter.status != null)
-                providerNumbers = providerNumbers.filter(
-                    (providerNumber) => providerNumber.status == filter.status
-                );
-            if (filter.src != "")
-                providerNumbers = providerNumbers.filter(
-                    (providerNumber) => providerNumber.src == filter.src
-                );
-            if (filter.service != "")
-                providerNumbers = providerNumbers.filter(
-                    (providerNumber) => providerNumber.service == filter.service
-                );
+            providerNumbers = providerNumbers.filter((providerNumber) => {
+                if (
+                    filter.status &&
+                    filter.status != null &&
+                    providerNumber.status !== filter.status
+                )
+                    return false;
+                if (
+                    filter.src &&
+                    filter.src != "" &&
+                    providerNumber.src !== filter.src
+                )
+                    return false;
+                if (
+                    filter.service &&
+                    filter.service != "" &&
+                    providerNumber.service !== filter.service
+                )
+                    return false;
+                if (filter.dateRange && filter.dateRange != null) {
+                    const dateProvider = moment(
+                        providerNumber.timeGet.toDate()
+                    );
+                    if (
+                        filter.dateRange[0] &&
+                        !moment(filter.dateRange[0]).isSameOrBefore(
+                            dateProvider,
+                            "days"
+                        )
+                    ) {
+                        return false;
+                    }
+
+                    if (
+                        filter.dateRange[1] &&
+                        !moment(filter.dateRange[1]).isSameOrAfter(
+                            dateProvider,
+                            "days"
+                        )
+                    ) {
+                        return false;
+                    }
+                }
+                return true;
+            });
         }
         for (const providerNumber of providerNumbers) {
             const Snap = await getDoc(
@@ -105,7 +139,7 @@ export const getAll = createAsyncThunk(
             providerNumber.number = temp.prefix + providerNumber.stt;
         }
         if (filter) {
-            if (filter.keywords != "")
+            if (filter.keywords != "") {
                 providerNumbers = providerNumbers.filter(
                     (providerNumber) =>
                         providerNumber.name
@@ -115,6 +149,7 @@ export const getAll = createAsyncThunk(
                             ?.toLowerCase()
                             .includes(filter.keywords.toLowerCase())
                 );
+            }
         }
         providerNumbers.sort(
             (a, b) =>

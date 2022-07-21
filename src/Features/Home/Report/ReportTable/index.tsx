@@ -1,8 +1,9 @@
-import { useEffect } from "react";
-import moment from "moment";
-import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
-import { DownloadOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { Col, Form, Row, Table, Typography } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 import { Excel } from "antd-table-saveas-excel";
+import moment, { Moment } from "moment";
+import { RangeValue } from "rc-picker/lib/interface";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import {
     providerNumberSelector,
@@ -10,6 +11,7 @@ import {
 } from "../../../../store/reducers/providerNumberSlice";
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
+import DatePicker from "../../../../components/DateRange";
 import styles from "../Report.module.scss";
 
 const columns = [
@@ -43,10 +45,18 @@ const columns = [
 const ReportTable = () => {
     const dispatch = useAppDispatch();
     const { loading, providerNumbers } = useAppSelector(providerNumberSelector);
+    const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
-        dispatch(getAll());
-    }, []);
+        dispatch(
+            getAll({
+                keywords: "",
+                dateRange: dateRange
+                    ? [dateRange[0] as Moment, dateRange[1] as Moment]
+                    : null,
+            })
+        );
+    }, [dateRange]);
 
     return (
         <div className={styles.section}>
@@ -60,15 +70,7 @@ const ReportTable = () => {
                                 </Typography.Text>
                             }
                         >
-                            <Form.Item noStyle>
-                                <DatePicker size="large" />
-                            </Form.Item>
-                            <CaretRightOutlined
-                                style={{ margin: "0 4px", fontSize: "10px" }}
-                            />
-                            <Form.Item noStyle>
-                                <DatePicker size="large" />
-                            </Form.Item>
+                            <DatePicker onChange={setDateRange} />
                         </Form.Item>
                     </Col>
                 </Row>

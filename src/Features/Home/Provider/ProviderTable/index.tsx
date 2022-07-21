@@ -1,17 +1,9 @@
 import { useEffect, useState } from "react";
 import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
-import {
-    Col,
-    DatePicker,
-    Form,
-    Row,
-    Select,
-    Space,
-    Table,
-    Typography,
-} from "antd";
+import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
-import moment from "moment";
+import moment, { Moment } from "moment";
+import { RangeValue } from "rc-picker/lib/interface";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import {
@@ -25,6 +17,7 @@ import {
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
+import DatePicker from "../../../../components/DateRange";
 import styles from "../Provider.module.scss";
 
 const { Option } = Select;
@@ -81,10 +74,21 @@ const ProviderTable = () => {
     const [src, setSrc] = useState<string>("");
     const [service, setService] = useState<string>("");
     const [keywords, setKeywords] = useState<string>("");
+    const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
-        dispatch(getAll({ status, src, service, keywords }));
-    }, [status, src, service, keywords]);
+        dispatch(
+            getAll({
+                status,
+                src,
+                service,
+                keywords,
+                dateRange: dateRange
+                    ? [dateRange[0] as Moment, dateRange[1] as Moment]
+                    : null,
+            })
+        );
+    }, [status, src, service, keywords, dateRange]);
 
     useEffect(() => {
         dispatch(getAllService());
@@ -114,7 +118,7 @@ const ProviderTable = () => {
                             >
                                 <Select
                                     size="large"
-                                    defaultValue={''}
+                                    defaultValue={""}
                                     value={service}
                                     onChange={(value) => setService(value)}
                                     suffixIcon={
@@ -126,7 +130,7 @@ const ProviderTable = () => {
                                         />
                                     }
                                 >
-                                    <Option value={''}>Tất cả</Option>
+                                    <Option value={""}>Tất cả</Option>
                                     {services.map((service) => {
                                         return (
                                             <Option value={service.id}>
@@ -198,18 +202,7 @@ const ProviderTable = () => {
                                     </Typography.Text>
                                 }
                             >
-                                <Form.Item noStyle>
-                                    <DatePicker size="large" />
-                                </Form.Item>
-                                <CaretRightOutlined
-                                    style={{
-                                        margin: "0 4px",
-                                        fontSize: "10px",
-                                    }}
-                                />
-                                <Form.Item noStyle>
-                                    <DatePicker size="large" />
-                                </Form.Item>
+                                <DatePicker onChange={setDateRange} />
                             </Form.Item>
                             <Form.Item
                                 label={

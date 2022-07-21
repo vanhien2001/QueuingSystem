@@ -7,6 +7,7 @@ import {
     updateDoc,
     setDoc,
 } from "firebase/firestore";
+import { Moment } from "moment";
 import { db } from "../../config/firebase";
 import { RootState } from "../index";
 
@@ -37,6 +38,7 @@ export const addService = createAsyncThunk(
 interface Ifilter {
     active: boolean | null;
     keywords: string;
+    dateRange: [Moment, Moment] | null;
 }
 
 export const getAll = createAsyncThunk(
@@ -52,6 +54,7 @@ export const getAll = createAsyncThunk(
             });
         });
         if (filter) {
+            console.log(filter.dateRange)
             if (filter.active != null)
                 services = services.filter(
                     (service) => service.isActive == filter.active

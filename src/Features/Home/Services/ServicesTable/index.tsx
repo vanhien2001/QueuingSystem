@@ -1,16 +1,9 @@
 import { useEffect, useState } from "react";
-import { CaretDownOutlined, CaretRightOutlined } from "@ant-design/icons";
-import {
-    Col,
-    DatePicker,
-    Form,
-    Row,
-    Select,
-    Space,
-    Table,
-    Typography,
-} from "antd";
+import { CaretDownOutlined } from "@ant-design/icons";
+import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
+import { Moment } from "moment";
+import { RangeValue } from "rc-picker/lib/interface";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import {
@@ -20,6 +13,7 @@ import {
 import Status from "../../../../components/Status";
 import ActionButton from "../../../../components/ActionButton";
 import SearchInput from "../../../../components/SearchInput";
+import DatePicker from "../../../../components/DateRange";
 import styles from "../Services.module.scss";
 
 const { Option } = Select;
@@ -66,15 +60,17 @@ const ServicesTable = () => {
     const { loading, services } = useAppSelector(serviceSelector);
     const [active, setActive] = useState<boolean | null>(null);
     const [keywords, setKeywords] = useState<string>("");
+    const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
         dispatch(
             getAll({
                 active,
                 keywords,
+                dateRange: dateRange ? [dateRange[0] as Moment, dateRange[1] as Moment] : null,
             })
         );
-    }, [active, keywords]);
+    }, [active, keywords, dateRange]);
 
     return (
         <div className={styles.section}>
@@ -121,18 +117,7 @@ const ServicesTable = () => {
                                     </Typography.Text>
                                 }
                             >
-                                <Form.Item noStyle>
-                                    <DatePicker size="large" />
-                                </Form.Item>
-                                <CaretRightOutlined
-                                    style={{
-                                        margin: "0 4px",
-                                        fontSize: "10px",
-                                    }}
-                                />
-                                <Form.Item noStyle>
-                                    <DatePicker size="large" />
-                                </Form.Item>
+                                <DatePicker onChange={setDateRange}/>
                             </Form.Item>
                         </Space>
                     </Col>

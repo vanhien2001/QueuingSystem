@@ -1,23 +1,18 @@
-import { useEffect } from "react";
-import {
-    Calendar,
-    Card,
-    Col,
-    Form,
-    Layout,
-    Progress,
-    Row,
-    Select,
-    Space,
-    Tag,
-    Typography,
-} from "antd";
+import { useEffect, useMemo, useState } from "react";
+import { Card, Col, Layout, Row, Select, Space, Typography } from "antd";
 import {
     DesktopOutlined,
     CalendarOutlined,
     CaretDownOutlined,
+    CustomerServiceOutlined,
+    CarryOutOutlined,
+    StarOutlined
 } from "@ant-design/icons";
-import { Line } from "@ant-design/plots";
+import {
+    Calendar,
+    DayRange,
+} from "@hassanmojab/react-modern-calendar-datepicker";
+import { Area } from "@ant-design/plots";
 import { useAppSelector, useAppDispatch } from "../../../store";
 import {
     providerNumberSelector,
@@ -38,40 +33,6 @@ import styles from "./Dasboard.module.scss";
 const { Sider, Content } = Layout;
 const { Option } = Select;
 
-const data = [
-    {
-        date: "01",
-        value: 3050,
-    },
-    {
-        date: "02",
-        value: 3250,
-    },
-    {
-        date: "03",
-        value: 3000,
-    },
-    {
-        date: "04",
-        value: 3900,
-    },
-    {
-        date: "05",
-        value: 4221,
-    },
-    {
-        date: "06",
-        value: 3000,
-    },
-    {
-        date: "07",
-        value: 3900,
-    },
-    {
-        date: "08",
-        value: 4221,
-    },
-];
 const iconCardStyle = {
     display: "flex",
     alignItems: "center",
@@ -87,12 +48,103 @@ const Dashboard = () => {
     const { providerNumbers } = useAppSelector(providerNumberSelector);
     const { devices } = useAppSelector(deviceSelector);
     const { services } = useAppSelector(serviceSelector);
+    const [chartData, setChartData] = useState("date");
+    const [calendarValue, setCalendarValue] = useState<DayRange>({
+        from: null,
+        to: null,
+    });
+
+    const data = useMemo(() => {
+        let start = calendarValue.from ? calendarValue.from.day : 0;
+        let end = calendarValue.to ? calendarValue.to.day : 30;
+        let month = calendarValue.to
+            ? calendarValue.to.month
+            : new Date().getMonth() + 1;
+        let data1 = [];
+        switch (chartData) {
+            case "date":
+                for (let i = start; i <= end; i++) {
+                    data1.push({
+                        xField: i,
+                        value: providerNumbers.filter((providerNumber) => {
+                            return (
+                                providerNumber.timeGet.toDate().getDate() ===
+                                    i &&
+                                providerNumber.timeGet.toDate().getMonth() +
+                                    1 ==
+                                    month
+                            );
+                        }).length,
+                    });
+                }
+                return data1;
+            case "week":
+                for (let i = 1; i <= 5; i++) {
+                    data1.push({
+                        xField: "Tuần " + i,
+                        value: providerNumbers.filter((providerNumber) => {
+                            return (
+                                providerNumber.timeGet.toDate().getMonth() +
+                                    1 ==
+                                    month &&
+                                providerNumber.timeGet.toDate().getDate() >
+                                    (i - 1) * 7 &&
+                                providerNumber.timeGet.toDate().getDate() <=
+                                    i * 7
+                            );
+                        }).length,
+                    });
+                }
+                return data1;
+            default:
+                for (let i = 1; i <= 12; i++) {
+                    data1.push({
+                        xField: i,
+                        value: providerNumbers.filter((providerNumber) => {
+                            return (
+                                providerNumber.timeGet.toDate().getMonth() +
+                                    1 ===
+                                i
+                            );
+                        }).length,
+                    });
+                }
+                console.log(data1);
+                return data1;
+        }
+    }, [chartData, calendarValue, providerNumbers]);
 
     const config = {
         data,
-        xField: "date",
+        xField: "xField",
         yField: "value",
         smooth: true,
+        xAxis: {
+            range: [0, 1],
+        },
+        tooltip: {
+            position: "top" as "left" | "right" | "top" | "bottom" | undefined,
+            domStyles: {
+                "g2-tooltip": {
+                    width: "100px",
+                    padding: "5px",
+                    backgroundColor: "#5185F7",
+                    borderRadius: "8px",
+                    color: "#fff",
+                    textAlign: "center",
+                    fontSize: "14px",
+                    fontWeight: 700,
+                },
+            },
+            customContent: (title: any, items: any): any => {
+                return <span>{items[0]?.value}</span>;
+            },
+        },
+        areaStyle: () => {
+            return {
+                fill: "l(90) 0:#5185F7 0.5:#5185F7 1:#fff",
+            };
+        },
     };
 
     useEffect(() => {
@@ -132,7 +184,7 @@ const Dashboard = () => {
                         <Col span={6}>
                             <CardContent
                                 icon={
-                                    <CalendarOutlined
+                                    <CarryOutOutlined
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
@@ -156,7 +208,7 @@ const Dashboard = () => {
                         <Col span={6}>
                             <CardContent
                                 icon={
-                                    <CalendarOutlined
+                                    <CustomerServiceOutlined
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
@@ -180,7 +232,7 @@ const Dashboard = () => {
                         <Col span={6}>
                             <CardContent
                                 icon={
-                                    <CalendarOutlined
+                                    <StarOutlined
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
@@ -213,10 +265,22 @@ const Dashboard = () => {
                         >
                             <Space direction="vertical">
                                 <Typography.Title className={styles.title}>
-                                    Bảng thống kê theo ngày
+                                    Bảng thống kê theo{" "}
+                                    {chartData == "date"
+                                        ? "ngày"
+                                        : chartData == "week"
+                                        ? "tuần"
+                                        : "tháng"}
                                 </Typography.Title>
                                 <Typography.Text className={styles.text}>
-                                    Tháng 7/2022
+                                    {chartData == "month"
+                                        ? "Năm "
+                                        : "Tháng " +
+                                          (calendarValue.to
+                                              ? calendarValue.to.month
+                                              : new Date().getMonth() + 1) +
+                                          "/"}
+                                    2022
                                 </Typography.Text>
                             </Space>
                             <Space
@@ -228,27 +292,27 @@ const Dashboard = () => {
                                 <Typography.Text className={styles.label}>
                                     Xem theo
                                 </Typography.Text>
-                                <Form.Item className={styles.selectContianer}>
-                                    <Select
-                                        size="large"
-                                        defaultValue={"date"}
-                                        suffixIcon={
-                                            <CaretDownOutlined
-                                                style={{
-                                                    fontSize: "20px",
-                                                    color: "#FF7506",
-                                                }}
-                                            />
-                                        }
-                                    >
-                                        <Option value="date">Ngày</Option>
-                                        <Option value="week">Tuần</Option>
-                                        <Option value="month">Tháng</Option>
-                                    </Select>
-                                </Form.Item>
+                                <Select
+                                    className={styles.selectContianer}
+                                    size="large"
+                                    onChange={(value) => setChartData(value)}
+                                    value={chartData}
+                                    suffixIcon={
+                                        <CaretDownOutlined
+                                            style={{
+                                                fontSize: "20px",
+                                                color: "#FF7506",
+                                            }}
+                                        />
+                                    }
+                                >
+                                    <Option value="date">Ngày</Option>
+                                    <Option value="week">Tuần</Option>
+                                    <Option value="month">Tháng</Option>
+                                </Select>
                             </Space>
                         </Space>
-                        <Line {...config} style={{ height: "300px" }} />
+                        <Area {...config} style={{ height: "300px" }} />
                     </Card>
                 </div>
             </Content>
@@ -344,11 +408,13 @@ const Dashboard = () => {
                             },
                         ]}
                     />
-                    <div className={styles.calendar}>
+                    <div className={styles.calendarContainer}>
                         <Calendar
-                            style={{ width: "80%" }}
-                            fullscreen={false}
-                            // onPanelChange={onPanelChange}
+                            calendarClassName={styles.calendar}
+                            value={calendarValue}
+                            onChange={(e) => setCalendarValue(e)}
+                            colorPrimary="#FF7506"
+                            colorPrimaryLight="#FFF2E7"
                         />
                     </div>
                 </div>

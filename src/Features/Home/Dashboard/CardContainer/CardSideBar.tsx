@@ -20,6 +20,7 @@ const CardSideBar = ({ icon, percent, color, title, quantity, data }: ICardConta
     return (
         <Card
             bodyStyle={{ padding: "0" }}
+            style={{ marginBottom: "12px"}}
             className={styles.cardContainerSidebar}
         >
             <Row gutter={0}>

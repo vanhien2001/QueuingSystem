@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { Col, DatePicker, Form, Row, Table, Typography } from "antd";
-import { CaretRightOutlined } from "@ant-design/icons";
-import moment from "moment";
+import { Col, Form, Row, Table, Typography } from "antd";
+import moment, { Moment } from "moment";
+import { RangeValue } from "rc-picker/lib/interface";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import { diarySelector, getAll } from "../../../../store/reducers/diarySlice";
 import SearchInput from "../../../../components/SearchInput";
+import DatePicker from "../../../../components/DateRange";
 import styles from "./HistoryUser.module.scss";
 
 const columns = [
@@ -37,10 +38,11 @@ const HistoryUserTable = () => {
     const dispatch = useAppDispatch();
     const { loading, diaries } = useAppSelector(diarySelector);
     const [keywords, setKeywords] = useState<string>("");
+    const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
-        dispatch(getAll({ keywords }));
-    }, [keywords]);
+        dispatch(getAll({ keywords, dateRange: dateRange ? [dateRange[0] as Moment, dateRange[1] as Moment] : null }));
+    }, [keywords, dateRange]);
 
     return (
         <div className={styles.section}>
@@ -54,15 +56,7 @@ const HistoryUserTable = () => {
                                 </Typography.Text>
                             }
                         >
-                            <Form.Item noStyle>
-                                <DatePicker size="large" />
-                            </Form.Item>
-                            <CaretRightOutlined
-                                style={{ margin: "0 4px", fontSize: "10px" }}
-                            />
-                            <Form.Item noStyle>
-                                <DatePicker size="large" />
-                            </Form.Item>
+                            <DatePicker onChange={setDateRange}/>
                         </Form.Item>
                     </Col>
                     <Col flex="300px">

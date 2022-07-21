@@ -1,3 +1,4 @@
+import moment, { Moment } from "moment";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
     collection,
@@ -28,6 +29,7 @@ export const add = createAsyncThunk("diary/add", async (values: diaryType) => {
 
 interface Ifilter {
     keywords: string;
+    dateRange: [Moment, Moment] | null;
 }
 
 export const getAll = createAsyncThunk(
@@ -43,7 +45,33 @@ export const getAll = createAsyncThunk(
             });
             console.log(value.data() as diaryType);
         });
+
         if (filter) {
+            diaries = diaries.filter((diary) => {
+                if (filter.dateRange != null) {
+                    const dateProvider = moment(diary.time.toDate());
+                    if (
+                        filter.dateRange[0] &&
+                        !moment(filter.dateRange[0]).isSameOrBefore(
+                            dateProvider,
+                            "days"
+                        )
+                    ) {
+                        return false;
+                    }
+
+                    if (
+                        filter.dateRange[1] &&
+                        !moment(filter.dateRange[1]).isSameOrAfter(
+                            dateProvider,
+                            "days"
+                        )
+                    ) {
+                        return false;
+                    }
+                }
+                return true;
+            });
             if (filter.keywords != "")
                 diaries = diaries.filter(
                     (diary) =>

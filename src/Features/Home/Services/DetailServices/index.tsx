@@ -19,6 +19,8 @@ import {
 } from "antd";
 import clsx from "clsx";
 import { useNavigate, useParams } from "react-router-dom";
+import { Moment } from "moment";
+import { RangeValue } from "rc-picker/lib/interface";
 import { useAppSelector, useAppDispatch } from "../../../../store";
 import { serviceSelector, get } from "../../../../store/reducers/serviceSlice";
 import {
@@ -89,12 +91,24 @@ const DetailService = () => {
     );
     const [status, setStatus] = useState<string | null>(null);
     const [keywords, setKeywords] = useState<string>("");
+    const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
         if (id) {
-            dispatch(getByIdService({ id, filter: { status, keywords } }));
+            dispatch(
+                getByIdService({
+                    id,
+                    filter: {
+                        status,
+                        keywords,
+                        dateRange: dateRange
+                            ? [dateRange[0] as Moment, dateRange[1] as Moment]
+                            : null,
+                    },
+                })
+            );
         }
-    }, [id, status, keywords]);
+    }, [id, status, keywords, dateRange]);
 
     useEffect(() => {
         if (id) {
