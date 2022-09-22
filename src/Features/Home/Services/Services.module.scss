@@ -6,18 +6,18 @@
     .title {
         color: #ff7506 !important;
         font-size: 24px !important;
-        &.title2{
+        &.title2 {
             font-size: 20px !important;
             margin-bottom: 12px;
         }
     }
-    .card{
+    .card {
         height: 550px;
-        .itemWrapper{
+        .itemWrapper {
             margin-bottom: 4px;
         }
     }
-    .providerInput{
+    .providerInput {
         height: 44px;
         width: 60px;
         border-radius: 8px;
@@ -26,7 +26,7 @@
         margin-bottom: 12px;
         display: flex;
         align-items: center;
-        .inputValue{
+        .inputValue {
             width: 60px;
         }
         .text {

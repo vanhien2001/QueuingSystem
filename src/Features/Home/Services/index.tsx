@@ -1,7 +1,7 @@
-import { Route, Routes } from "react-router-dom";
-import ServicesTable from "./ServicesTable";
-import AddServices from "./AddServices";
-import DetailServices from "./DetailServices";
+import { Route, Routes } from 'react-router-dom';
+import ServicesTable from './ServicesTable';
+import AddServices from './AddServices';
+import DetailServices from './DetailServices';
 
 const index = () => {
     return (

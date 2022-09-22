@@ -1,5 +1,5 @@
-import moment, { Moment } from "moment";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import moment, { Moment } from 'moment';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
     collection,
     doc,
@@ -10,11 +10,11 @@ import {
     Timestamp,
     query,
     where,
-} from "firebase/firestore";
-import { db } from "../../config/firebase";
-import { serviceType } from "./serviceSlice";
-import { RootState } from "../index";
-import { Console } from "console";
+} from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import { serviceType } from './serviceSlice';
+import { RootState } from '../index';
+import { Console } from 'console';
 
 export type providerNumberType = {
     id?: string;
@@ -22,7 +22,7 @@ export type providerNumberType = {
     number?: string;
     name: string;
     stt: number;
-    status: "waiting" | "used" | "skip";
+    status: 'waiting' | 'used' | 'skip';
     src: string;
     timeGet: Timestamp;
     timeExp: Timestamp;
@@ -31,15 +31,15 @@ export type providerNumberType = {
 };
 
 export const addProviderNumber = createAsyncThunk(
-    "providerNumber/add",
+    'providerNumber/add',
     async (values: providerNumberType) => {
         let providerNumbers: providerNumberType[] = [];
 
         const querySnapshot = await getDocs(
             query(
-                collection(db, "providerNumber"),
-                where("service", "==", values.service)
-            )
+                collection(db, 'providerNumber'),
+                where('service', '==', values.service),
+            ),
         );
         querySnapshot.forEach((value) => {
             providerNumbers.push({
@@ -49,19 +49,19 @@ export const addProviderNumber = createAsyncThunk(
         });
         providerNumbers.sort(
             (a, b) =>
-                b.timeGet.toDate().getTime() - a.timeGet.toDate().getTime()
+                b.timeGet.toDate().getTime() - a.timeGet.toDate().getTime(),
         );
 
-        const newDoc = doc(collection(db, "providerNumber"));
+        const newDoc = doc(collection(db, 'providerNumber'));
         await setDoc(newDoc, {
             ...values,
             stt: providerNumbers.length > 0 ? providerNumbers[0].stt + 1 : 1,
         });
 
-        const Ref = doc(db, "providerNumber", newDoc.id);
+        const Ref = doc(db, 'providerNumber', newDoc.id);
         const Snap = await getDoc(Ref);
         return Snap.id;
-    }
+    },
 );
 
 interface Ifilter {
@@ -73,10 +73,10 @@ interface Ifilter {
 }
 
 export const getAll = createAsyncThunk(
-    "providerNumber/getAll",
+    'providerNumber/getAll',
     async (filter?: Ifilter) => {
         let providerNumbers: providerNumberType[] = [];
-        const query = await getDocs(collection(db, "providerNumber"));
+        const query = await getDocs(collection(db, 'providerNumber'));
         query.forEach((value) => {
             providerNumbers.push({
                 id: value.id,
@@ -93,25 +93,25 @@ export const getAll = createAsyncThunk(
                     return false;
                 if (
                     filter.src &&
-                    filter.src != "" &&
+                    filter.src != '' &&
                     providerNumber.src !== filter.src
                 )
                     return false;
                 if (
                     filter.service &&
-                    filter.service != "" &&
+                    filter.service != '' &&
                     providerNumber.service !== filter.service
                 )
                     return false;
                 if (filter.dateRange && filter.dateRange != null) {
                     const dateProvider = moment(
-                        providerNumber.timeGet.toDate()
+                        providerNumber.timeGet.toDate(),
                     );
                     if (
                         filter.dateRange[0] &&
                         !moment(filter.dateRange[0]).isSameOrBefore(
                             dateProvider,
-                            "days"
+                            'days',
                         )
                     ) {
                         return false;
@@ -121,7 +121,7 @@ export const getAll = createAsyncThunk(
                         filter.dateRange[1] &&
                         !moment(filter.dateRange[1]).isSameOrAfter(
                             dateProvider,
-                            "days"
+                            'days',
                         )
                     ) {
                         return false;
@@ -132,14 +132,14 @@ export const getAll = createAsyncThunk(
         }
         for (const providerNumber of providerNumbers) {
             const Snap = await getDoc(
-                doc(db, "services", providerNumber.service as string)
+                doc(db, 'services', providerNumber.service as string),
             );
             const temp = Snap.data() as serviceType;
             providerNumber.service = temp.name;
             providerNumber.number = temp.prefix + providerNumber.stt;
         }
         if (filter) {
-            if (filter.keywords != "") {
+            if (filter.keywords != '') {
                 providerNumbers = providerNumbers.filter(
                     (providerNumber) =>
                         providerNumber.name
@@ -147,25 +147,25 @@ export const getAll = createAsyncThunk(
                             .includes(filter.keywords.toLowerCase()) ||
                         providerNumber.number
                             ?.toLowerCase()
-                            .includes(filter.keywords.toLowerCase())
+                            .includes(filter.keywords.toLowerCase()),
                 );
             }
         }
         providerNumbers.sort(
             (a, b) =>
-                b.timeGet.toDate().getTime() - a.timeGet.toDate().getTime()
+                b.timeGet.toDate().getTime() - a.timeGet.toDate().getTime(),
         );
         return providerNumbers;
-    }
+    },
 );
 
 export const getByIdService = createAsyncThunk(
-    "providerNumber/getByIdService",
+    'providerNumber/getByIdService',
     async ({ id, filter }: { id: string; filter?: Ifilter }) => {
         let providerNumbers: providerNumberType[] = [];
 
         const querySnapshot = await getDocs(
-            query(collection(db, "providerNumber"), where("service", "==", id))
+            query(collection(db, 'providerNumber'), where('service', '==', id)),
         );
         querySnapshot.forEach((value) => {
             providerNumbers.push({
@@ -175,7 +175,7 @@ export const getByIdService = createAsyncThunk(
         });
         for (const providerNumber of providerNumbers) {
             const Snap = await getDoc(
-                doc(db, "services", providerNumber.service as string)
+                doc(db, 'services', providerNumber.service as string),
             );
             const temp = Snap.data() as serviceType;
             providerNumber.number = temp.prefix + providerNumber.stt;
@@ -183,50 +183,50 @@ export const getByIdService = createAsyncThunk(
         if (filter) {
             if (filter.status != null)
                 providerNumbers = providerNumbers.filter(
-                    (providerNumber) => providerNumber.status == filter.status
+                    (providerNumber) => providerNumber.status == filter.status,
                 );
-            if (filter.keywords != "")
+            if (filter.keywords != '')
                 providerNumbers = providerNumbers.filter((providerNumber) =>
                     providerNumber.number
                         ?.toLowerCase()
-                        .includes(filter.keywords.toLowerCase())
+                        .includes(filter.keywords.toLowerCase()),
                 );
         }
         providerNumbers.sort(
             (a, b) =>
-                b.timeGet.toDate().getTime() - a.timeGet.toDate().getTime()
+                b.timeGet.toDate().getTime() - a.timeGet.toDate().getTime(),
         );
         return providerNumbers;
-    }
+    },
 );
 
 export const get = createAsyncThunk(
-    "providerNumber/get",
+    'providerNumber/get',
     async (id: string) => {
         let providerNumber: providerNumberType;
 
-        const providerNumberRef = doc(db, "providerNumber", id);
+        const providerNumberRef = doc(db, 'providerNumber', id);
         const providerNumberSnap = await getDoc(providerNumberRef);
         providerNumber = {
             id,
             ...(providerNumberSnap.data() as providerNumberType),
         };
         const Snap = await getDoc(
-            doc(db, "services", providerNumber.service as string)
+            doc(db, 'services', providerNumber.service as string),
         );
         const temp = Snap.data() as serviceType;
         providerNumber.service = temp.name;
         providerNumber.number = temp.prefix + providerNumber.stt;
         return providerNumber;
-    }
+    },
 );
 
 export const update = createAsyncThunk(
-    "providerNumber/update",
+    'providerNumber/update',
     async ({ id, ...value }: providerNumberType) => {
-        const ref = doc(db, "providerNumber", id as string);
+        const ref = doc(db, 'providerNumber', id as string);
         await updateDoc(ref, { ...value });
-    }
+    },
 );
 
 interface defaultState {
@@ -247,12 +247,12 @@ const initialState: defaultState = {
     providerNumbersFilter: [],
     message: {
         fail: false,
-        text: "",
+        text: '',
     },
 };
 
 const providerNumberSlice = createSlice({
-    name: "providerNumber",
+    name: 'providerNumber',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -262,10 +262,10 @@ const providerNumberSlice = createSlice({
         builder.addCase(addProviderNumber.fulfilled, (state, action) => {
             if (action.payload) {
                 state.message.fail = false;
-                state.message.text = "Thêm thành công";
+                state.message.text = 'Thêm thành công';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -282,11 +282,11 @@ const providerNumberSlice = createSlice({
             if (action.payload) {
                 state.providerNumbers = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.providerNumbers = [];
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -303,11 +303,11 @@ const providerNumberSlice = createSlice({
             if (action.payload) {
                 state.providerNumbersFilter = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.providerNumbersFilter = [];
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -324,10 +324,10 @@ const providerNumberSlice = createSlice({
             if (action.payload) {
                 state.providerNumber = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -342,7 +342,7 @@ const providerNumberSlice = createSlice({
         });
         builder.addCase(update.fulfilled, (state, action) => {
             state.message.fail = false;
-            state.message.text = "Cập nhật thành công";
+            state.message.text = 'Cập nhật thành công';
             state.loading = false;
         });
         builder.addCase(update.rejected, (state, action) => {

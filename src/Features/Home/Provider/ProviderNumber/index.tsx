@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
     Button,
     Card,
@@ -10,28 +10,27 @@ import {
     Typography,
     message as notice,
     Input,
-} from "antd";
-import { CaretDownOutlined } from "@ant-design/icons";
-import clsx from "clsx";
-import { Timestamp } from "firebase/firestore";
-import moment from "moment";
-import { Link } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+} from 'antd';
+import { CaretDownOutlined } from '@ant-design/icons';
+import clsx from 'clsx';
+import { Timestamp } from 'firebase/firestore';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     providerNumberSelector,
     get,
     getAll,
     addProviderNumber,
-} from "../../../../store/reducers/providerNumberSlice";
+} from '../../../../store/reducers/providerNumberSlice';
 import {
     serviceSelector,
     getAll as getServices,
-} from "../../../../store/reducers/serviceSlice";
-import { userSelector } from "../../../../store/reducers/userSlice";
-import { add as addDiary } from "../../../../store/reducers/diarySlice";
-import randomCustomer from "../../../../Utils/RandomCustomer";
-import styles from "../Provider.module.scss";
-import styles2 from "./Modal.module.scss";
+} from '../../../../store/reducers/serviceSlice';
+import { userSelector } from '../../../../store/reducers/userSlice';
+import { add as addDiary } from '../../../../store/reducers/diarySlice';
+import styles from '../Provider.module.scss';
+import styles2 from './Modal.module.scss';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
@@ -58,30 +57,33 @@ const ProviderNumber = () => {
             addProviderNumber({
                 service: service,
                 stt: 0,
-                src: "Hệ thống",
-                status: "waiting",
+                src: 'Hệ thống',
+                status: 'waiting',
                 timeGet: Timestamp.fromDate(time),
                 timeExp: Timestamp.fromDate(timeExp),
                 name: value.name,
                 phoneNumber: value.phone,
-                email: value.email ? value.email : ''
-            })
+                email: value.email ? value.email : '',
+            }),
         ).then((data) => {
             if (data.payload) {
                 const id = data.payload as string;
-                dispatch(get(id)).then(() => {setVisible(false);setVisible2(true)});
-                notice.success("Lấy số thành công", 3);
+                dispatch(get(id)).then(() => {
+                    setVisible(false);
+                    setVisible2(true);
+                });
+                notice.success('Lấy số thành công', 3);
                 dispatch(getAll());
                 dispatch(
                     addDiary({
-                        username: userLogin ? userLogin.username : "UnKnown",
-                        ip: "127.0.0.1",
-                        action: "Lấy số",
+                        username: userLogin ? userLogin.username : 'UnKnown',
+                        ip: '127.0.0.1',
+                        action: 'Lấy số',
                         time: Timestamp.fromDate(new Date()),
-                    })
+                    }),
                 );
             } else {
-                notice.error("Đã xảy ra lỗi", 3);
+                notice.error('Đã xảy ra lỗi', 3);
             }
         });
     };
@@ -92,7 +94,11 @@ const ProviderNumber = () => {
 
     return (
         <div className={clsx(styles.section, styles.section2)}>
-            <Form name="provider-new" layout="vertical" onFinish={() => setVisible(true)}>
+            <Form
+                name="provider-new"
+                layout="vertical"
+                onFinish={() => setVisible(true)}
+            >
                 <Title className={styles.title}>Quản lý cấp số</Title>
                 <Card bordered>
                     <Row gutter={24}>
@@ -111,7 +117,7 @@ const ProviderNumber = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Vui lòng chọn dịch vụ",
+                                        message: 'Vui lòng chọn dịch vụ',
                                     },
                                 ]}
                             >
@@ -122,8 +128,8 @@ const ProviderNumber = () => {
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
-                                                fontSize: "20px",
-                                                color: "#FF7506",
+                                                fontSize: '20px',
+                                                color: '#FF7506',
                                             }}
                                         />
                                     }
@@ -173,21 +179,21 @@ const ProviderNumber = () => {
             <Modal
                 centered
                 visible={visible2}
-                bodyStyle={{ borderRadius: "10px" }}
+                bodyStyle={{ borderRadius: '10px' }}
                 onCancel={() => setVisible2(false)}
                 width={470}
                 footer={
                     <div className={styles2.footerModal}>
                         <Typography.Text className={styles2.text}>
-                            {"Thời gian cấp:" +
+                            {'Thời gian cấp:' +
                                 moment(providerNumber?.timeGet.toDate()).format(
-                                    "HH:mm - DD/MM/YYYY"
+                                    'HH:mm - DD/MM/YYYY',
                                 )}
                         </Typography.Text>
                         <Typography.Text className={styles2.text}>
-                            {"Hạn sử dụng:" +
+                            {'Hạn sử dụng:' +
                                 moment(providerNumber?.timeExp.toDate()).format(
-                                    "HH:mm - DD/MM/YYYY"
+                                    'HH:mm - DD/MM/YYYY',
                                 )}
                         </Typography.Text>
                     </div>
@@ -210,54 +216,75 @@ const ProviderNumber = () => {
                 closable={false}
                 maskClosable={false}
                 visible={visible}
-                bodyStyle={{ borderRadius: "10px" }}
+                bodyStyle={{ borderRadius: '10px' }}
                 onCancel={() => setVisible(false)}
                 width={470}
                 footer={null}
             >
-                <Form className={styles2.formModal} layout="vertical" onFinish={onFinish}>
+                <Form
+                    className={styles2.formModal}
+                    layout="vertical"
+                    onFinish={onFinish}
+                >
                     <Typography.Title className={styles2.title}>
                         Số thứ tự được cấp
                     </Typography.Title>
                     <Form.Item
                         name="name"
                         required={false}
-                        label={<Typography.Text className={styles2.label}>Họ và tên <span>*</span></Typography.Text>}
+                        label={
+                            <Typography.Text className={styles2.label}>
+                                Họ và tên <span>*</span>
+                            </Typography.Text>
+                        }
                         rules={[
                             {
                                 required: true,
-                                message: "Vui lòng điền họ tên",
+                                message: 'Vui lòng điền họ tên',
                             },
                         ]}
-                        >
-                        <Input size="large" placeholder="Nhập họ tên của bạn"/>
+                    >
+                        <Input size="large" placeholder="Nhập họ tên của bạn" />
                     </Form.Item>
                     <Form.Item
                         name="phone"
                         required={false}
-                        label={<Typography.Text className={styles2.label}>Số điện thoại <span>*</span></Typography.Text>}
+                        label={
+                            <Typography.Text className={styles2.label}>
+                                Số điện thoại <span>*</span>
+                            </Typography.Text>
+                        }
                         rules={[
                             {
                                 required: true,
-                                message: "Vui lòng điền số điện thoại",
+                                message: 'Vui lòng điền số điện thoại',
                             },
                         ]}
-                        >
-                        <Input size="large" placeholder="Nhập số điện thoại của bạn"/>
+                    >
+                        <Input
+                            size="large"
+                            placeholder="Nhập số điện thoại của bạn"
+                        />
                     </Form.Item>
                     <Form.Item
                         name="email"
-                        label={<Typography.Text className={styles2.label}>Email</Typography.Text>}
+                        label={
+                            <Typography.Text className={styles2.label}>
+                                Email
+                            </Typography.Text>
+                        }
                         rules={[
                             {
                                 type: 'email',
-                                message: "Email không hợp lệ",
+                                message: 'Email không hợp lệ',
                             },
                         ]}
-                        >
-                        <Input size="large" placeholder="Nhập email của bạn"/>
+                    >
+                        <Input size="large" placeholder="Nhập email của bạn" />
                     </Form.Item>
-                    <Typography.Text className={styles2.note}><span>*</span>Là trường thông tin bắt buộc</Typography.Text>
+                    <Typography.Text className={styles2.note}>
+                        <span>*</span>Là trường thông tin bắt buộc
+                    </Typography.Text>
                     <Row
                         gutter={16}
                         justify="center"
@@ -282,7 +309,7 @@ const ProviderNumber = () => {
                                 className={styles.button}
                                 htmlType="submit"
                             >
-                                {loading ? "" : "Xác nhận"}
+                                {loading ? '' : 'Xác nhận'}
                             </Button>
                         </Col>
                     </Row>

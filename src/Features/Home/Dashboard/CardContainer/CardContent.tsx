@@ -1,6 +1,6 @@
-import { Card, Space, Tag, Typography } from "antd";
-import React from "react";
-import styles from "./CardContainer.module.scss";
+import { Card, Space, Tag, Typography } from 'antd';
+import React from 'react';
+import styles from './CardContainer.module.scss';
 
 interface ICardContainer {
     icon: React.ReactNode;
@@ -14,7 +14,7 @@ interface ICardContainer {
 
 const CardContent = ({ icon, title, number, tag }: ICardContainer) => {
     return (
-        <Card className={styles.cardContainer} bodyStyle={{ padding: "12px" }}>
+        <Card className={styles.cardContainer} bodyStyle={{ padding: '12px' }}>
             <Space size={12}>
                 {icon}
                 <Typography.Text className={styles.text}>
@@ -23,9 +23,9 @@ const CardContent = ({ icon, title, number, tag }: ICardContainer) => {
             </Space>
             <Space
                 style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    marginTop: "12px",
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    marginTop: '12px',
                 }}
             >
                 <Typography.Text className={styles.number}>
@@ -34,7 +34,7 @@ const CardContent = ({ icon, title, number, tag }: ICardContainer) => {
                 <Tag
                     className={styles.tag}
                     style={{
-                        backgroundColor: "rgba(255, 149, 1, 0.15)",
+                        backgroundColor: 'rgba(255, 149, 1, 0.15)',
                         color: tag.color,
                     }}
                 >

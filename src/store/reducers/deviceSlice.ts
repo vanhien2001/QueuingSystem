@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
     collection,
     doc,
@@ -6,9 +6,9 @@ import {
     getDocs,
     updateDoc,
     setDoc,
-} from "firebase/firestore";
-import { db } from "../../config/firebase";
-import { RootState } from "../index";
+} from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import { RootState } from '../index';
 
 export type deviceType = {
     id?: string;
@@ -24,14 +24,14 @@ export type deviceType = {
 };
 
 export const addDevice = createAsyncThunk(
-    "device/add",
+    'device/add',
     async (values: deviceType) => {
-        const newDoc = doc(collection(db, "devices"));
+        const newDoc = doc(collection(db, 'devices'));
         await setDoc(newDoc, values);
-        const Ref = doc(db, "device", newDoc.id);
+        const Ref = doc(db, 'device', newDoc.id);
         const Snap = await getDoc(Ref);
         return Snap;
-    }
+    },
 );
 
 interface Ifilter {
@@ -41,11 +41,11 @@ interface Ifilter {
 }
 
 export const getAll = createAsyncThunk(
-    "device/getAll",
+    'device/getAll',
     async (filter?: Ifilter) => {
         let devices: deviceType[] = [];
 
-        const query = await getDocs(collection(db, "devices"));
+        const query = await getDocs(collection(db, 'devices'));
         query.forEach((value) => {
             devices.push({
                 id: value.id,
@@ -55,13 +55,13 @@ export const getAll = createAsyncThunk(
         if (filter) {
             if (filter.active != null)
                 devices = devices.filter(
-                    (device) => device.isActive == filter.active
+                    (device) => device.isActive == filter.active,
                 );
             if (filter.connect != null)
                 devices = devices.filter(
-                    (device) => device.isConnect == filter.connect
+                    (device) => device.isConnect == filter.connect,
                 );
-            if (filter.keywords != "")
+            if (filter.keywords != '')
                 devices = devices.filter(
                     (device) =>
                         device.code
@@ -72,18 +72,18 @@ export const getAll = createAsyncThunk(
                             .includes(filter.keywords.toLowerCase()) ||
                         device.ip
                             .toLowerCase()
-                            .includes(filter.keywords.toLowerCase())
+                            .includes(filter.keywords.toLowerCase()),
                 );
         }
         devices.reverse();
         return devices;
-    }
+    },
 );
 
-export const get = createAsyncThunk("device/get", async (id: string) => {
+export const get = createAsyncThunk('device/get', async (id: string) => {
     let device: deviceType;
 
-    const deviceRef = doc(db, "devices", id);
+    const deviceRef = doc(db, 'devices', id);
     const deviceSnap = await getDoc(deviceRef);
     device = {
         id,
@@ -93,11 +93,11 @@ export const get = createAsyncThunk("device/get", async (id: string) => {
 });
 
 export const update = createAsyncThunk(
-    "device/update",
+    'device/update',
     async ({ id, ...value }: deviceType) => {
-        const ref = doc(db, "devices", id as string);
+        const ref = doc(db, 'devices', id as string);
         await updateDoc(ref, { ...value });
-    }
+    },
 );
 
 interface defaultState {
@@ -116,12 +116,12 @@ const initialState: defaultState = {
     devices: [],
     message: {
         fail: false,
-        text: "",
+        text: '',
     },
 };
 
 const deviceSlice = createSlice({
-    name: "device",
+    name: 'device',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -131,10 +131,10 @@ const deviceSlice = createSlice({
         builder.addCase(addDevice.fulfilled, (state, action) => {
             if (action.payload.exists()) {
                 state.message.fail = false;
-                state.message.text = "Thêm thành công";
+                state.message.text = 'Thêm thành công';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -151,10 +151,10 @@ const deviceSlice = createSlice({
             if (action.payload) {
                 state.devices = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -171,10 +171,10 @@ const deviceSlice = createSlice({
             if (action.payload) {
                 state.device = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -189,7 +189,7 @@ const deviceSlice = createSlice({
         });
         builder.addCase(update.fulfilled, (state, action) => {
             state.message.fail = false;
-            state.message.text = "Cập nhật thành công";
+            state.message.text = 'Cập nhật thành công';
             state.loading = false;
         });
         builder.addCase(update.rejected, (state, action) => {

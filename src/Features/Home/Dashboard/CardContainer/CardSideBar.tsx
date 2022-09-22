@@ -1,7 +1,7 @@
-import React from "react";
-import { Card, Col, Progress, Row, Space, Typography } from "antd";
-import Status from "../../../../components/Status";
-import styles from "./CardContainer.module.scss";
+import React from 'react';
+import { Card, Col, Progress, Row, Space, Typography } from 'antd';
+import Status from '../../../../components/Status';
+import styles from './CardContainer.module.scss';
 
 interface ICardContainer {
     icon: React.ReactNode;
@@ -10,26 +10,33 @@ interface ICardContainer {
     percent: number;
     quantity: number;
     data: {
-        type: "waiting" | "used" | "success" | "error";
+        type: 'waiting' | 'used' | 'success' | 'error';
         text: string;
         number: number;
     }[];
 }
 
-const CardSideBar = ({ icon, percent, color, title, quantity, data }: ICardContainer) => {
+const CardSideBar = ({
+    icon,
+    percent,
+    color,
+    title,
+    quantity,
+    data,
+}: ICardContainer) => {
     return (
         <Card
-            bodyStyle={{ padding: "0" }}
-            style={{ marginBottom: "12px"}}
+            bodyStyle={{ padding: '0' }}
+            style={{ marginBottom: '12px' }}
             className={styles.cardContainerSidebar}
         >
             <Row gutter={0}>
                 <Col span={12}>
                     <div
                         style={{
-                            display: "flex",
-                            alignItems: "center",
-                            padding: "12px 0 12px 16px",
+                            display: 'flex',
+                            alignItems: 'center',
+                            padding: '12px 0 12px 16px',
                         }}
                     >
                         <Progress
@@ -47,8 +54,8 @@ const CardSideBar = ({ icon, percent, color, title, quantity, data }: ICardConta
                                 <span
                                     style={{
                                         color,
-                                        fontSize: "14px",
-                                        fontWeight: "600",
+                                        fontSize: '14px',
+                                        fontWeight: '600',
                                     }}
                                 >
                                     {title}
@@ -60,32 +67,35 @@ const CardSideBar = ({ icon, percent, color, title, quantity, data }: ICardConta
                 <Col span={12}>
                     <div
                         style={{
-                            padding: "12px 0",
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            height: "100%",
+                            padding: '12px 0',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'center',
+                            height: '100%',
                         }}
                     >
-                        {data.map(value => {
+                        {data.map((value) => {
                             return (
                                 <Row>
                                     <Col span={18}>
-                                        <Status type={value.type} text={value.text} />
+                                        <Status
+                                            type={value.type}
+                                            text={value.text}
+                                        />
                                     </Col>
                                     <Col span={6}>
                                         <span
                                             style={{
                                                 color,
-                                                fontSize: "14px",
-                                                fontWeight: "700",
+                                                fontSize: '14px',
+                                                fontWeight: '700',
                                             }}
                                         >
                                             {value.number}
                                         </span>
                                     </Col>
                                 </Row>
-                            )
+                            );
                         })}
                     </div>
                 </Col>

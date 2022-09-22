@@ -1,26 +1,26 @@
-.container{
-    background-color: #FFF2E7;
+.container {
+    background-color: #fff2e7;
     margin-left: 24px;
     border-radius: 8px;
-    .containerItem{
+    .containerItem {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 12px 4px;
         cursor: pointer;
-        border-bottom: 1px solid #FFE3CD;
-        &:last-child{
+        border-bottom: 1px solid #ffe3cd;
+        &:last-child {
             border-bottom: none;
         }
-        .iconNotify{
+        .iconNotify {
             height: 28px;
             width: 28px;
             font-size: 28px;
             border: none;
-            color: #FFF2E7;
+            color: #fff2e7;
         }
-        .text{
+        .text {
             color: #ff7506;
             font-size: 14px;
             line-height: 20px;

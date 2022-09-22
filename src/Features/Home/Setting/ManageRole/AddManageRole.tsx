@@ -1,5 +1,5 @@
-import { useEffect } from "react"; 
-import clsx from "clsx";
+import { useEffect } from 'react';
+import clsx from 'clsx';
 import {
     Button,
     Card,
@@ -10,19 +10,19 @@ import {
     Row,
     Typography,
     message as notice,
-} from "antd";
-import { Timestamp } from "firebase/firestore";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+} from 'antd';
+import { Timestamp } from 'firebase/firestore';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     roleSelector,
     addRole,
     get,
     update,
-} from "../../../../store/reducers/roleSlice";
-import { userSelector } from "../../../../store/reducers/userSlice";
-import { add } from "../../../../store/reducers/diarySlice";
-import styles from "./ManageRole.module.scss";
+} from '../../../../store/reducers/roleSlice';
+import { userSelector } from '../../../../store/reducers/userSlice';
+import { add } from '../../../../store/reducers/diarySlice';
+import styles from './ManageRole.module.scss';
 
 const { Text, Title } = Typography;
 
@@ -51,21 +51,21 @@ const AddManageRole = () => {
                     authorityA: value.authorityA ? value.authorityA : [],
                     authorityB: value.authorityB ? value.authorityB : [],
                     authorityC: value.authorityC ? value.authorityC : [],
-                })
+                }),
             ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
+                if (data.meta.requestStatus == 'fulfilled') {
                     dispatch(get(id));
-                    notice.success("Cập nhật thành công", 3);
+                    notice.success('Cập nhật thành công', 3);
                     dispatch(
                         add({
                             username: userLogin ? userLogin.username : '',
-                            ip: "127.0.0.1",
-                            action: "Cập nhật thông tin vai trò ",
+                            ip: '127.0.0.1',
+                            action: 'Cập nhật thông tin vai trò ',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         } else {
@@ -75,21 +75,21 @@ const AddManageRole = () => {
                     authorityA: value.authorityA ? value.authorityA : [],
                     authorityB: value.authorityB ? value.authorityB : [],
                     authorityC: value.authorityC ? value.authorityC : [],
-                })
+                }),
             ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
-                    notice.success("Thêm thành công", 3);
-                    navigate("../");
+                if (data.meta.requestStatus == 'fulfilled') {
+                    notice.success('Thêm thành công', 3);
+                    navigate('../');
                     dispatch(
                         add({
                             username: userLogin ? userLogin.username : '',
-                            ip: "127.0.0.1",
-                            action: "Thêm vai trò ",
+                            ip: '127.0.0.1',
+                            action: 'Thêm vai trò ',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         }
@@ -97,7 +97,7 @@ const AddManageRole = () => {
 
     useEffect(() => {
         form.setFieldsValue(role);
-    }, [role])
+    }, [role]);
     useEffect(() => {
         if (id) {
             dispatch(get(id));
@@ -117,11 +117,11 @@ const AddManageRole = () => {
                 <Col flex="auto">
                     <Card bordered={false}>
                         <Row gutter={24}>
-                            <Col span={24} style={{ marginBottom: "20px" }}>
+                            <Col span={24} style={{ marginBottom: '20px' }}>
                                 <Title
                                     className={clsx(
                                         styles.title,
-                                        styles.title2
+                                        styles.title2,
                                     )}
                                 >
                                     Thông tin vai trò
@@ -140,7 +140,7 @@ const AddManageRole = () => {
                                         {
                                             required: true,
                                             message:
-                                                "Vui lòng điền tên vai trò",
+                                                'Vui lòng điền tên vai trò',
                                         },
                                     ]}
                                 >
@@ -160,14 +160,14 @@ const AddManageRole = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Vui lòng nhập mô tả",
+                                            message: 'Vui lòng nhập mô tả',
                                         },
                                     ]}
                                 >
                                     <Input.TextArea
                                         size="large"
                                         placeholder="Nhập mô tả"
-                                        style={{ height: "160px" }}
+                                        style={{ height: '160px' }}
                                     />
                                 </Form.Item>
                             </Col>
@@ -188,7 +188,7 @@ const AddManageRole = () => {
                                             <Title
                                                 className={clsx(
                                                     styles.title,
-                                                    styles.title2
+                                                    styles.title2,
                                                 )}
                                             >
                                                 Nhóm chức năng A
@@ -255,7 +255,7 @@ const AddManageRole = () => {
                                             <Title
                                                 className={clsx(
                                                     styles.title,
-                                                    styles.title2
+                                                    styles.title2,
                                                 )}
                                             >
                                                 Nhóm chức năng B
@@ -322,7 +322,7 @@ const AddManageRole = () => {
                                             <Title
                                                 className={clsx(
                                                     styles.title,
-                                                    styles.title2
+                                                    styles.title2,
                                                 )}
                                             >
                                                 Nhóm chức năng C
@@ -410,7 +410,7 @@ const AddManageRole = () => {
                         htmlType="submit"
                         loading={loading}
                     >
-                        {loading ? "" : id ? "Cập nhật" : "Thêm"}
+                        {loading ? '' : id ? 'Cập nhật' : 'Thêm'}
                     </Button>
                 </Col>
             </Row>

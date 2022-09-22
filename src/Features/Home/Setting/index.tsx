@@ -1,8 +1,8 @@
-import React from "react";
-import { Route, Routes } from "react-router-dom";
-import ManageRole from "./ManageRole";
-import ManageAccount from "./ManageAccount";
-import HistoryUser from "./HistoryUser";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import ManageRole from './ManageRole';
+import ManageAccount from './ManageAccount';
+import HistoryUser from './HistoryUser';
 
 const index = () => {
     return (

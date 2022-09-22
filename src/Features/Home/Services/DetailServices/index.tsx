@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
     EditOutlined,
     RollbackOutlined,
     CaretDownOutlined,
     CaretRightOutlined,
-} from "@ant-design/icons";
+} from '@ant-design/icons';
 import {
     Card,
     Col,
@@ -16,67 +16,67 @@ import {
     Space,
     Table,
     Typography,
-} from "antd";
-import clsx from "clsx";
-import { useNavigate, useParams } from "react-router-dom";
-import { Moment } from "moment";
-import { RangeValue } from "rc-picker/lib/interface";
-import { useAppSelector, useAppDispatch } from "../../../../store";
-import { serviceSelector, get } from "../../../../store/reducers/serviceSlice";
+} from 'antd';
+import clsx from 'clsx';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Moment } from 'moment';
+import { RangeValue } from 'rc-picker/lib/interface';
+import { useAppSelector, useAppDispatch } from '../../../../store';
+import { serviceSelector, get } from '../../../../store/reducers/serviceSlice';
 import {
     providerNumberSelector,
     getByIdService,
-} from "../../../../store/reducers/providerNumberSlice";
-import Status from "../../../../components/Status";
-import ActionButton from "../../../../components/ActionButton";
-import SearchInput from "../../../../components/SearchInput";
-import styles from "../Services.module.scss";
+} from '../../../../store/reducers/providerNumberSlice';
+import Status from '../../../../components/Status';
+import ActionButton from '../../../../components/ActionButton';
+import SearchInput from '../../../../components/SearchInput';
+import styles from '../Services.module.scss';
 
 const { Text, Title } = Typography;
 const { Option } = Select;
 
 const columns = [
     {
-        title: "Số thứ tự",
-        key: "stt",
-        dataIndex: "stt",
+        title: 'Số thứ tự',
+        key: 'stt',
+        dataIndex: 'stt',
     },
     {
-        title: "Trạng thái",
-        key: "status",
-        dataIndex: "status",
+        title: 'Trạng thái',
+        key: 'status',
+        dataIndex: 'status',
     },
 ];
 
 const data = [
     {
-        key: "1",
-        stt: "201001",
+        key: '1',
+        stt: '201001',
         status: <Status type="success" text="Đang hoàn thành" />,
     },
     {
-        key: "2",
-        stt: "201002",
+        key: '2',
+        stt: '201002',
         status: <Status type="waiting" text="Đang thực hiện" />,
     },
     {
-        key: "3",
-        stt: "201003",
+        key: '3',
+        stt: '201003',
         status: <Status type="used" text="Vắng" />,
     },
     {
-        key: "4",
-        stt: "201004",
+        key: '4',
+        stt: '201004',
         status: <Status type="success" text="Đang hoàn thành" />,
     },
     {
-        key: "3",
-        stt: "201003",
+        key: '3',
+        stt: '201003',
         status: <Status type="used" text="Vắng" />,
     },
     {
-        key: "4",
-        stt: "201004",
+        key: '4',
+        stt: '201004',
         status: <Status type="success" text="Đang hoàn thành" />,
     },
 ];
@@ -87,10 +87,10 @@ const DetailService = () => {
     const dispatch = useAppDispatch();
     const { service } = useAppSelector(serviceSelector);
     const { loading, providerNumbersFilter } = useAppSelector(
-        providerNumberSelector
+        providerNumberSelector,
     );
     const [status, setStatus] = useState<string | null>(null);
-    const [keywords, setKeywords] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>('');
     const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
@@ -105,7 +105,7 @@ const DetailService = () => {
                             ? [dateRange[0] as Moment, dateRange[1] as Moment]
                             : null,
                     },
-                })
+                }),
             );
         }
     }, [id, status, keywords, dateRange]);
@@ -125,7 +125,7 @@ const DetailService = () => {
                 <Col span={8}>
                     <Card
                         className={styles.card}
-                        style={{ marginRight: "24px" }}
+                        style={{ marginRight: '24px' }}
                     >
                         <Title className={clsx(styles.title, styles.title2)}>
                             Thông tin dịch vụ
@@ -187,7 +187,7 @@ const DetailService = () => {
                                     />
                                     <Typography.Text
                                         className={styles.text}
-                                        style={{ margin: "0 8px" }}
+                                        style={{ margin: '0 8px' }}
                                     >
                                         đến
                                     </Typography.Text>
@@ -239,8 +239,8 @@ const DetailService = () => {
                                 <Col span={24}>
                                     <Space
                                         style={{
-                                            display: "flex",
-                                            justifyContent: "space-between",
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
                                         }}
                                     >
                                         <Form.Item
@@ -263,8 +263,8 @@ const DetailService = () => {
                                                 suffixIcon={
                                                     <CaretDownOutlined
                                                         style={{
-                                                            fontSize: "20px",
-                                                            color: "#FF7506",
+                                                            fontSize: '20px',
+                                                            color: '#FF7506',
                                                         }}
                                                     />
                                                 }
@@ -288,26 +288,26 @@ const DetailService = () => {
                                                 <Typography.Text
                                                     className={styles.label}
                                                 >
-                                                    Chọn thời gian{" "}
+                                                    Chọn thời gian{' '}
                                                 </Typography.Text>
                                             }
                                         >
                                             <Form.Item noStyle>
                                                 <DatePicker
                                                     size="large"
-                                                    style={{ width: "150px" }}
+                                                    style={{ width: '150px' }}
                                                 />
                                             </Form.Item>
                                             <CaretRightOutlined
                                                 style={{
-                                                    margin: "0 4px",
-                                                    fontSize: "10px",
+                                                    margin: '0 4px',
+                                                    fontSize: '10px',
                                                 }}
                                             />
                                             <Form.Item noStyle>
                                                 <DatePicker
                                                     size="large"
-                                                    style={{ width: "150px" }}
+                                                    style={{ width: '150px' }}
                                                 />
                                             </Form.Item>
                                         </Form.Item>
@@ -342,28 +342,28 @@ const DetailService = () => {
                                                         <Status
                                                             type={
                                                                 providerNumber.status ==
-                                                                "skip"
-                                                                    ? "error"
+                                                                'skip'
+                                                                    ? 'error'
                                                                     : providerNumber.status
                                                             }
                                                             text={
                                                                 providerNumber.status ==
-                                                                "waiting"
-                                                                    ? "Đang thực hiện"
+                                                                'waiting'
+                                                                    ? 'Đang thực hiện'
                                                                     : providerNumber.status ==
-                                                                      "used"
-                                                                    ? "Đã hoàn thành"
-                                                                    : "Vắng"
+                                                                      'used'
+                                                                    ? 'Đã hoàn thành'
+                                                                    : 'Vắng'
                                                             }
                                                         />
                                                     ),
                                                 };
-                                            }
+                                            },
                                         )}
                                         bordered
                                         size="middle"
                                         pagination={{
-                                            position: ["bottomRight"],
+                                            position: ['bottomRight'],
                                         }}
                                     />
                                 </Col>
@@ -375,15 +375,15 @@ const DetailService = () => {
                     <ActionButton
                         data={[
                             {
-                                text: "Cập nhật danh sách",
+                                text: 'Cập nhật danh sách',
                                 icon: <EditOutlined />,
                                 onClick: () =>
                                     navigate(`../edit/${service?.id}`),
                             },
                             {
-                                text: "Quay lại",
+                                text: 'Quay lại',
                                 icon: <RollbackOutlined />,
-                                onClick: () => navigate("../"),
+                                onClick: () => navigate('../'),
                             },
                         ]}
                     />

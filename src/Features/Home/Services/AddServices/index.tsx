@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
     Button,
     Card,
@@ -10,20 +10,20 @@ import {
     Row,
     Typography,
     message as notice,
-} from "antd";
-import { Timestamp } from "firebase/firestore";
-import clsx from "clsx";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+} from 'antd';
+import { Timestamp } from 'firebase/firestore';
+import clsx from 'clsx';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     serviceSelector,
     addService,
     get,
     update,
-} from "../../../../store/reducers/serviceSlice";
-import { userSelector } from "../../../../store/reducers/userSlice";
-import { add as addDiary } from "../../../../store/reducers/diarySlice";
-import styles from "../Services.module.scss";
+} from '../../../../store/reducers/serviceSlice';
+import { userSelector } from '../../../../store/reducers/userSlice';
+import { add as addDiary } from '../../../../store/reducers/diarySlice';
+import styles from '../Services.module.scss';
 
 const { Text, Title } = Typography;
 
@@ -56,54 +56,54 @@ const AddService = () => {
                 update({
                     id,
                     ...value,
-                    prefix: value.prefix ? value.prefix : "",
-                    surfix: value.surfix ? value.surfix : "",
-                })
+                    prefix: value.prefix ? value.prefix : '',
+                    surfix: value.surfix ? value.surfix : '',
+                }),
             ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
+                if (data.meta.requestStatus == 'fulfilled') {
                     dispatch(get(id));
-                    notice.success("Cập nhật thành công", 3);
+                    notice.success('Cập nhật thành công', 3);
                     dispatch(
                         addDiary({
-                            username: userLogin ? userLogin.username : "",
-                            ip: "127.0.0.1",
-                            action: "Cập nhật thông tin dịch vụ",
+                            username: userLogin ? userLogin.username : '',
+                            ip: '127.0.0.1',
+                            action: 'Cập nhật thông tin dịch vụ',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         } else {
             dispatch(
                 addService({
                     ...value,
-                    prefix: value.prefix ? value.prefix : "",
-                    surfix: value.surfix ? value.surfix : "",
-                    isActive: true
-                })
+                    prefix: value.prefix ? value.prefix : '',
+                    surfix: value.surfix ? value.surfix : '',
+                    isActive: true,
+                }),
             ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
-                    notice.success("Thêm thành công", 3);
-                    navigate("../");
+                if (data.meta.requestStatus == 'fulfilled') {
+                    notice.success('Thêm thành công', 3);
+                    navigate('../');
                     dispatch(
                         addDiary({
-                            username: userLogin ? userLogin.username : "",
-                            ip: "127.0.0.1",
-                            action: "Thêm dịch vụ",
+                            username: userLogin ? userLogin.username : '',
+                            ip: '127.0.0.1',
+                            action: 'Thêm dịch vụ',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         }
     };
 
     useEffect(() => {
-        if(id){
+        if (id) {
             form.setFieldsValue(service);
             if (service?.prefix) setPrefix(true);
             if (service?.surfix) setSurfix(true);
@@ -148,7 +148,7 @@ const AddService = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Vui lòng nhập mã dịch vụ",
+                                        message: 'Vui lòng nhập mã dịch vụ',
                                     },
                                 ]}
                             >
@@ -166,7 +166,7 @@ const AddService = () => {
                                 rules={[
                                     {
                                         required: true,
-                                        message: "Vui lòng nhập mã dịch vụ",
+                                        message: 'Vui lòng nhập mã dịch vụ',
                                     },
                                 ]}
                             >
@@ -183,7 +183,7 @@ const AddService = () => {
                                 <Input.TextArea
                                     size="large"
                                     placeholder="Mô tả dịch vụ"
-                                    style={{ height: "150px" }}
+                                    style={{ height: '150px' }}
                                 />
                             </Form.Item>
                         </Col>
@@ -214,7 +214,7 @@ const AddService = () => {
                                     <Col span={17}>
                                         <Form.Item
                                             noStyle
-                                            name={"increaseStart"}
+                                            name={'increaseStart'}
                                         >
                                             <InputNumber
                                                 min={0}
@@ -227,11 +227,11 @@ const AddService = () => {
                                         </Form.Item>
                                         <Typography.Text
                                             className={styles.text}
-                                            style={{ margin: "0 8px" }}
+                                            style={{ margin: '0 8px' }}
                                         >
                                             đến
                                         </Typography.Text>
-                                        <Form.Item noStyle name={"increaseEnd"}>
+                                        <Form.Item noStyle name={'increaseEnd'}>
                                             <InputNumber
                                                 min={0}
                                                 max={9999}
@@ -255,7 +255,7 @@ const AddService = () => {
                                         </Checkbox>
                                     </Col>
                                     <Col span={17}>
-                                        <Form.Item noStyle name={"prefix"}>
+                                        <Form.Item noStyle name={'prefix'}>
                                             <Input
                                                 size="large"
                                                 className={styles.providerInput}
@@ -276,7 +276,7 @@ const AddService = () => {
                                         </Checkbox>
                                     </Col>
                                     <Col span={17}>
-                                        <Form.Item noStyle name={"surfix"}>
+                                        <Form.Item noStyle name={'surfix'}>
                                             <Input
                                                 size="large"
                                                 className={styles.providerInput}
@@ -289,7 +289,7 @@ const AddService = () => {
                                     <Col span={24}>
                                         <Form.Item
                                             noStyle
-                                            name={"reset"}
+                                            name={'reset'}
                                             valuePropName="checked"
                                         >
                                             <Checkbox>
@@ -328,7 +328,7 @@ const AddService = () => {
                             htmlType="submit"
                             loading={loading}
                         >
-                            {loading ? "" : id ? "Cập nhật" : "Thêm dịch vụ"}
+                            {loading ? '' : id ? 'Cập nhật' : 'Thêm dịch vụ'}
                         </Button>
                     </Col>
                 </Row>

@@ -1,56 +1,56 @@
-import { useEffect, useState } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
-import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { Moment } from "moment";
-import { RangeValue } from "rc-picker/lib/interface";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+import { useEffect, useState } from 'react';
+import { CaretDownOutlined } from '@ant-design/icons';
+import { Col, Form, Row, Select, Space, Table, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Moment } from 'moment';
+import { RangeValue } from 'rc-picker/lib/interface';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     serviceSelector,
     getAll,
-} from "../../../../store/reducers/serviceSlice";
-import Status from "../../../../components/Status";
-import ActionButton from "../../../../components/ActionButton";
-import SearchInput from "../../../../components/SearchInput";
-import DatePicker from "../../../../components/DateRange";
-import styles from "../Services.module.scss";
+} from '../../../../store/reducers/serviceSlice';
+import Status from '../../../../components/Status';
+import ActionButton from '../../../../components/ActionButton';
+import SearchInput from '../../../../components/SearchInput';
+import DatePicker from '../../../../components/DateRange';
+import styles from '../Services.module.scss';
 
 const { Option } = Select;
 
 const columns = [
     {
-        title: "Mã dịch vụ",
-        key: "id",
-        dataIndex: "id",
+        title: 'Mã dịch vụ',
+        key: 'id',
+        dataIndex: 'id',
     },
 
     {
-        title: "Tên dịch vụ",
-        key: "name",
-        dataIndex: "name",
+        title: 'Tên dịch vụ',
+        key: 'name',
+        dataIndex: 'name',
     },
 
     {
-        title: "Mô tả",
-        key: "description",
-        dataIndex: "description",
+        title: 'Mô tả',
+        key: 'description',
+        dataIndex: 'description',
     },
 
     {
-        title: "Trạng thái hoạt động",
-        key: "active",
-        dataIndex: "active",
+        title: 'Trạng thái hoạt động',
+        key: 'active',
+        dataIndex: 'active',
     },
     {
-        title: "",
-        key: "detail",
-        dataIndex: "detail",
+        title: '',
+        key: 'detail',
+        dataIndex: 'detail',
     },
     {
-        title: "",
-        key: "update",
-        dataIndex: "update",
+        title: '',
+        key: 'update',
+        dataIndex: 'update',
     },
 ];
 
@@ -59,7 +59,7 @@ const ServicesTable = () => {
     const dispatch = useAppDispatch();
     const { loading, services } = useAppSelector(serviceSelector);
     const [active, setActive] = useState<boolean | null>(null);
-    const [keywords, setKeywords] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>('');
     const [dateRange, setDateRange] = useState<RangeValue<Moment>>(null);
 
     useEffect(() => {
@@ -67,8 +67,10 @@ const ServicesTable = () => {
             getAll({
                 active,
                 keywords,
-                dateRange: dateRange ? [dateRange[0] as Moment, dateRange[1] as Moment] : null,
-            })
+                dateRange: dateRange
+                    ? [dateRange[0] as Moment, dateRange[1] as Moment]
+                    : null,
+            }),
         );
     }, [active, keywords, dateRange]);
 
@@ -97,8 +99,8 @@ const ServicesTable = () => {
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
-                                                fontSize: "20px",
-                                                color: "#FF7506",
+                                                fontSize: '20px',
+                                                color: '#FF7506',
                                             }}
                                         />
                                     }
@@ -113,11 +115,11 @@ const ServicesTable = () => {
                             <Form.Item
                                 label={
                                     <Typography.Text className={styles.label}>
-                                        Chọn thời gian{" "}
+                                        Chọn thời gian{' '}
                                     </Typography.Text>
                                 }
                             >
-                                <DatePicker onChange={setDateRange}/>
+                                <DatePicker onChange={setDateRange} />
                             </Form.Item>
                         </Space>
                     </Col>
@@ -152,13 +154,13 @@ const ServicesTable = () => {
                                     <Status
                                         type={
                                             service.isActive
-                                                ? "success"
-                                                : "error"
+                                                ? 'success'
+                                                : 'error'
                                         }
                                         text={
                                             service.isActive
-                                                ? "Hoạt động"
-                                                : "Ngưng hoạt động"
+                                                ? 'Hoạt động'
+                                                : 'Ngưng hoạt động'
                                         }
                                     />
                                 ),
@@ -184,7 +186,7 @@ const ServicesTable = () => {
                         size="middle"
                         pagination={{
                             defaultPageSize: 8,
-                            position: ["bottomRight"],
+                            position: ['bottomRight'],
                             showLessItems: true,
                             showSizeChanger: false,
                         }}
@@ -194,9 +196,9 @@ const ServicesTable = () => {
                     <ActionButton
                         data={[
                             {
-                                text: "Thêm dịch vụ",
+                                text: 'Thêm dịch vụ',
                                 icon: <PlusOutlined />,
-                                onClick: () => navigate("../add"),
+                                onClick: () => navigate('../add'),
                             },
                         ]}
                     />

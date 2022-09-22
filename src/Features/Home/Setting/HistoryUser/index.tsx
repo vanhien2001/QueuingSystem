@@ -1,6 +1,5 @@
-import { Route, Routes } from "react-router-dom";
-import HistoryUserTable from "./HistoryUserTable";
-
+import { Route, Routes } from 'react-router-dom';
+import HistoryUserTable from './HistoryUserTable';
 
 const index = () => {
     return (

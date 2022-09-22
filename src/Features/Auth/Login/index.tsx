@@ -1,11 +1,11 @@
-import { useEffect } from "react";
-import { Button, Col, Form, Input, Row, Typography } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import clsx from "clsx";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from '../../../store/index'
-import { userSelector, login, load } from "../../../store/reducers/userSlice";
-import styles from "../Form.module.scss";
+import { useEffect } from 'react';
+import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import clsx from 'clsx';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../store/index';
+import { userSelector, login, load } from '../../../store/reducers/userSlice';
+import styles from '../Form.module.scss';
 
 interface formValue {
     username: string;
@@ -18,17 +18,16 @@ const LoginForm = () => {
     const { authLoading, message, userLogin } = useAppSelector(userSelector);
 
     const onFinish = (value: formValue) => {
-        dispatch(login(value))
-        .then(() => dispatch(load()))
+        dispatch(login(value)).then(() => dispatch(load()));
     };
 
     useEffect(() => {
-        dispatch(load())
+        dispatch(load());
     }, []);
 
     useEffect(() => {
         if (userLogin) {
-            navigate("/dashboard");
+            navigate('/dashboard');
         }
     }, [userLogin]);
 
@@ -41,16 +40,16 @@ const LoginForm = () => {
         >
             <Form.Item label="Tên đăng nhập" name="username">
                 <Input
-                    style={{ borderRadius: "8px" }}
-                    status={message.fail ? "error" : undefined}
+                    style={{ borderRadius: '8px' }}
+                    status={message.fail ? 'error' : undefined}
                     size="large"
                     disabled={authLoading}
+                    placeholder="vanhien2001"
                 />
             </Form.Item>
             <Form.Item
                 label="Password"
                 name="password"
-                // rules={[{ required: true, message: "Không được bỏ trống" }]}
                 help={
                     message.fail ? (
                         <div className={styles.warningWrapper}>
@@ -77,10 +76,11 @@ const LoginForm = () => {
                 }
             >
                 <Input.Password
-                    style={{ borderRadius: "8px" }}
-                    status={message.fail ? "error" : undefined}
+                    style={{ borderRadius: '8px' }}
+                    status={message.fail ? 'error' : undefined}
                     size="large"
                     disabled={authLoading}
+                    placeholder="1234"
                 />
             </Form.Item>
             <Form.Item>
@@ -91,7 +91,7 @@ const LoginForm = () => {
                         htmlType="submit"
                         loading={authLoading}
                     >
-                        {authLoading ? "": "Đăng nhập"}
+                        {authLoading ? '' : 'Đăng nhập'}
                     </Button>
                     <Link
                         className={clsx(styles.link)}

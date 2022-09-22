@@ -1,61 +1,61 @@
-import { useEffect, useState } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
-import { Col, Form, Row, Select, Space, Table, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
-import { deviceSelector, getAll } from "../../../../store/reducers/deviceSlice";
+import { useEffect, useState } from 'react';
+import { CaretDownOutlined } from '@ant-design/icons';
+import { Col, Form, Row, Select, Space, Table, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
+import { deviceSelector, getAll } from '../../../../store/reducers/deviceSlice';
 import {
     serviceSelector,
     getAll as getAllService,
-} from "../../../../store/reducers/serviceSlice";
-import Status from "../../../../components/Status";
-import ActionButton from "../../../../components/ActionButton";
-import SearchInput from "../../../../components/SearchInput";
-import styles from "../Devices.module.scss";
+} from '../../../../store/reducers/serviceSlice';
+import Status from '../../../../components/Status';
+import ActionButton from '../../../../components/ActionButton';
+import SearchInput from '../../../../components/SearchInput';
+import styles from '../Devices.module.scss';
 
 const { Option } = Select;
 
 const columns = [
     {
-        title: "Mã thiết bị",
-        key: "id",
-        dataIndex: "id",
+        title: 'Mã thiết bị',
+        key: 'id',
+        dataIndex: 'id',
     },
     {
-        title: "Tên thiết bị",
-        key: "name",
-        dataIndex: "name",
+        title: 'Tên thiết bị',
+        key: 'name',
+        dataIndex: 'name',
     },
     {
-        title: "Địa chỉ IP",
-        key: "IPAddess",
-        dataIndex: "IPAddess",
+        title: 'Địa chỉ IP',
+        key: 'IPAddess',
+        dataIndex: 'IPAddess',
     },
     {
-        title: "Trạng thái hoạt động",
-        key: "active",
-        dataIndex: "active",
+        title: 'Trạng thái hoạt động',
+        key: 'active',
+        dataIndex: 'active',
     },
     {
-        title: "Trạng thái kết nối",
-        key: "connect",
-        dataIndex: "connect",
+        title: 'Trạng thái kết nối',
+        key: 'connect',
+        dataIndex: 'connect',
     },
     {
-        title: "Dịch vụ sửa dụng",
-        key: "services",
-        dataIndex: "services",
+        title: 'Dịch vụ sửa dụng',
+        key: 'services',
+        dataIndex: 'services',
     },
     {
-        title: "",
-        key: "detail",
-        dataIndex: "detail",
+        title: '',
+        key: 'detail',
+        dataIndex: 'detail',
     },
     {
-        title: "",
-        key: "update",
-        dataIndex: "update",
+        title: '',
+        key: 'update',
+        dataIndex: 'update',
     },
 ];
 
@@ -66,7 +66,7 @@ const DevicesTable = () => {
     const { services } = useAppSelector(serviceSelector);
     const [active, setActive] = useState<boolean | null>(null);
     const [connect, setConnect] = useState<boolean | null>(null);
-    const [keywords, setKeywords] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>('');
 
     useEffect(() => {
         dispatch(
@@ -74,7 +74,7 @@ const DevicesTable = () => {
                 active,
                 connect,
                 keywords,
-            })
+            }),
         );
     }, [active, connect, keywords]);
 
@@ -107,8 +107,8 @@ const DevicesTable = () => {
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
-                                                fontSize: "20px",
-                                                color: "#FF7506",
+                                                fontSize: '20px',
+                                                color: '#FF7506',
                                             }}
                                         />
                                     }
@@ -137,8 +137,8 @@ const DevicesTable = () => {
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
-                                                fontSize: "20px",
-                                                color: "#FF7506",
+                                                fontSize: '20px',
+                                                color: '#FF7506',
                                             }}
                                         />
                                     }
@@ -181,13 +181,13 @@ const DevicesTable = () => {
                                     <Status
                                         type={
                                             device.isActive
-                                                ? "success"
-                                                : "error"
+                                                ? 'success'
+                                                : 'error'
                                         }
                                         text={
                                             device.isActive
-                                                ? "Hoạt động"
-                                                : "Ngưng hoạt động"
+                                                ? 'Hoạt động'
+                                                : 'Ngưng hoạt động'
                                         }
                                     />
                                 ),
@@ -195,23 +195,23 @@ const DevicesTable = () => {
                                     <Status
                                         type={
                                             device.isConnect
-                                                ? "success"
-                                                : "error"
+                                                ? 'success'
+                                                : 'error'
                                         }
                                         text={
                                             device.isConnect
-                                                ? "Hoạt động"
-                                                : "Ngưng hoạt động"
+                                                ? 'Hoạt động'
+                                                : 'Ngưng hoạt động'
                                         }
                                     />
                                 ),
                                 services: device.services
                                     .map((value) => {
                                         return services.find(
-                                            (service) => service.id == value
+                                            (service) => service.id == value,
                                         )?.name;
                                     })
-                                    .join(", "),
+                                    .join(', '),
                                 detail: (
                                     <Link
                                         to={`./detail/${device.id}`}
@@ -234,7 +234,7 @@ const DevicesTable = () => {
                         size="middle"
                         pagination={{
                             defaultPageSize: 8,
-                            position: ["bottomRight"],
+                            position: ['bottomRight'],
                             showLessItems: true,
                             showSizeChanger: false,
                         }}
@@ -244,9 +244,9 @@ const DevicesTable = () => {
                     <ActionButton
                         data={[
                             {
-                                text: "Thêm thiết bị",
+                                text: 'Thêm thiết bị',
                                 icon: <PlusOutlined />,
-                                onClick: () => navigate("../add"),
+                                onClick: () => navigate('../add'),
                             },
                         ]}
                     />

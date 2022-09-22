@@ -1,17 +1,17 @@
-import { useEffect } from "react";
-import { RollbackOutlined } from "@ant-design/icons";
-import { Card, Col, Row, Typography } from "antd";
-import clsx from "clsx";
-import moment from "moment";
-import { useNavigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+import { useEffect } from 'react';
+import { RollbackOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Typography } from 'antd';
+import clsx from 'clsx';
+import moment from 'moment';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     providerNumberSelector,
     get,
-} from "../../../../store/reducers/providerNumberSlice";
-import Status from "../../../../components/Status";
-import ActionButton from "../../../../components/ActionButton";
-import styles from "../Provider.module.scss";
+} from '../../../../store/reducers/providerNumberSlice';
+import Status from '../../../../components/Status';
+import ActionButton from '../../../../components/ActionButton';
+import styles from '../Provider.module.scss';
 
 const DetailDevice = () => {
     const navigate = useNavigate();
@@ -111,22 +111,22 @@ const DetailDevice = () => {
                                                 <Status
                                                     type={
                                                         providerNumber.status ==
-                                                        "skip"
-                                                            ? "error"
+                                                        'skip'
+                                                            ? 'error'
                                                             : providerNumber.status
                                                     }
                                                     text={
                                                         providerNumber.status ==
-                                                        "waiting"
-                                                            ? "Đang chờ"
+                                                        'waiting'
+                                                            ? 'Đang chờ'
                                                             : providerNumber.status ==
-                                                              "used"
-                                                            ? "Đã sử dụng"
-                                                            : "Bỏ qua"
+                                                              'used'
+                                                            ? 'Đã sử dụng'
+                                                            : 'Bỏ qua'
                                                     }
                                                 />
                                             ) : (
-                                                ""
+                                                ''
                                             )}
                                         </Typography.Text>
                                     </Col>
@@ -182,8 +182,8 @@ const DetailDevice = () => {
                                             className={styles.text}
                                         >
                                             {moment(
-                                                providerNumber?.timeGet.toDate()
-                                            ).format("HH:mm - DD/MM/YYYY")}
+                                                providerNumber?.timeGet.toDate(),
+                                            ).format('HH:mm - DD/MM/YYYY')}
                                         </Typography.Text>
                                     </Col>
                                 </Row>
@@ -220,8 +220,8 @@ const DetailDevice = () => {
                                             className={styles.text}
                                         >
                                             {moment(
-                                                providerNumber?.timeExp.toDate()
-                                            ).format("HH:mm - DD/MM/YYYY")}
+                                                providerNumber?.timeExp.toDate(),
+                                            ).format('HH:mm - DD/MM/YYYY')}
                                         </Typography.Text>
                                     </Col>
                                 </Row>
@@ -233,9 +233,9 @@ const DetailDevice = () => {
                     <ActionButton
                         data={[
                             {
-                                text: "Quay lại",
+                                text: 'Quay lại',
                                 icon: <RollbackOutlined />,
-                                onClick: () => navigate("../"),
+                                onClick: () => navigate('../'),
                             },
                         ]}
                     />

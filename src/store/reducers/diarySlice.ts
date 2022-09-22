@@ -1,5 +1,5 @@
-import moment, { Moment } from "moment";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import moment, { Moment } from 'moment';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
     collection,
     doc,
@@ -7,9 +7,9 @@ import {
     getDocs,
     setDoc,
     Timestamp,
-} from "firebase/firestore";
-import { db } from "../../config/firebase";
-import { RootState } from "../index";
+} from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import { RootState } from '../index';
 
 export type diaryType = {
     id?: string;
@@ -19,10 +19,10 @@ export type diaryType = {
     time: Timestamp;
 };
 
-export const add = createAsyncThunk("diary/add", async (values: diaryType) => {
-    const newDoc = doc(collection(db, "diaryUser"));
+export const add = createAsyncThunk('diary/add', async (values: diaryType) => {
+    const newDoc = doc(collection(db, 'diaryUser'));
     await setDoc(newDoc, values);
-    const ref = doc(db, "roles", newDoc.id);
+    const ref = doc(db, 'roles', newDoc.id);
     const snap = await getDoc(ref);
     return snap;
 });
@@ -33,11 +33,11 @@ interface Ifilter {
 }
 
 export const getAll = createAsyncThunk(
-    "diary/getAll",
+    'diary/getAll',
     async (filter?: Ifilter) => {
         let diaries: diaryType[] = [];
 
-        const query = await getDocs(collection(db, "diaryUser"));
+        const query = await getDocs(collection(db, 'diaryUser'));
         query.forEach((value) => {
             diaries.push({
                 id: value.id,
@@ -54,7 +54,7 @@ export const getAll = createAsyncThunk(
                         filter.dateRange[0] &&
                         !moment(filter.dateRange[0]).isSameOrBefore(
                             dateProvider,
-                            "days"
+                            'days',
                         )
                     ) {
                         return false;
@@ -64,7 +64,7 @@ export const getAll = createAsyncThunk(
                         filter.dateRange[1] &&
                         !moment(filter.dateRange[1]).isSameOrAfter(
                             dateProvider,
-                            "days"
+                            'days',
                         )
                     ) {
                         return false;
@@ -72,7 +72,7 @@ export const getAll = createAsyncThunk(
                 }
                 return true;
             });
-            if (filter.keywords != "")
+            if (filter.keywords != '')
                 diaries = diaries.filter(
                     (diary) =>
                         diary.username
@@ -83,14 +83,14 @@ export const getAll = createAsyncThunk(
                             .includes(filter.keywords.toLowerCase()) ||
                         diary.action
                             .toLowerCase()
-                            .includes(filter.keywords.toLowerCase())
+                            .includes(filter.keywords.toLowerCase()),
                 );
         }
         diaries.sort(
-            (a, b) => b.time.toDate().getTime() - a.time.toDate().getTime()
+            (a, b) => b.time.toDate().getTime() - a.time.toDate().getTime(),
         );
         return diaries;
-    }
+    },
 );
 
 interface defaultState {
@@ -107,12 +107,12 @@ const initialState: defaultState = {
     diaries: [],
     message: {
         fail: false,
-        text: "",
+        text: '',
     },
 };
 
 const diarySlice = createSlice({
-    name: "diary",
+    name: 'diary',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -122,10 +122,10 @@ const diarySlice = createSlice({
         builder.addCase(add.fulfilled, (state, action) => {
             if (action.payload.exists()) {
                 state.message.fail = false;
-                state.message.text = "Lưu lịch sử thành công";
+                state.message.text = 'Lưu lịch sử thành công';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -142,10 +142,10 @@ const diarySlice = createSlice({
             if (action.payload) {
                 state.diaries = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });

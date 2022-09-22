@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
     Calendar,
     DayRange,
-} from "@hassanmojab/react-modern-calendar-datepicker";
-import { DatePicker as AntDatePicker, Popover, Space } from "antd";
-import { CalendarOutlined, CaretRightOutlined } from "@ant-design/icons";
-import moment, { Moment } from "moment";
-import { RangeValue } from "rc-picker/lib/interface";
+} from '@hassanmojab/react-modern-calendar-datepicker';
+import { DatePicker as AntDatePicker, Popover, Space } from 'antd';
+import { CalendarOutlined, CaretRightOutlined } from '@ant-design/icons';
+import moment, { Moment } from 'moment';
+import { RangeValue } from 'rc-picker/lib/interface';
 
 interface IDateRange {
     value?: RangeValue<Moment>;
@@ -111,15 +111,15 @@ const DateRange = (props: IDateRange) => {
                     panelRender={() => undefined}
                     onChange={handleOnChangeFrom}
                     suffixIcon={
-                        <CalendarOutlined style={{ color: "#FF7506" }} />
+                        <CalendarOutlined style={{ color: '#FF7506' }} />
                     }
                     format="DD/MM/YYYY"
                     style={{ width: 150 }}
                 />
                 <CaretRightOutlined
                     style={{
-                        margin: "0 4px",
-                        fontSize: "10px",
+                        margin: '0 4px',
+                        fontSize: '10px',
                     }}
                 />
                 <AntDatePicker
@@ -128,7 +128,7 @@ const DateRange = (props: IDateRange) => {
                     panelRender={() => undefined}
                     onChange={handleOnChangeTo}
                     suffixIcon={
-                        <CalendarOutlined style={{ color: "#FF7506" }} />
+                        <CalendarOutlined style={{ color: '#FF7506' }} />
                     }
                     format="DD/MM/YYYY"
                     style={{ width: 150 }}

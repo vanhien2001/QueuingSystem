@@ -1,10 +1,10 @@
-import { Button, Col, Form, Input, Row, Typography } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import clsx from "clsx";
-import { useAppDispatch, useAppSelector } from '../../../store/index'
-import { userSelector, findByEmail } from "../../../store/reducers/userSlice";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "../Form.module.scss";
+import { Button, Col, Form, Input, Row, Typography } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import clsx from 'clsx';
+import { useAppDispatch, useAppSelector } from '../../../store/index';
+import { userSelector, findByEmail } from '../../../store/reducers/userSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from '../Form.module.scss';
 
 interface formValue {
     email: string;
@@ -16,13 +16,17 @@ const ForgotPass = () => {
     const { authLoading, message } = useAppSelector(userSelector);
 
     const onFinish = (value: formValue) => {
-        dispatch(findByEmail(value.email))
-            .then((data) => {
-                data.payload && navigate("/auth/change-password");
-            });
+        dispatch(findByEmail(value.email)).then((data) => {
+            data.payload && navigate('/auth/change-password');
+        });
     };
     return (
-        <Form name="login" layout="vertical" className={clsx(styles.form)} onFinish={onFinish}>
+        <Form
+            name="login"
+            layout="vertical"
+            className={clsx(styles.form)}
+            onFinish={onFinish}
+        >
             <Typography.Title className={clsx(styles.title)}>
                 Đặt lại mật khẩu
             </Typography.Title>
@@ -33,11 +37,11 @@ const ForgotPass = () => {
                 rules={[
                     {
                         required: true,
-                        message: "Vui lòng nhập email",
+                        message: 'Vui lòng nhập email',
                     },
                     {
-                        type: "email",
-                        message: "Email không hợp lệ",
+                        type: 'email',
+                        message: 'Email không hợp lệ',
                     },
                 ]}
                 help={
@@ -65,12 +69,12 @@ const ForgotPass = () => {
                     ) : undefined
                 }
             >
-                <Input size="large" style={{ borderRadius: "8px" }} />
+                <Input size="large" style={{ borderRadius: '8px' }} />
             </Form.Item>
             <Form.Item>
                 <div
                     className={clsx(styles.buttonContainer)}
-                    style={{ flexDirection: "row" }}
+                    style={{ flexDirection: 'row' }}
                 >
                     <Button
                         className={clsx(styles.btn)}
@@ -86,7 +90,7 @@ const ForgotPass = () => {
                         htmlType="submit"
                         loading={authLoading}
                     >
-                        {authLoading ? "": "Tiếp tục"}
+                        {authLoading ? '' : 'Tiếp tục'}
                     </Button>
                 </div>
             </Form.Item>

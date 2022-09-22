@@ -1,55 +1,55 @@
-import { CaretDownOutlined } from "@ant-design/icons";
-import { Col, Form, Row, Select, Table, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { Link, useNavigate } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
-import { userSelector, getAll } from "../../../../store/reducers/userSlice";
-import Status from "../../../../components/Status";
-import ActionButton from "../../../../components/ActionButton";
-import SearchInput from "../../../../components/SearchInput";
-import styles from "./ManageAccount.module.scss";
-import { useEffect, useState } from "react";
+import { CaretDownOutlined } from '@ant-design/icons';
+import { Col, Form, Row, Select, Table, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
+import { userSelector, getAll } from '../../../../store/reducers/userSlice';
+import Status from '../../../../components/Status';
+import ActionButton from '../../../../components/ActionButton';
+import SearchInput from '../../../../components/SearchInput';
+import styles from './ManageAccount.module.scss';
+import { useEffect, useState } from 'react';
 
 const { Option } = Select;
 
 const columns = [
     {
-        title: "Tên đăng nhập",
-        key: "username",
-        dataIndex: "username",
+        title: 'Tên đăng nhập',
+        key: 'username',
+        dataIndex: 'username',
     },
 
     {
-        title: "Họ tên",
-        key: "name",
-        dataIndex: "name",
+        title: 'Họ tên',
+        key: 'name',
+        dataIndex: 'name',
     },
 
     {
-        title: "Số điện thoại",
-        key: "phoneNumber",
-        dataIndex: "phoneNumber",
+        title: 'Số điện thoại',
+        key: 'phoneNumber',
+        dataIndex: 'phoneNumber',
     },
 
     {
-        title: "Email",
-        key: "email",
-        dataIndex: "email",
+        title: 'Email',
+        key: 'email',
+        dataIndex: 'email',
     },
     {
-        title: "Vai trò",
-        key: "role",
-        dataIndex: "role",
+        title: 'Vai trò',
+        key: 'role',
+        dataIndex: 'role',
     },
     {
-        title: "Trạng thái hoạt động",
-        key: "status",
-        dataIndex: "status",
+        title: 'Trạng thái hoạt động',
+        key: 'status',
+        dataIndex: 'status',
     },
     {
-        title: "",
-        key: "update",
-        dataIndex: "update",
+        title: '',
+        key: 'update',
+        dataIndex: 'update',
     },
 ];
 
@@ -58,7 +58,7 @@ const ManageAccountTable = () => {
     const dispatch = useAppDispatch();
     const { authLoading, users } = useAppSelector(userSelector);
     const [active, setActive] = useState<boolean | null>(null);
-    const [keywords, setKeywords] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>('');
 
     useEffect(() => {
         dispatch(getAll({ active, keywords }));
@@ -87,8 +87,8 @@ const ManageAccountTable = () => {
                                 suffixIcon={
                                     <CaretDownOutlined
                                         style={{
-                                            fontSize: "20px",
-                                            color: "#FF7506",
+                                            fontSize: '20px',
+                                            color: '#FF7506',
                                         }}
                                     />
                                 }
@@ -125,11 +125,11 @@ const ManageAccountTable = () => {
                             ...user,
                             status: (
                                 <Status
-                                    type={user.isActive ? "success" : "error"}
+                                    type={user.isActive ? 'success' : 'error'}
                                     text={
                                         user.isActive
-                                            ? "Hoạt động"
-                                            : "Ngưng hoạt động"
+                                            ? 'Hoạt động'
+                                            : 'Ngưng hoạt động'
                                     }
                                 />
                             ),
@@ -146,7 +146,7 @@ const ManageAccountTable = () => {
                         size="middle"
                         pagination={{
                             defaultPageSize: 8,
-                            position: ["bottomRight"],
+                            position: ['bottomRight'],
                             showLessItems: true,
                             showSizeChanger: false,
                         }}
@@ -156,9 +156,9 @@ const ManageAccountTable = () => {
                     <ActionButton
                         data={[
                             {
-                                text: "Thêm tài khoản",
+                                text: 'Thêm tài khoản',
                                 icon: <PlusOutlined />,
-                                onClick: () => navigate("../add"),
+                                onClick: () => navigate('../add'),
                             },
                         ]}
                     />

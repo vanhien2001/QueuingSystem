@@ -1,11 +1,19 @@
-import { useEffect, useState } from "react";
-import { Button, Col, Form, Input, Row, Typography, message as notice } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import clsx from "clsx";
-import { useAppDispatch, useAppSelector } from '../../../store/index'
-import { userSelector, changePass } from "../../../store/reducers/userSlice";
-import { Link, useNavigate } from "react-router-dom";
-import styles from "../Form.module.scss";
+import { useEffect, useState } from 'react';
+import {
+    Button,
+    Col,
+    Form,
+    Input,
+    Row,
+    Typography,
+    message as notice,
+} from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import clsx from 'clsx';
+import { useAppDispatch, useAppSelector } from '../../../store/index';
+import { userSelector, changePass } from '../../../store/reducers/userSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import styles from '../Form.module.scss';
 
 interface formValue {
     password: string;
@@ -17,49 +25,55 @@ const ChangePass = () => {
     const dispatch = useAppDispatch();
     const { authLoading, userId } = useAppSelector(userSelector);
 
-    const [ message, setMessage ] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
     const onFinish = (value: formValue) => {
-        if(value.password === value.passwordConfirm){
-            setMessage("");
-            dispatch(changePass({
-                id: userId,
-                password: value.password,
-            }))
-            .then(
-                (data) => {
-                    if (data.meta.requestStatus == 'fulfilled') {
-                        notice.success('Đổi mật khẩu thành công', 3);
-                        navigate("/auth/login");
-                    } else {
-                        notice.error('Đã xảy ra lỗi', 3);
-                    }
+        if (value.password === value.passwordConfirm) {
+            setMessage('');
+            dispatch(
+                changePass({
+                    id: userId,
+                    password: value.password,
+                }),
+            ).then((data) => {
+                if (data.meta.requestStatus == 'fulfilled') {
+                    notice.success('Đổi mật khẩu thành công', 3);
+                    navigate('/auth/login');
+                } else {
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
-            )
-        }else{
-            setMessage("Mật khẩu không khớp");
+            });
+        } else {
+            setMessage('Mật khẩu không khớp');
         }
     };
 
     useEffect(() => {
-        if(!userId) {
-            navigate("/auth/forgot-password");
+        if (!userId) {
+            navigate('/auth/forgot-password');
         }
-    }, [userId])
+    }, [userId]);
     return (
-        <Form name="login" layout="vertical" className={clsx(styles.form)} onFinish={onFinish}>
-            <Typography.Title className={clsx(styles.title)}>Đặt lại mật khẩu mới</Typography.Title>
+        <Form
+            name="login"
+            layout="vertical"
+            className={clsx(styles.form)}
+            onFinish={onFinish}
+        >
+            <Typography.Title className={clsx(styles.title)}>
+                Đặt lại mật khẩu mới
+            </Typography.Title>
             <Form.Item
                 label="Mật khẩu"
                 name="password"
                 rules={[
                     {
                         required: true,
-                        message: "Không được bỏ trống",
+                        message: 'Không được bỏ trống',
                     },
                 ]}
             >
-                <Input.Password size="large" style={{ borderRadius: "8px" }} />
+                <Input.Password size="large" style={{ borderRadius: '8px' }} />
             </Form.Item>
             <Form.Item
                 label="Nhập lại mật khẩu"
@@ -89,7 +103,7 @@ const ChangePass = () => {
                     ) : undefined
                 }
             >
-                <Input.Password size="large" style={{ borderRadius: "8px" }} />
+                <Input.Password size="large" style={{ borderRadius: '8px' }} />
             </Form.Item>
             <Form.Item>
                 <div className={clsx(styles.buttonContainer)}>
@@ -99,7 +113,7 @@ const ChangePass = () => {
                         htmlType="submit"
                         loading={authLoading}
                     >
-                        {authLoading ? "": "Xác nhận"}
+                        {authLoading ? '' : 'Xác nhận'}
                     </Button>
                 </div>
             </Form.Item>

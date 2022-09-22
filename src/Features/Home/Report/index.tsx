@@ -1,6 +1,5 @@
-import { Route, Routes } from "react-router-dom";
-import ReportTable from "./ReportTable";
-
+import { Route, Routes } from 'react-router-dom';
+import ReportTable from './ReportTable';
 
 const index = () => {
     return (

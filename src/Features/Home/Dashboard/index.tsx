@@ -1,46 +1,46 @@
-import { useEffect, useMemo, useState } from "react";
-import { Card, Col, Layout, Row, Select, Space, Typography } from "antd";
+import { useEffect, useMemo, useState } from 'react';
+import { Card, Col, Layout, Row, Select, Space, Typography } from 'antd';
 import {
     DesktopOutlined,
     CalendarOutlined,
     CaretDownOutlined,
     CustomerServiceOutlined,
     CarryOutOutlined,
-    StarOutlined
-} from "@ant-design/icons";
+    StarOutlined,
+} from '@ant-design/icons';
 import {
     Calendar,
     DayRange,
-} from "@hassanmojab/react-modern-calendar-datepicker";
-import { Area } from "@ant-design/plots";
-import { useAppSelector, useAppDispatch } from "../../../store";
+} from '@hassanmojab/react-modern-calendar-datepicker';
+import { Area } from '@ant-design/plots';
+import { useAppSelector, useAppDispatch } from '../../../store';
 import {
     providerNumberSelector,
     getAll,
-} from "../../../store/reducers/providerNumberSlice";
+} from '../../../store/reducers/providerNumberSlice';
 import {
     deviceSelector,
     getAll as getAllDevice,
-} from "../../../store/reducers/deviceSlice";
+} from '../../../store/reducers/deviceSlice';
 import {
     serviceSelector,
     getAll as getAllService,
-} from "../../../store/reducers/serviceSlice";
-import CardContent from "./CardContainer/CardContent";
-import CardSideBar from "./CardContainer/CardSideBar";
-import styles from "./Dasboard.module.scss";
+} from '../../../store/reducers/serviceSlice';
+import CardContent from './CardContainer/CardContent';
+import CardSideBar from './CardContainer/CardSideBar';
+import styles from './Dasboard.module.scss';
 
 const { Sider, Content } = Layout;
 const { Option } = Select;
 
 const iconCardStyle = {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "48px",
-    width: "48px",
-    fontSize: "24px",
-    borderRadius: "50%",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '48px',
+    width: '48px',
+    fontSize: '24px',
+    borderRadius: '50%',
 };
 
 const Dashboard = () => {
@@ -48,7 +48,7 @@ const Dashboard = () => {
     const { providerNumbers } = useAppSelector(providerNumberSelector);
     const { devices } = useAppSelector(deviceSelector);
     const { services } = useAppSelector(serviceSelector);
-    const [chartData, setChartData] = useState("date");
+    const [chartData, setChartData] = useState('date');
     const [calendarValue, setCalendarValue] = useState<DayRange>({
         from: null,
         to: null,
@@ -62,7 +62,7 @@ const Dashboard = () => {
             : new Date().getMonth() + 1;
         let data1 = [];
         switch (chartData) {
-            case "date":
+            case 'date':
                 for (let i = start; i <= end; i++) {
                     data1.push({
                         xField: i,
@@ -78,10 +78,10 @@ const Dashboard = () => {
                     });
                 }
                 return data1;
-            case "week":
+            case 'week':
                 for (let i = 1; i <= 5; i++) {
                     data1.push({
-                        xField: "Tuần " + i,
+                        xField: 'Tuần ' + i,
                         value: providerNumbers.filter((providerNumber) => {
                             return (
                                 providerNumber.timeGet.toDate().getMonth() +
@@ -116,23 +116,23 @@ const Dashboard = () => {
 
     const config = {
         data,
-        xField: "xField",
-        yField: "value",
+        xField: 'xField',
+        yField: 'value',
         smooth: true,
         xAxis: {
             range: [0, 1],
         },
         tooltip: {
-            position: "top" as "left" | "right" | "top" | "bottom" | undefined,
+            position: 'top' as 'left' | 'right' | 'top' | 'bottom' | undefined,
             domStyles: {
-                "g2-tooltip": {
-                    width: "100px",
-                    padding: "5px",
-                    backgroundColor: "#5185F7",
-                    borderRadius: "8px",
-                    color: "#fff",
-                    textAlign: "center",
-                    fontSize: "14px",
+                'g2-tooltip': {
+                    width: '100px',
+                    padding: '5px',
+                    backgroundColor: '#5185F7',
+                    borderRadius: '8px',
+                    color: '#fff',
+                    textAlign: 'center',
+                    fontSize: '14px',
                     fontWeight: 700,
                 },
             },
@@ -142,7 +142,7 @@ const Dashboard = () => {
         },
         areaStyle: () => {
             return {
-                fill: "l(90) 0:#5185F7 0.5:#5185F7 1:#fff",
+                fill: 'l(90) 0:#5185F7 0.5:#5185F7 1:#fff',
             };
         },
     };
@@ -168,15 +168,15 @@ const Dashboard = () => {
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
-                                                "rgba(100, 147, 249, 0.2)",
-                                            color: "#6493F9",
+                                                'rgba(100, 147, 249, 0.2)',
+                                            color: '#6493F9',
                                         }}
                                     />
                                 }
-                                title={"Số thứ tự đã cấp"}
+                                title={'Số thứ tự đã cấp'}
                                 number={providerNumbers.length}
                                 tag={{
-                                    color: "#FF9138",
+                                    color: '#FF9138',
                                     number: 32.41,
                                 }}
                             />
@@ -188,19 +188,19 @@ const Dashboard = () => {
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
-                                                "rgb(53, 199, 90, 0.2)",
-                                            color: "#35C75A",
+                                                'rgb(53, 199, 90, 0.2)',
+                                            color: '#35C75A',
                                         }}
                                     />
                                 }
-                                title={"Số thứ tự đã sử dụng"}
+                                title={'Số thứ tự đã sử dụng'}
                                 number={
                                     providerNumbers.filter(
-                                        (value) => value.status === "used"
+                                        (value) => value.status === 'used',
                                     ).length
                                 }
                                 tag={{
-                                    color: "#E73F3F",
+                                    color: '#E73F3F',
                                     number: 32.41,
                                 }}
                             />
@@ -212,19 +212,19 @@ const Dashboard = () => {
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
-                                                "rgba(255, 172, 106, 0.2)",
-                                            color: "#FFAC6A",
+                                                'rgba(255, 172, 106, 0.2)',
+                                            color: '#FFAC6A',
                                         }}
                                     />
                                 }
-                                title={"Số thứ tự đang chờ"}
+                                title={'Số thứ tự đang chờ'}
                                 number={
                                     providerNumbers.filter(
-                                        (value) => value.status === "waiting"
+                                        (value) => value.status === 'waiting',
                                     ).length
                                 }
                                 tag={{
-                                    color: "#FF9138",
+                                    color: '#FF9138',
                                     number: 32.41,
                                 }}
                             />
@@ -236,19 +236,19 @@ const Dashboard = () => {
                                         style={{
                                             ...iconCardStyle,
                                             backgroundColor:
-                                                "rgba(248, 109, 109, 0.2)",
-                                            color: "#F86D6D",
+                                                'rgba(248, 109, 109, 0.2)',
+                                            color: '#F86D6D',
                                         }}
                                     />
                                 }
-                                title={"Số thứ tự đã bỏ qua"}
+                                title={'Số thứ tự đã bỏ qua'}
                                 number={
                                     providerNumbers.filter(
-                                        (value) => value.status === "skip"
+                                        (value) => value.status === 'skip',
                                     ).length
                                 }
                                 tag={{
-                                    color: "#E73F3F",
+                                    color: '#E73F3F',
                                     number: 32.41,
                                 }}
                             />
@@ -257,36 +257,36 @@ const Dashboard = () => {
                     <Card className={styles.chartContainer}>
                         <Space
                             style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "center",
-                                marginBottom: "20px",
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginBottom: '20px',
                             }}
                         >
                             <Space direction="vertical">
                                 <Typography.Title className={styles.title}>
-                                    Bảng thống kê theo{" "}
-                                    {chartData == "date"
-                                        ? "ngày"
-                                        : chartData == "week"
-                                        ? "tuần"
-                                        : "tháng"}
+                                    Bảng thống kê theo{' '}
+                                    {chartData == 'date'
+                                        ? 'ngày'
+                                        : chartData == 'week'
+                                        ? 'tuần'
+                                        : 'tháng'}
                                 </Typography.Title>
                                 <Typography.Text className={styles.text}>
-                                    {chartData == "month"
-                                        ? "Năm "
-                                        : "Tháng " +
+                                    {chartData == 'month'
+                                        ? 'Năm '
+                                        : 'Tháng ' +
                                           (calendarValue.to
                                               ? calendarValue.to.month
                                               : new Date().getMonth() + 1) +
-                                          "/"}
+                                          '/'}
                                     2022
                                 </Typography.Text>
                             </Space>
                             <Space
                                 style={{
-                                    display: "flex",
-                                    alignItems: "center",
+                                    display: 'flex',
+                                    alignItems: 'center',
                                 }}
                             >
                                 <Typography.Text className={styles.label}>
@@ -300,8 +300,8 @@ const Dashboard = () => {
                                     suffixIcon={
                                         <CaretDownOutlined
                                             style={{
-                                                fontSize: "20px",
-                                                color: "#FF7506",
+                                                fontSize: '20px',
+                                                color: '#FF7506',
                                             }}
                                         />
                                     }
@@ -312,14 +312,14 @@ const Dashboard = () => {
                                 </Select>
                             </Space>
                         </Space>
-                        <Area {...config} style={{ height: "300px" }} />
+                        <Area {...config} style={{ height: '300px' }} />
                     </Card>
                 </div>
             </Content>
             <Sider
                 width={410}
                 style={{
-                    position: "fixed",
+                    position: 'fixed',
                     right: 0,
                     top: 0,
                     bottom: 0,
@@ -330,80 +330,80 @@ const Dashboard = () => {
                         Tổng quan
                     </Typography.Title>
                     <CardSideBar
-                        icon={<DesktopOutlined style={{ color: "#FF7506" }} />}
+                        icon={<DesktopOutlined style={{ color: '#FF7506' }} />}
                         percent={90}
-                        color={"#FF7506"}
-                        title={"Thiết bị"}
+                        color={'#FF7506'}
+                        title={'Thiết bị'}
                         quantity={devices.length}
                         data={[
                             {
-                                type: "success",
-                                text: "Đang hoạt động",
+                                type: 'success',
+                                text: 'Đang hoạt động',
                                 number: devices.filter(
-                                    (device) => device.isActive === true
+                                    (device) => device.isActive === true,
                                 ).length,
                             },
                             {
-                                type: "used",
-                                text: "Ngưng hoạt động",
+                                type: 'used',
+                                text: 'Ngưng hoạt động',
                                 number: devices.filter(
-                                    (device) => device.isActive === false
+                                    (device) => device.isActive === false,
                                 ).length,
                             },
                         ]}
                     />
                     <CardSideBar
-                        icon={<DesktopOutlined style={{ color: "#4277FF" }} />}
+                        icon={<DesktopOutlined style={{ color: '#4277FF' }} />}
                         percent={76}
-                        color={"#4277FF"}
-                        title={"Dịch vụ"}
+                        color={'#4277FF'}
+                        title={'Dịch vụ'}
                         quantity={services.length}
                         data={[
                             {
-                                type: "success",
-                                text: "Đang hoạt động",
+                                type: 'success',
+                                text: 'Đang hoạt động',
                                 number: services.filter(
-                                    (service) => service.isActive === true
+                                    (service) => service.isActive === true,
                                 ).length,
                             },
                             {
-                                type: "used",
-                                text: "Ngưng hoạt động",
+                                type: 'used',
+                                text: 'Ngưng hoạt động',
                                 number: services.filter(
-                                    (service) => service.isActive === false
+                                    (service) => service.isActive === false,
                                 ).length,
                             },
                         ]}
                     />
                     <CardSideBar
-                        icon={<DesktopOutlined style={{ color: "#35C75A" }} />}
+                        icon={<DesktopOutlined style={{ color: '#35C75A' }} />}
                         percent={86}
-                        color={"#35C75A"}
-                        title={"Cấp số"}
+                        color={'#35C75A'}
+                        title={'Cấp số'}
                         quantity={providerNumbers.length}
                         data={[
                             {
-                                type: "success",
-                                text: "Đã sử dụng",
+                                type: 'success',
+                                text: 'Đã sử dụng',
                                 number: providerNumbers.filter(
                                     (providerNumber) =>
-                                        providerNumber.status === "used"
+                                        providerNumber.status === 'used',
                                 ).length,
                             },
                             {
-                                type: "used",
-                                text: "Đang chờ",
+                                type: 'used',
+                                text: 'Đang chờ',
                                 number: providerNumbers.filter(
                                     (providerNumber) =>
-                                        providerNumber.status === "waiting"
+                                        providerNumber.status === 'waiting',
                                 ).length,
                             },
                             {
-                                type: "error",
-                                text: "Bỏ qua",
+                                type: 'error',
+                                text: 'Bỏ qua',
                                 number: providerNumbers.filter(
                                     (providerNumber) =>
-                                        providerNumber.status === "skip"
+                                        providerNumber.status === 'skip',
                                 ).length,
                             },
                         ]}

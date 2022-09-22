@@ -31,6 +31,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "format": "prettier --single-quote --trailing-comma all --tab-width 4 --write \"./**/*.{ts,tsx,scss}\"",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
@@ -53,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.7.1"
   }
 }

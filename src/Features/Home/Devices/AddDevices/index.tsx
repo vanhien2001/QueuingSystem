@@ -1,4 +1,4 @@
-import { CaretDownOutlined } from "@ant-design/icons";
+import { CaretDownOutlined } from '@ant-design/icons';
 import {
     Button,
     Card,
@@ -9,25 +9,25 @@ import {
     Select,
     Typography,
     message as notice,
-} from "antd";
-import clsx from "clsx";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+} from 'antd';
+import clsx from 'clsx';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     deviceSelector,
     addDevice,
     get,
     update,
-} from "../../../../store/reducers/deviceSlice";
+} from '../../../../store/reducers/deviceSlice';
 import {
     serviceSelector,
     getAll,
-} from "../../../../store/reducers/serviceSlice";
-import { userSelector } from "../../../../store/reducers/userSlice";
-import { add as addDiary } from "../../../../store/reducers/diarySlice";
-import styles from "../Devices.module.scss";
-import { Timestamp } from "firebase/firestore";
-import { useEffect } from "react";
+} from '../../../../store/reducers/serviceSlice';
+import { userSelector } from '../../../../store/reducers/userSlice';
+import { add as addDiary } from '../../../../store/reducers/diarySlice';
+import styles from '../Devices.module.scss';
+import { Timestamp } from 'firebase/firestore';
+import { useEffect } from 'react';
 
 const { Option } = Select;
 interface formValue {
@@ -58,40 +58,38 @@ const AddDevices = () => {
                 update({
                     id,
                     ...value,
-                })
+                }),
             ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
+                if (data.meta.requestStatus == 'fulfilled') {
                     dispatch(get(id));
-                    notice.success("Cập nhật thành công", 3);
+                    notice.success('Cập nhật thành công', 3);
                     dispatch(
                         addDiary({
-                            username: userLogin ? userLogin.username : "",
-                            ip: "127.0.0.1",
-                            action: "Cập nhật thông tin thiết bị",
+                            username: userLogin ? userLogin.username : '',
+                            ip: '127.0.0.1',
+                            action: 'Cập nhật thông tin thiết bị',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         } else {
-            dispatch(
-                addDevice(value)
-            ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
-                    notice.success("Thêm thành công", 3);
-                    navigate("../");
+            dispatch(addDevice(value)).then((data) => {
+                if (data.meta.requestStatus == 'fulfilled') {
+                    notice.success('Thêm thành công', 3);
+                    navigate('../');
                     dispatch(
                         addDiary({
-                            username: userLogin ? userLogin.username : "",
-                            ip: "127.0.0.1",
-                            action: "Thêm thiết bị",
+                            username: userLogin ? userLogin.username : '',
+                            ip: '127.0.0.1',
+                            action: 'Thêm thiết bị',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         }
@@ -104,7 +102,7 @@ const AddDevices = () => {
         if (id) {
             dispatch(get(id));
         }
-        dispatch(getAll())
+        dispatch(getAll());
     }, []);
 
     return (
@@ -141,7 +139,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập mã thiết bị",
+                                    message: 'Vui lòng nhập mã thiết bị',
                                 },
                             ]}
                         >
@@ -163,7 +161,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng chọn loại thiết bị",
+                                    message: 'Vui lòng chọn loại thiết bị',
                                 },
                             ]}
                         >
@@ -173,17 +171,17 @@ const AddDevices = () => {
                                 suffixIcon={
                                     <CaretDownOutlined
                                         style={{
-                                            fontSize: "20px",
-                                            color: "#FF7506",
+                                            fontSize: '20px',
+                                            color: '#FF7506',
                                         }}
                                     />
                                 }
                             >
-                                <Option key={1} value={"kisok"}>
-                                    {"Kisok"}
+                                <Option key={1} value={'kisok'}>
+                                    {'Kisok'}
                                 </Option>
-                                <Option key={2} value={"Hệ thống"}>
-                                    {"Hệ thống"}
+                                <Option key={2} value={'Hệ thống'}>
+                                    {'Hệ thống'}
                                 </Option>
                             </Select>
                         </Form.Item>
@@ -200,7 +198,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập tên thiết bị",
+                                    message: 'Vui lòng nhập tên thiết bị',
                                 },
                             ]}
                         >
@@ -222,7 +220,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập tên đăng nhập",
+                                    message: 'Vui lòng nhập tên đăng nhập',
                                 },
                             ]}
                         >
@@ -241,7 +239,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập địa chỉ ip",
+                                    message: 'Vui lòng nhập địa chỉ ip',
                                 },
                             ]}
                         >
@@ -260,7 +258,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập mật khẩu",
+                                    message: 'Vui lòng nhập mật khẩu',
                                 },
                             ]}
                         >
@@ -279,7 +277,7 @@ const AddDevices = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng chọn dịch vụ sử dụng",
+                                    message: 'Vui lòng chọn dịch vụ sử dụng',
                                 },
                             ]}
                         >
@@ -289,12 +287,15 @@ const AddDevices = () => {
                                 size="large"
                                 placeholder="Chọn dịch vụ sử dụng"
                             >
-                                {services.map(service => {
+                                {services.map((service) => {
                                     return (
-                                        <Option key={service.id} value={service.id}>
+                                        <Option
+                                            key={service.id}
+                                            value={service.id}
+                                        >
                                             {service.name}
                                         </Option>
-                                    )
+                                    );
                                 })}
                             </Select>
                         </Form.Item>
@@ -324,7 +325,7 @@ const AddDevices = () => {
                         htmlType="submit"
                         loading={loading}
                     >
-                        {loading ? "" : id ? "Cập nhật" : "Thêm thiết bị"}
+                        {loading ? '' : id ? 'Cập nhật' : 'Thêm thiết bị'}
                     </Button>
                 </Col>
             </Row>

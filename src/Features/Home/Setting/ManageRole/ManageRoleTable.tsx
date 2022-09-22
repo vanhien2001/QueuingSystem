@@ -1,42 +1,42 @@
-import { useEffect, useState } from "react";
-import { Col, Form, Row, Table, Typography } from "antd";
-import { PlusOutlined } from "@ant-design/icons";
-import { useAppSelector, useAppDispatch } from "../../../../store";
-import { roleSelector, getAll } from "../../../../store/reducers/roleSlice";
-import ActionButton from "../../../../components/ActionButton";
-import SearchInput from "../../../../components/SearchInput";
-import styles from "./ManageRole.module.scss";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Col, Form, Row, Table, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { useAppSelector, useAppDispatch } from '../../../../store';
+import { roleSelector, getAll } from '../../../../store/reducers/roleSlice';
+import ActionButton from '../../../../components/ActionButton';
+import SearchInput from '../../../../components/SearchInput';
+import styles from './ManageRole.module.scss';
+import { Link, useNavigate } from 'react-router-dom';
 
 const columns = [
     {
-        title: "Tên vai trò",
-        key: "name",
-        dataIndex: "name",
+        title: 'Tên vai trò',
+        key: 'name',
+        dataIndex: 'name',
     },
 
     {
-        title: "Số người dùng",
-        key: "amountOfUser",
-        dataIndex: "amountOfUser",
+        title: 'Số người dùng',
+        key: 'amountOfUser',
+        dataIndex: 'amountOfUser',
     },
 
     {
-        title: "Mô tả",
-        key: "description",
-        dataIndex: "description",
+        title: 'Mô tả',
+        key: 'description',
+        dataIndex: 'description',
     },
     {
-        title: "",
-        key: "update",
-        dataIndex: "update",
+        title: '',
+        key: 'update',
+        dataIndex: 'update',
     },
 ];
 const ManageRoleTable = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { loading, roles } = useAppSelector(roleSelector);
-    const [keywords, setKeywords] = useState<string>("");
+    const [keywords, setKeywords] = useState<string>('');
 
     useEffect(() => {
         dispatch(getAll({ keywords }));
@@ -88,7 +88,7 @@ const ManageRoleTable = () => {
                             size="middle"
                             pagination={{
                                 defaultPageSize: 8,
-                                position: ["bottomRight"],
+                                position: ['bottomRight'],
                                 showLessItems: true,
                                 showSizeChanger: false,
                             }}
@@ -98,9 +98,9 @@ const ManageRoleTable = () => {
                         <ActionButton
                             data={[
                                 {
-                                    text: "Thêm vai trò",
+                                    text: 'Thêm vai trò',
                                     icon: <PlusOutlined />,
-                                    onClick: () => navigate("../add"),
+                                    onClick: () => navigate('../add'),
                                 },
                             ]}
                         />

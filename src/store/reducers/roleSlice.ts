@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
     collection,
     doc,
@@ -8,9 +8,9 @@ import {
     updateDoc,
     where,
     setDoc,
-} from "firebase/firestore";
-import { db } from "../../config/firebase";
-import { RootState } from "../index";
+} from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import { RootState } from '../index';
 
 export type roleType = {
     id?: string;
@@ -23,14 +23,14 @@ export type roleType = {
 };
 
 export const addRole = createAsyncThunk(
-    "role/add",
+    'role/add',
     async (values: roleType) => {
-        const newRole = doc(collection(db, "roles"));
+        const newRole = doc(collection(db, 'roles'));
         await setDoc(newRole, values);
-        const roleRef = doc(db, "roles", newRole.id);
+        const roleRef = doc(db, 'roles', newRole.id);
         const roleSnap = await getDoc(roleRef);
         return roleSnap;
-    }
+    },
 );
 
 interface Ifilter {
@@ -38,11 +38,11 @@ interface Ifilter {
 }
 
 export const getAll = createAsyncThunk(
-    "role/getAll",
+    'role/getAll',
     async (filter?: Ifilter) => {
         let roles: roleType[] = [];
 
-        const queryRoles = await getDocs(collection(db, "roles"));
+        const queryRoles = await getDocs(collection(db, 'roles'));
         queryRoles.forEach((value) => {
             roles.push({
                 id: value.id,
@@ -51,7 +51,7 @@ export const getAll = createAsyncThunk(
         });
         for (const role of roles) {
             const roleSnap = await getDocs(
-                query(collection(db, "user"), where("role", "==", role.id))
+                query(collection(db, 'user'), where('role', '==', role.id)),
             );
             let amountOfUser = 0;
             roleSnap.forEach((value) => {
@@ -60,7 +60,7 @@ export const getAll = createAsyncThunk(
             role.amountOfUser = amountOfUser;
         }
         if (filter) {
-            if (filter.keywords != "")
+            if (filter.keywords != '')
                 roles = roles.filter(
                     (role) =>
                         role.name
@@ -68,18 +68,18 @@ export const getAll = createAsyncThunk(
                             .includes(filter.keywords.toLowerCase()) ||
                         role.description
                             .toLowerCase()
-                            .includes(filter.keywords.toLowerCase())
+                            .includes(filter.keywords.toLowerCase()),
                 );
         }
         roles.reverse();
         return roles;
-    }
+    },
 );
 
-export const get = createAsyncThunk("role/get", async (id: string) => {
+export const get = createAsyncThunk('role/get', async (id: string) => {
     let role: roleType;
 
-    const roleRef = doc(db, "roles", id);
+    const roleRef = doc(db, 'roles', id);
     const roleSnap = await getDoc(roleRef);
     role = {
         id,
@@ -90,11 +90,11 @@ export const get = createAsyncThunk("role/get", async (id: string) => {
 });
 
 export const update = createAsyncThunk(
-    "role/update",
+    'role/update',
     async (value: roleType) => {
-        const roleRef = doc(db, "roles", value.id as string);
+        const roleRef = doc(db, 'roles', value.id as string);
         await updateDoc(roleRef, value);
-    }
+    },
 );
 
 interface defaultState {
@@ -113,12 +113,12 @@ const initialState: defaultState = {
     roles: [],
     message: {
         fail: false,
-        text: "",
+        text: '',
     },
 };
 
 const roleSlice = createSlice({
-    name: "role",
+    name: 'role',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -128,10 +128,10 @@ const roleSlice = createSlice({
         builder.addCase(addRole.fulfilled, (state, action) => {
             if (action.payload.exists()) {
                 state.message.fail = false;
-                state.message.text = "Thêm vai trò thành công";
+                state.message.text = 'Thêm vai trò thành công';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -148,10 +148,10 @@ const roleSlice = createSlice({
             if (action.payload) {
                 state.roles = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -168,10 +168,10 @@ const roleSlice = createSlice({
             if (action.payload) {
                 state.role = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -186,7 +186,7 @@ const roleSlice = createSlice({
         });
         builder.addCase(update.fulfilled, (state, action) => {
             state.message.fail = false;
-            state.message.text = "Cập nhật thành công";
+            state.message.text = 'Cập nhật thành công';
             state.loading = false;
         });
         builder.addCase(update.rejected, (state, action) => {

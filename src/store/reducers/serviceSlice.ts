@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {
     collection,
     doc,
@@ -6,10 +6,10 @@ import {
     getDocs,
     updateDoc,
     setDoc,
-} from "firebase/firestore";
-import { Moment } from "moment";
-import { db } from "../../config/firebase";
-import { RootState } from "../index";
+} from 'firebase/firestore';
+import { Moment } from 'moment';
+import { db } from '../../config/firebase';
+import { RootState } from '../index';
 
 export type serviceType = {
     id?: string;
@@ -25,14 +25,14 @@ export type serviceType = {
 };
 
 export const addService = createAsyncThunk(
-    "service/add",
+    'service/add',
     async (values: serviceType) => {
-        const newDoc = doc(collection(db, "services"));
+        const newDoc = doc(collection(db, 'services'));
         await setDoc(newDoc, values);
-        const Ref = doc(db, "service", newDoc.id);
+        const Ref = doc(db, 'service', newDoc.id);
         const Snap = await getDoc(Ref);
         return Snap;
-    }
+    },
 );
 
 interface Ifilter {
@@ -42,11 +42,11 @@ interface Ifilter {
 }
 
 export const getAll = createAsyncThunk(
-    "service/getAll",
+    'service/getAll',
     async (filter?: Ifilter) => {
         let services: serviceType[] = [];
 
-        const query = await getDocs(collection(db, "services"));
+        const query = await getDocs(collection(db, 'services'));
         query.forEach((value) => {
             services.push({
                 id: value.id,
@@ -54,12 +54,12 @@ export const getAll = createAsyncThunk(
             });
         });
         if (filter) {
-            console.log(filter.dateRange)
+            console.log(filter.dateRange);
             if (filter.active != null)
                 services = services.filter(
-                    (service) => service.isActive == filter.active
+                    (service) => service.isActive == filter.active,
                 );
-            if (filter.keywords != "")
+            if (filter.keywords != '')
                 services = services.filter(
                     (service) =>
                         service.code
@@ -70,18 +70,18 @@ export const getAll = createAsyncThunk(
                             .includes(filter.keywords.toLowerCase()) ||
                         service.description
                             .toLowerCase()
-                            .includes(filter.keywords.toLowerCase())
+                            .includes(filter.keywords.toLowerCase()),
                 );
         }
         services.reverse();
         return services;
-    }
+    },
 );
 
-export const get = createAsyncThunk("service/get", async (id: string) => {
+export const get = createAsyncThunk('service/get', async (id: string) => {
     let service: serviceType;
 
-    const serviceRef = doc(db, "services", id);
+    const serviceRef = doc(db, 'services', id);
     const serviceSnap = await getDoc(serviceRef);
     service = {
         id,
@@ -92,11 +92,11 @@ export const get = createAsyncThunk("service/get", async (id: string) => {
 });
 
 export const update = createAsyncThunk(
-    "service/update",
+    'service/update',
     async ({ id, ...value }: serviceType) => {
-        const ref = doc(db, "services", id as string);
+        const ref = doc(db, 'services', id as string);
         await updateDoc(ref, { ...value });
-    }
+    },
 );
 
 interface defaultState {
@@ -115,12 +115,12 @@ const initialState: defaultState = {
     services: [],
     message: {
         fail: false,
-        text: "",
+        text: '',
     },
 };
 
 const serviceSlice = createSlice({
-    name: "service",
+    name: 'service',
     initialState,
     reducers: {},
     extraReducers: (builder) => {
@@ -130,10 +130,10 @@ const serviceSlice = createSlice({
         builder.addCase(addService.fulfilled, (state, action) => {
             if (action.payload.exists()) {
                 state.message.fail = false;
-                state.message.text = "Thêm thành công";
+                state.message.text = 'Thêm thành công';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -150,10 +150,10 @@ const serviceSlice = createSlice({
             if (action.payload) {
                 state.services = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -170,10 +170,10 @@ const serviceSlice = createSlice({
             if (action.payload) {
                 state.service = action.payload;
                 state.message.fail = false;
-                state.message.text = "";
+                state.message.text = '';
             } else {
                 state.message.fail = true;
-                state.message.text = "Đã xảy ra lỗi !";
+                state.message.text = 'Đã xảy ra lỗi !';
             }
             state.loading = false;
         });
@@ -188,7 +188,7 @@ const serviceSlice = createSlice({
         });
         builder.addCase(update.fulfilled, (state, action) => {
             state.message.fail = false;
-            state.message.text = "Cập nhật thành công";
+            state.message.text = 'Cập nhật thành công';
             state.loading = false;
         });
         builder.addCase(update.rejected, (state, action) => {

@@ -1,44 +1,44 @@
-import { useEffect, useState } from "react";
-import { Col, Form, Row, Table, Typography } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
-import { Excel } from "antd-table-saveas-excel";
-import moment, { Moment } from "moment";
-import { RangeValue } from "rc-picker/lib/interface";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+import { useEffect, useState } from 'react';
+import { Col, Form, Row, Table, Typography } from 'antd';
+import { DownloadOutlined } from '@ant-design/icons';
+import { Excel } from 'antd-table-saveas-excel';
+import moment, { Moment } from 'moment';
+import { RangeValue } from 'rc-picker/lib/interface';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     providerNumberSelector,
     getAll,
-} from "../../../../store/reducers/providerNumberSlice";
-import Status from "../../../../components/Status";
-import ActionButton from "../../../../components/ActionButton";
-import DatePicker from "../../../../components/DateRange";
-import styles from "../Report.module.scss";
+} from '../../../../store/reducers/providerNumberSlice';
+import Status from '../../../../components/Status';
+import ActionButton from '../../../../components/ActionButton';
+import DatePicker from '../../../../components/DateRange';
+import styles from '../Report.module.scss';
 
 const columns = [
     {
-        title: "Số thứ tự",
-        key: "stt",
-        dataIndex: "stt",
+        title: 'Số thứ tự',
+        key: 'stt',
+        dataIndex: 'stt',
     },
     {
-        title: "Tên dịch vụ",
-        key: "name",
-        dataIndex: "name",
+        title: 'Tên dịch vụ',
+        key: 'name',
+        dataIndex: 'name',
     },
     {
-        title: "Thời gian cấp",
-        key: "time",
-        dataIndex: "time",
+        title: 'Thời gian cấp',
+        key: 'time',
+        dataIndex: 'time',
     },
     {
-        title: "Tình trạng",
-        key: "status",
-        dataIndex: "status",
+        title: 'Tình trạng',
+        key: 'status',
+        dataIndex: 'status',
     },
     {
-        title: "Nguồn cấp",
-        key: "src",
-        dataIndex: "src",
+        title: 'Nguồn cấp',
+        key: 'src',
+        dataIndex: 'src',
     },
 ];
 
@@ -50,11 +50,11 @@ const ReportTable = () => {
     useEffect(() => {
         dispatch(
             getAll({
-                keywords: "",
+                keywords: '',
                 dateRange: dateRange
                     ? [dateRange[0] as Moment, dateRange[1] as Moment]
                     : null,
-            })
+            }),
         );
     }, [dateRange]);
 
@@ -66,7 +66,7 @@ const ReportTable = () => {
                         <Form.Item
                             label={
                                 <Typography.Text className={styles.label}>
-                                    Chọn thời gian{" "}
+                                    Chọn thời gian{' '}
                                 </Typography.Text>
                             }
                         >
@@ -86,36 +86,36 @@ const ReportTable = () => {
                                         stt: providerNumber.number,
                                         name: providerNumber.service,
                                         time: moment(
-                                            providerNumber.timeGet.toDate()
-                                        ).format("HH:mm - DD/MM/YYYY"),
+                                            providerNumber.timeGet.toDate(),
+                                        ).format('HH:mm - DD/MM/YYYY'),
                                         status: (
                                             <Status
                                                 type={
                                                     providerNumber.status ==
-                                                    "skip"
-                                                        ? "error"
+                                                    'skip'
+                                                        ? 'error'
                                                         : providerNumber.status
                                                 }
                                                 text={
                                                     providerNumber.status ==
-                                                    "waiting"
-                                                        ? "Đang chờ"
+                                                    'waiting'
+                                                        ? 'Đang chờ'
                                                         : providerNumber.status ==
-                                                          "used"
-                                                        ? "Đã sử dụng"
-                                                        : "Bỏ qua"
+                                                          'used'
+                                                        ? 'Đã sử dụng'
+                                                        : 'Bỏ qua'
                                                 }
                                             />
                                         ),
                                         src: providerNumber.src,
                                     };
-                                }
+                                },
                             )}
                             bordered
                             size="middle"
                             pagination={{
                                 defaultPageSize: 8,
-                                position: ["bottomRight"],
+                                position: ['bottomRight'],
                                 showLessItems: true,
                                 showSizeChanger: false,
                             }}
@@ -125,28 +125,28 @@ const ReportTable = () => {
                         <ActionButton
                             data={[
                                 {
-                                    text: "Tải về",
+                                    text: 'Tải về',
                                     icon: <DownloadOutlined />,
                                     onClick: () => {
                                         const excel = new Excel();
                                         excel
-                                            .addSheet("Report")
+                                            .addSheet('Report')
                                             .addColumns([
                                                 ...columns,
                                                 {
-                                                    title: "Họ tên",
-                                                    key: "customer",
-                                                    dataIndex: "customer",
+                                                    title: 'Họ tên',
+                                                    key: 'customer',
+                                                    dataIndex: 'customer',
                                                 },
                                                 {
-                                                    title: "Số điện thoại",
-                                                    key: "phoneNumber",
-                                                    dataIndex: "phoneNumber",
+                                                    title: 'Số điện thoại',
+                                                    key: 'phoneNumber',
+                                                    dataIndex: 'phoneNumber',
                                                 },
                                                 {
-                                                    title: "Email",
-                                                    key: "email",
-                                                    dataIndex: "email",
+                                                    title: 'Email',
+                                                    key: 'email',
+                                                    dataIndex: 'email',
                                                 },
                                             ])
                                             .addDataSource(
@@ -157,18 +157,18 @@ const ReportTable = () => {
                                                             stt: providerNumber.number,
                                                             name: providerNumber.service,
                                                             time: moment(
-                                                                providerNumber.timeGet.toDate()
+                                                                providerNumber.timeGet.toDate(),
                                                             ).format(
-                                                                "HH:mm - DD/MM/YYYY"
+                                                                'HH:mm - DD/MM/YYYY',
                                                             ),
                                                             status:
                                                                 providerNumber.status ==
-                                                                "waiting"
-                                                                    ? "Đang chờ"
+                                                                'waiting'
+                                                                    ? 'Đang chờ'
                                                                     : providerNumber.status ==
-                                                                      "used"
-                                                                    ? "Đã sử dụng"
-                                                                    : "Bỏ qua",
+                                                                      'used'
+                                                                    ? 'Đã sử dụng'
+                                                                    : 'Bỏ qua',
                                                             src: providerNumber.src,
                                                             customer:
                                                                 providerNumber.name,
@@ -176,13 +176,13 @@ const ReportTable = () => {
                                                                 providerNumber.phoneNumber,
                                                             email: providerNumber.email,
                                                         };
-                                                    }
+                                                    },
                                                 ),
                                                 {
                                                     str2Percent: true,
-                                                }
+                                                },
                                             )
-                                            .saveAs("Report.xlsx");
+                                            .saveAs('Report.xlsx');
                                     },
                                 },
                             ]}

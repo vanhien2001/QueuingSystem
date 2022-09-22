@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { CaretDownOutlined } from "@ant-design/icons";
+import { useEffect } from 'react';
+import { CaretDownOutlined } from '@ant-design/icons';
 import {
     Button,
     Card,
@@ -10,20 +10,20 @@ import {
     Select,
     Typography,
     message as notice,
-} from "antd";
-import clsx from "clsx";
-import { Timestamp } from "firebase/firestore";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
+} from 'antd';
+import clsx from 'clsx';
+import { Timestamp } from 'firebase/firestore';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
 import {
     userSelector,
     add,
     get,
     update,
-} from "../../../../store/reducers/userSlice";
-import { roleSelector, getAll } from "../../../../store/reducers/roleSlice";
-import { add as addDiary } from "../../../../store/reducers/diarySlice";
-import styles from "./ManageAccount.module.scss";
+} from '../../../../store/reducers/userSlice';
+import { roleSelector, getAll } from '../../../../store/reducers/roleSlice';
+import { add as addDiary } from '../../../../store/reducers/diarySlice';
+import styles from './ManageAccount.module.scss';
 
 const { Option } = Select;
 
@@ -42,7 +42,8 @@ const AddManageAccount = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
-    const { authLoading, message, user, userLogin } = useAppSelector(userSelector);
+    const { authLoading, message, user, userLogin } =
+        useAppSelector(userSelector);
     const { roles } = useAppSelector(roleSelector);
 
     const onFinish = (value: formValue) => {
@@ -51,38 +52,38 @@ const AddManageAccount = () => {
                 update({
                     id,
                     ...value,
-                })
+                }),
             ).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
+                if (data.meta.requestStatus == 'fulfilled') {
                     dispatch(get(id));
-                    notice.success("Cập nhật thành công", 3);
+                    notice.success('Cập nhật thành công', 3);
                     dispatch(
                         addDiary({
                             username: userLogin ? userLogin.username : '',
-                            ip: "127.0.0.1",
-                            action: "Cập nhật thông tin tài khoản",
+                            ip: '127.0.0.1',
+                            action: 'Cập nhật thông tin tài khoản',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         } else {
             dispatch(add(value)).then((data) => {
-                if (data.meta.requestStatus == "fulfilled") {
-                    notice.success("Thêm thành công", 3);
-                    navigate("../");
+                if (data.meta.requestStatus == 'fulfilled') {
+                    notice.success('Thêm thành công', 3);
+                    navigate('../');
                     dispatch(
                         addDiary({
                             username: userLogin ? userLogin.username : '',
-                            ip: "127.0.0.1",
-                            action: "Thêm tài khoản",
+                            ip: '127.0.0.1',
+                            action: 'Thêm tài khoản',
                             time: Timestamp.fromDate(new Date()),
-                        })
+                        }),
                     );
                 } else {
-                    notice.error("Đã xảy ra lỗi", 3);
+                    notice.error('Đã xảy ra lỗi', 3);
                 }
             });
         }
@@ -93,7 +94,7 @@ const AddManageAccount = () => {
             ...user,
             passwordConfirm: user?.password,
         });
-    }, [user])
+    }, [user]);
     useEffect(() => {
         dispatch(getAll());
         if (id) {
@@ -136,7 +137,7 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập họ tên",
+                                    message: 'Vui lòng nhập họ tên',
                                 },
                             ]}
                         >
@@ -155,7 +156,7 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập tên đăng nhập",
+                                    message: 'Vui lòng nhập tên đăng nhập',
                                 },
                             ]}
                         >
@@ -177,7 +178,7 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập số điện thoại",
+                                    message: 'Vui lòng nhập số điện thoại',
                                 },
                             ]}
                         >
@@ -199,7 +200,7 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập mật khẩu",
+                                    message: 'Vui lòng nhập mật khẩu',
                                 },
                             ]}
                         >
@@ -218,8 +219,8 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    type: "email",
-                                    message: "Vui lòng nhập email",
+                                    type: 'email',
+                                    message: 'Vui lòng nhập email',
                                 },
                             ]}
                         >
@@ -238,7 +239,7 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng nhập mật khẩu",
+                                    message: 'Vui lòng nhập mật khẩu',
                                 },
                             ]}
                         >
@@ -256,7 +257,7 @@ const AddManageAccount = () => {
                             rules={[
                                 {
                                     required: true,
-                                    message: "Vui lòng chọn vai trò",
+                                    message: 'Vui lòng chọn vai trò',
                                 },
                             ]}
                         >
@@ -266,8 +267,8 @@ const AddManageAccount = () => {
                                 suffixIcon={
                                     <CaretDownOutlined
                                         style={{
-                                            fontSize: "20px",
-                                            color: "#FF7506",
+                                            fontSize: '20px',
+                                            color: '#FF7506',
                                         }}
                                     />
                                 }
@@ -297,8 +298,8 @@ const AddManageAccount = () => {
                                 suffixIcon={
                                     <CaretDownOutlined
                                         style={{
-                                            fontSize: "20px",
-                                            color: "#FF7506",
+                                            fontSize: '20px',
+                                            color: '#FF7506',
                                         }}
                                     />
                                 }
@@ -337,7 +338,7 @@ const AddManageAccount = () => {
                         htmlType="submit"
                         loading={authLoading}
                     >
-                        {authLoading ? "" : id ? "Cập nhật" : "Thêm"}
+                        {authLoading ? '' : id ? 'Cập nhật' : 'Thêm'}
                     </Button>
                 </Col>
             </Row>

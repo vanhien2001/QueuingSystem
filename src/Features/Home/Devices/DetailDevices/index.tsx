@@ -1,16 +1,16 @@
-import { useEffect } from "react";
-import { EditOutlined } from "@ant-design/icons";
-import { Card, Col, Row, Typography } from "antd";
-import clsx from "clsx";
-import { useNavigate, useParams } from "react-router-dom";
-import { useAppSelector, useAppDispatch } from "../../../../store";
-import { deviceSelector, get } from "../../../../store/reducers/deviceSlice";
+import { useEffect } from 'react';
+import { EditOutlined } from '@ant-design/icons';
+import { Card, Col, Row, Typography } from 'antd';
+import clsx from 'clsx';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../../../store';
+import { deviceSelector, get } from '../../../../store/reducers/deviceSlice';
 import {
     serviceSelector,
     getAll as getAllService,
-} from "../../../../store/reducers/serviceSlice";
-import ActionButton from "../../../../components/ActionButton";
-import styles from "../Devices.module.scss";
+} from '../../../../store/reducers/serviceSlice';
+import ActionButton from '../../../../components/ActionButton';
+import styles from '../Devices.module.scss';
 
 const DetailDevice = () => {
     const navigate = useNavigate();
@@ -165,10 +165,10 @@ const DetailDevice = () => {
                                                 .map((value) => {
                                                     return services.find(
                                                         (service) =>
-                                                            service.id == value
+                                                            service.id == value,
                                                     )?.name;
                                                 })
-                                                .join(", ")}
+                                                .join(', ')}
                                         </Typography.Text>
                                     </Col>
                                 </Row>
@@ -180,7 +180,7 @@ const DetailDevice = () => {
                     <ActionButton
                         data={[
                             {
-                                text: "Cập nhật thiết bị",
+                                text: 'Cập nhật thiết bị',
                                 icon: <EditOutlined />,
                                 onClick: () =>
                                     navigate(`../edit/${device?.id}`),
